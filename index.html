@@ -142,7 +142,7 @@ tr.rwatch td{background:#101616}
       <span>Alerts:</span>
       <button class="lang-btn active" id="lbtn-pt" onclick="setLang('pt')">PT</button>
       <button class="lang-btn" id="lbtn-en" onclick="setLang('en')">EN</button>
-      <button class="lang-btn" onclick="testWhatsApp()" style="margin-left:6px;background:#2D7A4F22;border-color:#2D7A4F44;color:#2D7A4F">Test WA</button>
+      <button class="lang-btn" onclick="testWhatsApp()" style="margin-left:6px;background:#1A2A3A;border-color:#378ADD44;color:#378ADD">Test Telegram</button>
     </div>
     <div class="conn-badge">
       <div class="dot" id="conn-dot"></div>
@@ -316,10 +316,10 @@ let alertState={}; // {id: {layer, ts}}
 let autoTimer=null, autoSecs=300;
 
 // ── TWILIO ─────────────────────────────────────────────────────────────────
-const TW_SID   = 'ACfed79d56ee1c87ad0730799305f70c1a';
-const TW_TOKEN = 'ea4773299f1f489938921110a9f8c38c';
-const TW_FROM  = 'whatsapp:+14155238886';
-const TW_TO    = 'whatsapp:+5582994170281';
+const TG_TOKEN = '8700935512:AAFakfGqVPuCVdh9ihu5Sre11VnLjKow4bs';
+const TG_CHAT = '5245753077';
+
+
 
 // ── ALERT MESSAGES ─────────────────────────────────────────────────────────
 const MSGS = {
@@ -347,20 +347,18 @@ const MSGS = {
   }
 };
 
-// ── WHATSAPP ───────────────────────────────────────────────────────────────
+// ── TELEGRAM ───────────────────────────────────────────────────────────────
 async function sendWA(body) {
   try {
-    const creds = btoa(TW_SID+':'+TW_TOKEN);
-    const params = new URLSearchParams({From:TW_FROM, To:TW_TO, Body:body});
-    const r = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${TW_SID}/Messages.json`,{
-      method:'POST',
-      headers:{'Authorization':'Basic '+creds,'Content-Type':'application/x-www-form-urlencoded'},
-      body: params.toString()
+    const r = await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({chat_id: TG_CHAT, text: body})
     });
     const d = await r.json();
-    if(d.sid) addLog('WhatsApp sent: '+d.sid.slice(0,14)+'...','ok');
-    else addLog('WhatsApp error: '+(d.message||JSON.stringify(d)),'err');
-  } catch(e){ addLog('WhatsApp failed: '+e.message,'err'); }
+    if(d.ok) addLog('Telegram alert sent ✓','ok');
+    else addLog('Telegram error: '+d.description,'err');
+  } catch(e){ addLog('Telegram failed: '+e.message,'err'); }
 }
 
 function getAlertLayer(vb, sp) {
@@ -424,7 +422,7 @@ async function testWhatsApp(){
   const btn=event.target;
   btn.textContent='Sending...';btn.disabled=true;
   addLog('Testing WhatsApp connection...','info');
-  await sendWA('UMBRA Ops ✅ Teste de conexão\n\nSistema funcionando.\nAlertas ativos para todas as contas.');
+  await sendWA('UMBRA Ops ✅ Teste de conexão\n\nSistema funcionando.\nAlertas Telegram ativos.');
   btn.textContent='Test WhatsApp';btn.disabled=false;
 }
 
