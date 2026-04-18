@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UMBRA Ops</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0D0D0D;color:#E8E8E0;min-height:100vh;font-size:14px}
+.topbar{background:#111;border-bottom:1px solid #1E1E1E;padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:54px}
+.brand{font-size:15px;font-weight:700;letter-spacing:1.5px;color:#C8A96E}
+.brand span{color:#555;font-weight:400;font-size:12px;margin-left:8px;letter-spacing:0}
+.topright{display:flex;align-items:center;gap:16px}
+.conn-badge{display:flex;align-items:center;gap:6px;font-size:12px;color:#555}
+.dot{width:7px;height:7px;border-radius:50%;background:#333;flex-shrink:0}
+.dot.on{background:#2D7A4F;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.lang-wrap{display:flex;align-items:center;gap:5px;font-size:12px;color:#555}
+.lang-btn{padding:3px 10px;border-radius:20px;font-size:11px;cursor:pointer;font-weight:500;transition:all .15s;border:1px solid #252525;background:#1A1A1A;color:#555}
+.lang-btn.active{background:#C8A96E22;border-color:#C8A96E44;color:#C8A96E}
+.tabs{background:#111;border-bottom:1px solid #1E1E1E;padding:0 28px;display:flex}
+.tab{padding:13px 18px;font-size:13px;color:#555;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;user-select:none;white-space:nowrap}
+.tab:hover{color:#AAA}
+.tab.active{color:#C8A96E;border-bottom-color:#C8A96E}
+.tbadge{background:#1A1A1A;color:#555;font-size:10px;padding:2px 7px;border-radius:20px;margin-left:5px}
+.tab.active .tbadge{background:#C8A96E22;color:#C8A96E}
+.tbadge.red{background:#1A0808;color:#E24B4A}
+.main{padding:22px 28px;max-width:1440px;margin:0 auto}
+.pane{display:none}.pane.active{display:block}
+/* SETUP */
+.setup-wrap{max-width:480px;margin:60px auto}
+.setup-card{background:#161616;border:1px solid #C8A96E33;border-radius:12px;padding:32px}
+.setup-card h2{color:#C8A96E;font-size:18px;font-weight:500;margin-bottom:6px}
+.setup-card p{color:#666;font-size:13px;line-height:1.7;margin-bottom:24px}
+.flabel{font-size:11px;color:#555;text-transform:uppercase;letter-spacing:.6px;display:block;margin-bottom:6px}
+.tok-inp{width:100%;background:#1A1A1A;border:1px solid #252525;border-radius:8px;padding:11px 14px;color:#E8E8E0;font-size:13px;font-family:monospace;outline:none;margin-bottom:14px;transition:border .15s}
+.tok-inp:focus{border-color:#C8A96E44}
+.primary-btn{width:100%;background:#C8A96E;color:#0D0D0D;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;transition:background .15s}
+.primary-btn:hover{background:#D4B87A}
+.primary-btn:disabled{background:#222;color:#444;cursor:not-allowed}
+.errbox{background:#1A0808;border:1px solid #E24B4A22;border-radius:8px;padding:12px 14px;font-size:13px;color:#E24B4A;margin-top:12px;display:none}
+/* METRICS */
+.metrics{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:20px}
+.metric{background:#161616;border:1px solid #1E1E1E;border-radius:10px;padding:14px 16px}
+.mlbl{font-size:11px;color:#444;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.mval{font-size:22px;font-weight:600;color:#777}
+.mval.ok{color:#2D7A4F}.mval.warn{color:#BA7517}.mval.danger{color:#E24B4A}
+/* CARD */
+.card{background:#161616;border:1px solid #1E1E1E;border-radius:10px;padding:18px 22px;margin-bottom:14px}
+.card-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.card-title{font-size:15px;font-weight:600;color:#E8E8E0}
+.card-hint{font-size:13px;color:#555;margin-bottom:14px;line-height:1.6}
+.sbtn{background:#1A1A1A;border:1px solid #252525;color:#C8C8C0;padding:7px 14px;border-radius:6px;font-size:13px;cursor:pointer;white-space:nowrap;transition:all .15s}
+.sbtn:hover{border-color:#C8A96E44;color:#C8A96E}
+.sbtn:disabled{color:#333;cursor:not-allowed}
+.sbtn.gold{background:#C8A96E22;border-color:#C8A96E44;color:#C8A96E}
+.sbtn.gold:hover{background:#C8A96E33}
+.btnrow{display:flex;gap:8px;align-items:center}
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:10px 12px;font-size:11px;font-weight:600;color:#444;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid #1A1A1A;white-space:nowrap}
+td{padding:11px 12px;border-bottom:1px solid #141414;color:#B0B0A8;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr.rdanger td{background:#160808}
+tr.rwarn td{background:#161000}
+tr.rwatch td{background:#101616}
+/* PILLS */
+.pill{font-size:12px;font-weight:600;padding:4px 11px;border-radius:20px;white-space:nowrap;display:inline-block}
+.p-ok{background:#0A1F12;color:#2D7A4F;border:1px solid #2D7A4F22}
+.p-warn{background:#1A1000;color:#BA7517;border:1px solid #BA751722}
+.p-danger{background:#180808;color:#E24B4A;border:1px solid #E24B4A22}
+.p-info{background:#0A1525;color:#378ADD;border:1px solid #378ADD22}
+.p-gray{background:#1A1A1A;color:#555;border:1px solid #33333322}
+.p-gold{background:#1A1200;color:#C8A96E;border:1px solid #C8A96E22}
+.p-l1{background:#0F1A0A;color:#5A9E3A;border:1px solid #5A9E3A22}
+.p-l2{background:#1A1400;color:#C8A96E;border:1px solid #C8A96E22}
+.p-l3{background:#1A0E00;color:#E8902A;border:1px solid #E8902A22}
+.p-l4{background:#1A0808;color:#E24B4A;border:1px solid #E24B4A22}
+.p-l5{background:#2A0808;color:#FF2A2A;border:1px solid #FF2A2A44}
+/* INPUTS */
+.cel-inp{background:#141414;border:1px solid #1E1E1E;border-radius:6px;padding:6px 10px;color:#E8E8E0;font-size:13px;width:100%;outline:none;transition:border .15s,background .15s}
+.cel-inp:focus{border-color:#C8A96E55;background:#1A1A1A}
+.bal-inp{background:#141414;border:1px solid #1E1E1E;border-radius:6px;padding:6px 10px;color:#E8E8E0;font-size:13px;width:110px;font-family:monospace;outline:none;transition:border .15s}
+.bal-inp:focus{border-color:#C8A96E55;background:#1A1A1A}
+/* NAMES */
+.aname{font-weight:600;color:#E8E8E0;font-size:14px}
+.aid{font-size:11px;color:#333;font-family:monospace;margin-top:2px}
+/* LOG */
+.log{background:#0A0A0A;border:1px solid #1A1A1A;border-radius:8px;padding:12px;font-size:12px;font-family:monospace;max-height:260px;overflow-y:auto;line-height:1.5}
+.ll{padding:3px 0;border-bottom:1px solid #0F0F0F}.ll:last-child{border-bottom:none}
+.lok{color:#2D7A4F}.lwarn{color:#BA7517}.lerr{color:#E24B4A}.linfo{color:#378ADD}.lmuted{color:#333}
+/* LAYOUT */
+.two-col{display:grid;grid-template-columns:1.3fr 1fr;gap:14px}
+.mono{font-family:monospace}
+.c-ok{color:#2D7A4F}.c-danger{color:#E24B4A}.c-warn{color:#BA7517}.c-muted{color:#444}.c-gold{color:#C8A96E}
+/* HEALTH */
+.hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px}
+.hcard{background:#141414;border:1px solid #1E1E1E;border-radius:10px;padding:16px 18px}
+.hcard.hc-danger{border-color:#E24B4A44;background:#120808}
+.hcard.hc-warn{border-color:#BA751744;background:#120F00}
+.hcard.hc-ok{border-color:#2D7A4F22}
+.hc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
+.hc-name{font-size:14px;font-weight:600;color:#E8E8E0;margin-bottom:2px}
+.hc-id{font-size:10px;color:#333;font-family:monospace}
+.hc-rows{display:flex;flex-direction:column;gap:6px}
+.hc-row{display:flex;justify-content:space-between;font-size:13px}
+.hc-key{color:#444}.hc-val{color:#888;font-family:monospace}
+.abanner{margin-top:10px;padding:9px 12px;border-radius:6px;font-size:13px;font-weight:500;line-height:1.5}
+.ab-danger{background:#1A0808;color:#E24B4A;border:1px solid #E24B4A22}
+.ab-warn{background:#1A1000;color:#BA7517;border:1px solid #BA751722}
+/* WARMING */
+.wbar-wrap{background:#1A1A1A;border-radius:20px;height:6px;width:70px;overflow:hidden;display:inline-block;vertical-align:middle}
+.wbar{height:100%;border-radius:20px;background:#C8A96E;transition:width .4s}
+/* REPORT */
+.rbox{background:#0A0A0A;border:1px solid #1E1E1E;border-radius:8px;padding:18px;font-size:13px;font-family:monospace;line-height:1.9;color:#A8A8A0;white-space:pre-wrap;max-height:400px;overflow-y:auto}
+/* ALERT LAYERS LEGEND */
+.layers{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
+.layer-card{border-radius:8px;padding:10px 12px;font-size:12px}
+.lc1{background:#0F1A0A;border:1px solid #5A9E3A22}
+.lc2{background:#1A1400;border:1px solid #C8A96E22}
+.lc3{background:#1A0E00;border:1px solid #E8902A22}
+.lc4{background:#1A0808;border:1px solid #E24B4A22}
+.lc5{background:#2A0808;border:1px solid #FF2A2A44}
+.lc-title{font-weight:700;margin-bottom:3px}
+.loader{display:inline-block;width:13px;height:13px;border:2px solid #222;border-top-color:#C8A96E;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty-s{text-align:center;padding:40px;color:#333;font-size:14px}
+/* MODAL */
+.modal-bg{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#000000BB;z-index:200;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:#161616;border:1px solid #C8A96E33;border-radius:12px;padding:28px;width:440px;max-width:92vw}
+.modal h3{color:#C8A96E;font-size:15px;font-weight:600;margin-bottom:18px}
+.mfield{margin-bottom:12px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">UMBRA <span>Ops Dashboard</span></div>
+  <div class="topright">
+    <div class="lang-wrap">
+      <span>Alerts:</span>
+      <button class="lang-btn active" id="lbtn-pt" onclick="setLang('pt')">PT</button>
+      <button class="lang-btn" id="lbtn-en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="testWhatsApp()" style="margin-left:6px;background:#2D7A4F22;border-color:#2D7A4F44;color:#2D7A4F">Test WA</button>
+    </div>
+    <div class="conn-badge">
+      <div class="dot" id="conn-dot"></div>
+      <span id="conn-label">Not connected</span>
+    </div>
+  </div>
+</div>
+
+<div class="tabs" id="tabs" style="display:none">
+  <div class="tab active" onclick="switchTab('recon')">Reconciliation <span class="tbadge" id="tb-recon">—</span></div>
+  <div class="tab" onclick="switchTab('health')">Account health <span class="tbadge" id="tb-health">—</span></div>
+  <div class="tab" onclick="switchTab('warming')">Warming <span class="tbadge" id="tb-warm">0</span></div>
+  <div class="tab" onclick="switchTab('report')">Daily report</div>
+  <div class="tab" onclick="switchTab('log')">Log <span class="tbadge" id="tb-log">0</span></div>
+</div>
+
+<div class="main">
+
+  <!-- SETUP -->
+  <div id="pane-setup" class="pane active">
+    <div class="setup-wrap">
+      <div class="setup-card">
+        <h2>Connect to Meta Ads</h2>
+        <p>Enter your Meta API access token. The system pulls live spend, monitors account health, tracks warming, and sends WhatsApp alerts for every flag.</p>
+        <span class="flabel">Access Token</span>
+        <input class="tok-inp" type="password" id="tok" placeholder="EAALHty9jREg..." autocomplete="off"/>
+        <button class="primary-btn" id="cbtn" onclick="connect()">Connect and load accounts</button>
+        <div class="errbox" id="errmsg"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECONCILIATION -->
+  <div id="pane-recon" class="pane">
+    <div class="metrics">
+      <div class="metric"><div class="mlbl">Vendor balances</div><div class="mval" id="m-bal">—</div></div>
+      <div class="metric"><div class="mlbl">Meta spend today</div><div class="mval" id="m-spend">—</div></div>
+      <div class="metric"><div class="mlbl">Avg runway</div><div class="mval" id="m-runway">—</div></div>
+      <div class="metric"><div class="mlbl">Flags active</div><div class="mval" id="m-flags">—</div></div>
+      <div class="metric"><div class="mlbl">Active accounts</div><div class="mval ok" id="m-active">—</div></div>
+      <div class="metric"><div class="mlbl">Next check</div><div class="mval" id="m-cd" style="font-size:16px;padding-top:3px">—</div></div>
+    </div>
+
+    <div class="layers">
+      <div class="layer-card lc1"><div class="lc-title" style="color:#5A9E3A">Layer 1 — 20%</div><div style="color:#5A9E3A99;font-size:11px">Attention — plan top-up</div></div>
+      <div class="layer-card lc2"><div class="lc-title" style="color:#C8A96E">Layer 2 — 10%</div><div style="color:#C8A96E99;font-size:11px">Alert — top up today</div></div>
+      <div class="layer-card lc3"><div class="lc-title" style="color:#E8902A">Layer 3 — 5%</div><div style="color:#E8902A99;font-size:11px">Critical — urgent top-up</div></div>
+      <div class="layer-card lc4"><div class="lc-title" style="color:#E24B4A">Layer 4 — Zero</div><div style="color:#E24B4A99;font-size:11px">Account paused</div></div>
+      <div class="layer-card lc5"><div class="lc-title" style="color:#FF2A2A">Layer 5 — Negative</div><div style="color:#FF2A2A99;font-size:11px">Emergency — call vendor</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-hdr">
+        <div class="card-title">Live reconciliation</div>
+        <div class="btnrow">
+          <span style="font-size:12px;color:#444" id="last-check-label">Not checked yet</span>
+          <button class="sbtn" id="check-btn" onclick="runCheck()">Run check now</button>
+          <button class="sbtn gold" onclick="switchTab('report')">Daily report</button>
+        </div>
+      </div>
+      <p class="card-hint">Enter vendor balance, vendor name and media buyer per account. Meta spend is pulled automatically. WhatsApp alerts fire on every flag change.</p>
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Account</th>
+              <th>Vendor</th>
+              <th>Media buyer</th>
+              <th>Vendor balance ($)</th>
+              <th>Meta spend today ($)</th>
+              <th>Remaining ($)</th>
+              <th>Runway</th>
+              <th>Alert layer</th>
+            </tr>
+          </thead>
+          <tbody id="recon-tb"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEALTH -->
+  <div id="pane-health" class="pane">
+    <div class="card-hdr" style="margin-bottom:14px">
+      <div style="font-size:15px;font-weight:600;color:#E8E8E0">Account health — restrictions & bans</div>
+      <button class="sbtn gold" id="health-btn" onclick="runHealthCheck()">Refresh health</button>
+    </div>
+    <div id="health-sum" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px"></div>
+    <div id="hgrid" class="hgrid"><div class="empty-s"><span class="loader"></span>Loading...</div></div>
+  </div>
+
+  <!-- WARMING -->
+  <div id="pane-warming" class="pane">
+    <div class="card">
+      <div class="card-hdr">
+        <div class="card-title">Warming pipeline</div>
+        <button class="sbtn gold" onclick="openWarmModal()">+ Add account</button>
+      </div>
+      <p class="card-hint">Days advance automatically based on the date added. Accounts are ready for media buyers after Day 14.</p>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>Account ID</th><th>Vendor</th><th>Buyer</th><th>Day</th><th>Progress</th><th>Phase</th><th>Budget/day</th><th>Vertical</th><th>Ready date</th><th></th></tr></thead>
+          <tbody id="warm-tb"></tbody>
+        </table>
+      </div>
+      <div id="warm-empty" class="empty-s" style="display:none">No accounts warming. Click "+ Add account" to start.</div>
+    </div>
+  </div>
+
+  <!-- REPORT -->
+  <div id="pane-report" class="pane">
+    <div class="card">
+      <div class="card-hdr">
+        <div class="card-title">Daily report</div>
+        <div class="btnrow">
+          <button class="sbtn" onclick="generateReport()">Regenerate</button>
+          <button class="sbtn gold" onclick="copyReport()">Copy to clipboard</button>
+        </div>
+      </div>
+      <p class="card-hint">Ready to paste into Slack or Telegram. Run a check first to get fresh data.</p>
+      <div class="rbox" id="rbox">Run a reconciliation check first, then come back here.</div>
+    </div>
+  </div>
+
+  <!-- LOG -->
+  <div id="pane-log" class="pane">
+    <div class="two-col">
+      <div class="card">
+        <div class="card-hdr">
+          <div class="card-title">All ad accounts</div>
+          <span class="c-muted" id="acct-count" style="font-size:13px">—</span>
+        </div>
+        <table>
+          <thead><tr><th>Name</th><th>Vendor</th><th>Buyer</th><th>Lifetime spend</th><th>Status</th></tr></thead>
+          <tbody id="acct-tb"></tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-hdr">
+          <div class="card-title">System log</div>
+          <button class="sbtn" onclick="clearLog()">Clear</button>
+        </div>
+        <div class="log" id="slog"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- WARMING MODAL -->
+<div class="modal-bg" id="warm-modal">
+  <div class="modal">
+    <h3>Add account to warming pipeline</h3>
+    <div class="mfield"><span class="flabel">Account ID</span><input class="tok-inp" id="w-id" placeholder="act_123456789" style="margin:0"/></div>
+    <div class="mfield"><span class="flabel">Vendor</span><input class="tok-inp" id="w-vendor" placeholder="Tiger Agency" style="margin:0"/></div>
+    <div class="mfield"><span class="flabel">Media Buyer</span><input class="tok-inp" id="w-buyer" placeholder="John" style="margin:0"/></div>
+    <div class="mfield"><span class="flabel">Target Vertical</span><input class="tok-inp" id="w-vertical" placeholder="Nutra / Biz Op / Mixed" style="margin:0"/></div>
+    <div class="btnrow" style="margin-top:18px">
+      <button class="sbtn gold" style="flex:1;padding:10px" onclick="saveWarm()">Add to pipeline</button>
+      <button class="sbtn" style="padding:10px 16px" onclick="closeWarmModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── STATE ──────────────────────────────────────────────────────────────────
+let TOKEN='', accounts=[], spends={}, prevStatus={}, warmingAccounts=[], logCount=0;
+let alertLang='pt';
+let acctMeta={}; // {id: {vendor, buyer}}
+let alertState={}; // {id: {layer, ts}}
+let autoTimer=null, autoSecs=300;
+
+// ── TWILIO ─────────────────────────────────────────────────────────────────
+const TW_SID   = 'ACfed79d56ee1c87ad0730799305f70c1a';
+const TW_TOKEN = '668bf84770c1513121eb0f200c3a4793';
+const TW_FROM  = 'whatsapp:+14155238886';
+const TW_TO    = 'whatsapp:+5582994170281';
+
+// ── ALERT MESSAGES ─────────────────────────────────────────────────────────
+const MSGS = {
+  pt: {
+    l1: (n,v,b,rem,pct) => `UMBRA Ops ⚠️ ATENÇÃO\n\nConta: ${n}\nVendor: ${v||'—'} | Buyer: ${b||'—'}\n\nSaldo em ${pct}% — $${Math.round(rem)} restando.\nPlaneje o top-up em breve.`,
+    l2: (n,v,b,rem,pct) => `UMBRA Ops 🔶 ALERTA\n\nConta: ${n}\nVendor: ${v||'—'} | Buyer: ${b||'—'}\n\nSaldo em ${pct}% — $${Math.round(rem)} restando.\nFaça o top-up hoje.`,
+    l3: (n,v,b,rem,pct) => `UMBRA Ops 🔴 CRÍTICO\n\nConta: ${n}\nVendor: ${v||'—'} | Buyer: ${b||'—'}\n\nSaldo em ${pct}% — $${Math.round(rem)} restando.\nTop-up URGENTE agora.`,
+    l4: (n,v,b)         => `UMBRA Ops 🚨 CONTA ZERADA\n\nConta: ${n}\nVendor: ${v||'—'} | Buyer: ${b||'—'}\n\nSaldo zerado. Campanhas pausadas.\nFaça o top-up imediatamente.`,
+    l5: (n,v,b,amt)     => `UMBRA Ops 🚨🚨 EMERGÊNCIA\n\nConta: ${n}\nVendor: ${v||'—'} | Buyer: ${b||'—'}\n\nGasto EXCEDEU saldo em $${Math.round(amt)}.\nContate o vendor AGORA.`,
+    disabled: (n,v,b)   => `UMBRA Ops 🔴 CONTA DESATIVADA\n\nConta: ${n}\nVendor: ${v||'—'} | Buyer: ${b||'—'}\n\nSolicite replacement + balance transfer ao vendor imediatamente.`,
+    warn: (n,v,b)       => `UMBRA Ops ⚠️ AVISO\n\nConta: ${n}\nVendor: ${v||'—'} | Buyer: ${b||'—'}\n\nProblema de cobrança ou política detectado. Monitore.`,
+    change: (n,v,b,s1,s2)=> `UMBRA Ops 🚨 MUDANÇA DE STATUS\n\nConta: ${n}\nVendor: ${v||'—'} | Buyer: ${b||'—'}\n\nStatus mudou de ${s1} para ${s2}.\nVerifique imediatamente.`,
+    repeat: (n,v,b,layer)=> `UMBRA Ops ⏰ LEMBRETE — problema persiste há 24h!\n\nConta: ${n}\nVendor: ${v||'—'} | Buyer: ${b||'—'}\n\nAinda no nível de alerta: ${layer}\nNenhuma ação tomada ainda?`,
+  },
+  en: {
+    l1: (n,v,b,rem,pct) => `UMBRA Ops ⚠️ ATTENTION\n\nAccount: ${n}\nVendor: ${v||'—'} | Buyer: ${b||'—'}\n\nBalance at ${pct}% — $${Math.round(rem)} remaining.\nPlan your top-up soon.`,
+    l2: (n,v,b,rem,pct) => `UMBRA Ops 🔶 ALERT\n\nAccount: ${n}\nVendor: ${v||'—'} | Buyer: ${b||'—'}\n\nBalance at ${pct}% — $${Math.round(rem)} remaining.\nTop up today.`,
+    l3: (n,v,b,rem,pct) => `UMBRA Ops 🔴 CRITICAL\n\nAccount: ${n}\nVendor: ${v||'—'} | Buyer: ${b||'—'}\n\nBalance at ${pct}% — $${Math.round(rem)} remaining.\nURGENT top-up required.`,
+    l4: (n,v,b)         => `UMBRA Ops 🚨 ACCOUNT ZEROED\n\nAccount: ${n}\nVendor: ${v||'—'} | Buyer: ${b||'—'}\n\nBalance is zero. Campaigns paused.\nTop up immediately.`,
+    l5: (n,v,b,amt)     => `UMBRA Ops 🚨🚨 EMERGENCY\n\nAccount: ${n}\nVendor: ${v||'—'} | Buyer: ${b||'—'}\n\nSpend EXCEEDED balance by $${Math.round(amt)}.\nContact vendor NOW.`,
+    disabled: (n,v,b)   => `UMBRA Ops 🔴 ACCOUNT DISABLED\n\nAccount: ${n}\nVendor: ${v||'—'} | Buyer: ${b||'—'}\n\nRequest replacement + balance transfer from vendor immediately.`,
+    warn: (n,v,b)       => `UMBRA Ops ⚠️ WARNING\n\nAccount: ${n}\nVendor: ${v||'—'} | Buyer: ${b||'—'}\n\nBilling or policy issue detected. Monitor closely.`,
+    change: (n,v,b,s1,s2)=>`UMBRA Ops 🚨 STATUS CHANGE\n\nAccount: ${n}\nVendor: ${v||'—'} | Buyer: ${b||'—'}\n\nStatus changed from ${s1} to ${s2}.\nCheck immediately.`,
+    repeat: (n,v,b,layer)=>`UMBRA Ops ⏰ REMINDER — issue persists for 24h!\n\nAccount: ${n}\nVendor: ${v||'—'} | Buyer: ${b||'—'}\n\nStill at alert level: ${layer}\nNo action taken yet?`,
+  }
+};
+
+// ── WHATSAPP ───────────────────────────────────────────────────────────────
+async function sendWA(body) {
+  try {
+    const creds = btoa(TW_SID+':'+TW_TOKEN);
+    const params = new URLSearchParams({From:TW_FROM, To:TW_TO, Body:body});
+    const r = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${TW_SID}/Messages.json`,{
+      method:'POST',
+      headers:{'Authorization':'Basic '+creds,'Content-Type':'application/x-www-form-urlencoded'},
+      body: params.toString()
+    });
+    const d = await r.json();
+    if(d.sid) addLog('WhatsApp sent: '+d.sid.slice(0,14)+'...','ok');
+    else addLog('WhatsApp error: '+(d.message||JSON.stringify(d)),'err');
+  } catch(e){ addLog('WhatsApp failed: '+e.message,'err'); }
+}
+
+function getAlertLayer(vb, sp) {
+  if(vb<=0) return null;
+  const rem = vb - sp;
+  const pct = (rem/vb)*100;
+  if(sp > vb) return 5;
+  if(rem <= 0) return 4;
+  if(pct <= 5) return 3;
+  if(pct <= 10) return 2;
+  if(pct <= 20) return 1;
+  return 0;
+}
+
+function checkAndAlert(a, vb, sp) {
+  const layer = getAlertLayer(vb, sp);
+  if(layer===null||layer===0) { alertState[a.id]=null; return; }
+  const m = acctMeta[a.id]||{};
+  const v = m.vendor||'—', b = m.buyer||'—';
+  const rem = vb-sp, pct = vb>0?Math.round((rem/vb)*100):0;
+  const prev = alertState[a.id];
+  const now = Date.now();
+  const M = MSGS[alertLang];
+  // New layer or layer worsened → alert immediately
+  if(!prev || prev.layer !== layer) {
+    let msg='';
+    if(layer===1) msg=M.l1(a.name,v,b,rem,pct);
+    else if(layer===2) msg=M.l2(a.name,v,b,rem,pct);
+    else if(layer===3) msg=M.l3(a.name,v,b,rem,pct);
+    else if(layer===4) msg=M.l4(a.name,v,b);
+    else if(layer===5) msg=M.l5(a.name,v,b,sp-vb);
+    sendWA(msg);
+    addLog('WA Alert L'+layer+': '+a.name,'warn');
+    alertState[a.id] = {layer, ts:now};
+  } else if(prev && prev.layer===layer && now-prev.ts >= 86400000) {
+    // Same layer, 24h passed → repeat reminder
+    const layerLabel = ['','20%','10%','5%','Zero','Negative'][layer];
+    sendWA(M.repeat(a.name,v,b,layerLabel));
+    addLog('WA Repeat L'+layer+': '+a.name,'warn');
+    alertState[a.id] = {layer, ts:now};
+  }
+}
+
+// ── UTILS ──────────────────────────────────────────────────────────────────
+const fmt  = n => (n===null||n===undefined||isNaN(n)) ? '—' : '$'+Math.round(n).toLocaleString();
+const fmt0 = n => '$'+Math.round(n||0).toLocaleString();
+const today= () => new Date().toISOString().slice(0,10);
+const addDays=(d,n)=>{const dt=new Date(d);dt.setDate(dt.getDate()+n);return dt.toISOString().slice(0,10)};
+const fmtTime=()=>new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+
+function addLog(msg,t='info'){
+  logCount++;
+  document.getElementById('tb-log').textContent=logCount>99?'99+':logCount;
+  const el=document.getElementById('slog');
+  const ts=new Date().toTimeString().slice(0,8);
+  const d=document.createElement('div');
+  d.className='ll l'+t; d.textContent='['+ts+'] '+msg;
+  el.prepend(d);
+}
+async function testWhatsApp(){
+  const btn=event.target;
+  btn.textContent='Sending...';btn.disabled=true;
+  addLog('Testing WhatsApp connection...','info');
+  await sendWA('UMBRA Ops ✅ Teste de conexão\n\nSistema funcionando.\nAlertas ativos para todas as contas.');
+  btn.textContent='Test WhatsApp';btn.disabled=false;
+}
+
+function clearLog(){document.getElementById('slog').innerHTML='';logCount=0;document.getElementById('tb-log').textContent='0';addLog('Log cleared','muted');}
+function showErr(m){const e=document.getElementById('errmsg');e.textContent=m;e.style.display='block';}
+
+function switchTab(name){
+  const names=['recon','health','warming','report','log'];
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',names[i]===name));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+  document.getElementById('pane-'+name).classList.add('active');
+}
+
+function setLang(lang){
+  alertLang=lang;
+  ['pt','en'].forEach(l=>{
+    const btn=document.getElementById('lbtn-'+l);
+    btn.classList.toggle('active',l===lang);
+  });
+  addLog('Alert language: '+lang.toUpperCase(),'info');
+}
+
+function sPill(code){
+  const map={1:['Active','p-ok'],2:['Disabled','p-danger'],3:['Unsettled','p-warn'],
+    9:['Grace period','p-warn'],100:['Pending closure','p-warn'],101:['Closed','p-danger']};
+  const [l,c]=map[code]||['Status '+code,'p-gray'];
+  return`<span class="pill ${c}">${l}</span>`;
+}
+
+function layerPill(layer){
+  if(!layer||layer===0) return '<span class="pill p-ok">OK</span>';
+  const cfg=[null,
+    ['20% remaining','p-l1'],['10% remaining','p-l2'],['5% remaining','p-l3'],
+    ['Zero balance','p-l4'],['Negative — emergency','p-l5']
+  ];
+  const [l,c]=cfg[layer]||['Unknown','p-gray'];
+  return`<span class="pill ${c}">${l}</span>`;
+}
+
+function rowClass(layer){
+  if(!layer||layer===0) return '';
+  return ['','rwatch','rwarn','rwarn','rdanger','rdanger'][layer]||'';
+}
+
+function saveMetaToStorage(){
+  try{localStorage.setItem('umbra_acct_meta',JSON.stringify(acctMeta));}catch(e){}
+}
+function loadMetaFromStorage(){
+  try{const d=localStorage.getItem('umbra_acct_meta');if(d) acctMeta=JSON.parse(d);}catch(e){}
+}
+
+// ── API ────────────────────────────────────────────────────────────────────
+async function apiFetch(path){
+  const sep=path.includes('?')?'&':'?';
+  const r=await fetch('https://graph.facebook.com/v19.0/'+path+sep+'access_token='+TOKEN);
+  return r.json();
+}
+
+// ── CONNECT ────────────────────────────────────────────────────────────────
+async function connect(){
+  const btn=document.getElementById('cbtn');
+  TOKEN=document.getElementById('tok').value.trim();
+  if(!TOKEN){showErr('Please enter your access token.');return;}
+  btn.disabled=true; btn.innerHTML='<span class="loader"></span>Connecting...';
+  try{
+    const d=await apiFetch('me/adaccounts?fields=id,name,account_status,currency,amount_spent,disable_reason&limit=25');
+    if(d.error){showErr('API error: '+d.error.message);btn.disabled=false;btn.textContent='Connect and load accounts';return;}
+    accounts=d.data||[];
+    if(!accounts.length){showErr('No ad accounts found.');btn.disabled=false;btn.textContent='Connect and load accounts';return;}
+    loadMetaFromStorage();
+    accounts.forEach(a=>{prevStatus[a.id]=a.account_status;if(!acctMeta[a.id])acctMeta[a.id]={vendor:'',buyer:''};});
+    document.getElementById('pane-setup').classList.remove('active');
+    document.getElementById('tabs').style.display='flex';
+    document.getElementById('pane-recon').classList.add('active');
+    document.getElementById('conn-dot').classList.add('on');
+    document.getElementById('conn-label').textContent='Connected — '+accounts.length+' accounts';
+    document.getElementById('m-active').textContent=accounts.filter(a=>a.account_status===1).length;
+    document.getElementById('tb-recon').textContent=accounts.length;
+    document.getElementById('acct-count').textContent=accounts.length+' accounts';
+    addLog('Connected — '+accounts.length+' accounts loaded','ok');
+    buildReconRows();
+    renderAccountsList();
+    runHealthCheck();
+    startAutoRefresh();
+  }catch(e){
+    showErr('Connection failed. Check your token.');
+    btn.disabled=false; btn.textContent='Connect and load accounts';
+  }
+}
+
+// ── RECONCILIATION ─────────────────────────────────────────────────────────
+function buildReconRows(){
+  const tb=document.getElementById('recon-tb');
+  tb.innerHTML='';
+  accounts.forEach(a=>{
+    const m=acctMeta[a.id]||{};
+    const tr=document.createElement('tr');
+    tr.id='rrow-'+a.id;
+    tr.innerHTML=`
+      <td><div class="aname">${a.name}</div><div class="aid">${a.id}</div></td>
+      <td><input class="cel-inp" id="vendor-${a.id}" placeholder="Vendor name" value="${m.vendor||''}" onchange="saveMeta('${a.id}')"/></td>
+      <td><input class="cel-inp" id="buyer-${a.id}" placeholder="Media buyer" value="${m.buyer||''}" onchange="saveMeta('${a.id}')"/></td>
+      <td><input class="bal-inp" type="number" id="bal-${a.id}" placeholder="0.00" step="any"/></td>
+      <td class="mono" id="rsp-${a.id}" style="font-size:14px">—</td>
+      <td class="mono" id="rrem-${a.id}" style="font-size:14px;font-weight:600">—</td>
+      <td id="rrw-${a.id}">—</td>
+      <td id="rflag-${a.id}"><span class="pill p-info">Enter balance</span></td>
+    `;
+    tb.appendChild(tr);
+  });
+}
+
+function saveMeta(id){
+  acctMeta[id]={
+    vendor: document.getElementById('vendor-'+id)?.value||'',
+    buyer:  document.getElementById('buyer-'+id)?.value||''
+  };
+  saveMetaToStorage();
+}
+
+async function getSpend(id){
+  const t=today();
+  try{
+    const d=await apiFetch(id+'/insights?fields=spend&time_range={"since":"'+t+'","until":"'+t+'"}');
+    return d.data&&d.data.length?parseFloat(d.data[0].spend)||0:0;
+  }catch{return 0;}
+}
+
+async function runCheck(){
+  const btn=document.getElementById('check-btn');
+  btn.disabled=true; btn.innerHTML='<span class="loader"></span>Checking...';
+  addLog('Reconciliation check started','info');
+  const results=await Promise.all(accounts.map(a=>getSpend(a.id)));
+  accounts.forEach((a,i)=>{ spends[a.id]=results[i]; const el=document.getElementById('rsp-'+a.id); if(el) el.textContent=fmt0(results[i]); });
+  updateAllRows();
+  btn.disabled=false; btn.textContent='Run check now';
+  document.getElementById('last-check-label').textContent='Last check: '+fmtTime();
+  autoSecs=300;
+  addLog('Check complete — '+accounts.length+' accounts reconciled','ok');
+  generateReport();
+}
+
+function updateAllRows(){
+  let totBal=0,totSpend=0,flagCount=0,totalRw=0,rwCount=0;
+  accounts.forEach(a=>{
+    const vb=parseFloat(document.getElementById('bal-'+a.id)?.value)||0;
+    const sp=spends[a.id]||0;
+    const rem=vb-sp;
+    const layer=getAlertLayer(vb,sp);
+    totBal+=vb; totSpend+=sp;
+    if(layer>0) flagCount++;
+    const spEl=document.getElementById('rsp-'+a.id);
+    const remEl=document.getElementById('rrem-'+a.id);
+    const rwEl=document.getElementById('rrw-'+a.id);
+    const flEl=document.getElementById('rflag-'+a.id);
+    const rowEl=document.getElementById('rrow-'+a.id);
+    if(!rowEl) return;
+    if(spEl) spEl.textContent=fmt0(sp);
+    if(vb===0){
+      if(remEl) remEl.innerHTML='<span class="c-muted">—</span>';
+      if(rwEl) rwEl.textContent='—';
+      if(flEl) flEl.innerHTML='<span class="pill p-info">Enter balance</span>';
+      rowEl.className='';
+      return;
+    }
+    // Remaining
+    if(remEl){
+      const remColor=rem<0?'#FF2A2A':rem<vb*0.05?'#E24B4A':rem<vb*0.1?'#E8902A':rem<vb*0.2?'#C8A96E':'#2D7A4F';
+      remEl.innerHTML=`<span style="color:${remColor};font-family:monospace">${fmt(rem)}</span>`;
+    }
+    // Runway
+    const rw=sp>0?Math.floor(vb/sp):999;
+    if(rw<999){totalRw+=rw;rwCount++;}
+    const rwColor=rw<3?'#E24B4A':rw<7?'#BA7517':'#2D7A4F';
+    const rwPct=Math.min(100,Math.round((rw/14)*100));
+    if(rwEl) rwEl.innerHTML=`<span style="color:${rwColor};font-family:monospace;font-weight:600">${rw>99?'99+':rw}d</span><div class="wbar-wrap" style="margin-left:6px"><div class="wbar" style="width:${rwPct}%;background:${rwColor}"></div></div>`;
+    // Flag
+    if(flEl) flEl.innerHTML=layerPill(layer);
+    if(rowEl) rowEl.className=rowClass(layer);
+    // WhatsApp alert
+    checkAndAlert(a,vb,sp);
+  });
+  document.getElementById('m-bal').textContent=totBal>0?fmt(totBal):'—';
+  document.getElementById('m-bal').className='mval '+(totBal>0?'ok':'');
+  document.getElementById('m-spend').textContent=fmt0(totSpend);
+  const mf=document.getElementById('m-flags'); mf.textContent=flagCount; mf.className='mval '+(flagCount>0?'danger':'ok');
+  const avgRw=rwCount>0?Math.round(totalRw/rwCount):0;
+  const mr=document.getElementById('m-runway'); mr.textContent=avgRw>0?avgRw+'d':'—'; mr.className='mval '+(avgRw<3?'danger':avgRw<7?'warn':'ok');
+}
+
+// ── HEALTH ─────────────────────────────────────────────────────────────────
+async function getCampaigns(id){
+  try{const d=await apiFetch(id+'/campaigns?fields=effective_status&limit=10');return d.data?d.data.filter(c=>c.effective_status==='ACTIVE').length:0;}
+  catch{return 0;}
+}
+
+async function runHealthCheck(){
+  const btn=document.getElementById('health-btn');
+  const grid=document.getElementById('hgrid');
+  if(btn){btn.disabled=true;btn.innerHTML='<span class="loader"></span>Checking...';}
+  grid.innerHTML='<div class="empty-s"><span class="loader"></span>Loading health data...</div>';
+  addLog('Health check started','info');
+  const cams=await Promise.all(accounts.map(a=>getCampaigns(a.id)));
+  grid.innerHTML='';
+  let issues=0,disabled=0;
+  accounts.forEach((a,i)=>{
+    const isDisabled=a.account_status===2||a.account_status===101;
+    const isWarn=a.account_status===3||a.account_status===9||a.account_status===100;
+    const isOk=a.account_status===1;
+    if(!isOk) issues++;
+    if(isDisabled) disabled++;
+    const m=acctMeta[a.id]||{};
+    // Status change detection
+    if(prevStatus[a.id]&&prevStatus[a.id]!==a.account_status&&!isOk){
+      addLog('STATUS CHANGE: '+a.name+' → status '+a.account_status,'err');
+      sendWA(MSGS[alertLang].change(a.name,m.vendor,m.buyer,prevStatus[a.id],a.account_status));
+    }
+    if(isDisabled&&prevStatus[a.id]!==a.account_status){addLog('DISABLED: '+a.name,'err');sendWA(MSGS[alertLang].disabled(a.name,m.vendor,m.buyer));}
+    else if(isWarn&&prevStatus[a.id]!==a.account_status){addLog('WARNING: '+a.name,'warn');sendWA(MSGS[alertLang].warn(a.name,m.vendor,m.buyer));}
+    prevStatus[a.id]=a.account_status;
+    const cardCls=isDisabled?'hc-danger':isWarn?'hc-warn':'hc-ok';
+    const lifetime=a.amount_spent?fmt(parseFloat(a.amount_spent)/100):'$0';
+    const statusMap={1:'Active',2:'Disabled',3:'Unsettled',9:'In grace period',100:'Pending closure',101:'Closed'};
+    let alertHtml='';
+    if(isDisabled) alertHtml='<div class="abanner ab-danger">Account disabled — request replacement + balance transfer from vendor immediately</div>';
+    else if(isWarn) alertHtml='<div class="abanner ab-warn">Billing or policy issue — pause spend if unresolved within 24h</div>';
+    grid.innerHTML+=`
+      <div class="hcard ${cardCls}">
+        <div class="hc-top"><div><div class="hc-name">${a.name}</div><div class="hc-id">${a.id}</div></div>${sPill(a.account_status)}</div>
+        <div class="hc-rows">
+          <div class="hc-row"><span class="hc-key">Vendor</span><span class="hc-val">${m.vendor||'—'}</span></div>
+          <div class="hc-row"><span class="hc-key">Buyer</span><span class="hc-val">${m.buyer||'—'}</span></div>
+          <div class="hc-row"><span class="hc-key">Status</span><span class="hc-val ${isOk?'c-ok':isDisabled?'c-danger':'c-warn'}">${statusMap[a.account_status]||'Status '+a.account_status}</span></div>
+          <div class="hc-row"><span class="hc-key">Lifetime spend</span><span class="hc-val">${lifetime}</span></div>
+          <div class="hc-row"><span class="hc-key">Active campaigns</span><span class="hc-val ${cams[i]>0?'c-ok':'c-muted'}">${cams[i]}</span></div>
+        </div>${alertHtml}
+      </div>`;
+  });
+  document.getElementById('tb-health').textContent=issues>0?issues+' issues':'OK';
+  if(issues>0) document.getElementById('tb-health').classList.add('red');
+  else document.getElementById('tb-health').classList.remove('red');
+  const sumEl=document.getElementById('health-sum');
+  const active=accounts.filter(a=>a.account_status===1).length;
+  sumEl.innerHTML=`
+    <div class="metric"><div class="mlbl">Active</div><div class="mval ok">${active}</div></div>
+    <div class="metric"><div class="mlbl">Disabled</div><div class="mval ${disabled>0?'danger':''}">${disabled}</div></div>
+    <div class="metric"><div class="mlbl">Issues</div><div class="mval ${issues>0?'warn':''}">${issues}</div></div>
+    <div class="metric"><div class="mlbl">Total</div><div class="mval">${accounts.length}</div></div>`;
+  if(btn){btn.disabled=false;btn.textContent='Refresh health';}
+  addLog('Health check complete — '+disabled+' disabled, '+issues+' issues',issues>0?'warn':'ok');
+}
+
+// ── WARMING ────────────────────────────────────────────────────────────────
+function openWarmModal(){document.getElementById('warm-modal').classList.add('open');['w-id','w-vendor','w-buyer','w-vertical'].forEach(id=>document.getElementById(id).value='');}
+function closeWarmModal(){document.getElementById('warm-modal').classList.remove('open');}
+function saveWarm(){
+  const id=document.getElementById('w-id').value.trim();
+  if(!id) return;
+  warmingAccounts.push({id,vendor:document.getElementById('w-vendor').value,buyer:document.getElementById('w-buyer').value,vertical:document.getElementById('w-vertical').value,startDate:today()});
+  closeWarmModal(); renderWarming();
+  addLog('Added '+id+' to warming pipeline','info');
+}
+function removeWarm(idx){const n=warmingAccounts[idx].id;warmingAccounts.splice(idx,1);renderWarming();addLog('Warming complete: '+n,'ok');}
+
+function renderWarming(){
+  const tb=document.getElementById('warm-tb');
+  const empty=document.getElementById('warm-empty');
+  tb.innerHTML='';
+  document.getElementById('tb-warm').textContent=warmingAccounts.length||0;
+  if(!warmingAccounts.length){empty.style.display='block';return;}
+  empty.style.display='none';
+  warmingAccounts.forEach((w,idx)=>{
+    const start=new Date(w.startDate);
+    const day=Math.min(14,Math.max(1,Math.floor((Date.now()-start)/(864e5))+1));
+    const pct=Math.round((day/14)*100);
+    const phase=day>=8?'<span class="pill p-warn">Ramp</span>':day>=4?'<span class="pill p-info">BM setup</span>':'<span class="pill p-info">Behavior</span>';
+    const budget=day>=8?'$'+Math.round(5*Math.pow(1.3,day-7)):day>=4?'$5':'$0';
+    tb.innerHTML+=`<tr>
+      <td><div class="aname" style="font-size:13px">${w.id}</div></td>
+      <td style="color:#888">${w.vendor||'—'}</td>
+      <td style="color:#888">${w.buyer||'—'}</td>
+      <td><span class="mono c-gold" style="font-size:14px;font-weight:700">Day ${day}/14</span></td>
+      <td><div class="wbar-wrap"><div class="wbar" style="width:${pct}%"></div></div><span style="font-size:11px;color:#555;margin-left:8px">${pct}%</span></td>
+      <td>${phase}</td>
+      <td class="mono">${budget}/day</td>
+      <td style="color:#888">${w.vertical||'—'}</td>
+      <td style="font-size:12px;color:#555">${addDays(w.startDate,14)}</td>
+      <td><button class="sbtn" style="font-size:11px;padding:4px 10px;color:#2D7A4F" onclick="removeWarm(${idx})">Mark done</button></td>
+    </tr>`;
+  });
+}
+
+// ── REPORT ─────────────────────────────────────────────────────────────────
+function generateReport(){
+  const d=new Date();
+  const ds=d.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  let totBal=0,totSpend=0,flags=[];
+  let active=0,disabled=0;
+  accounts.forEach(a=>{
+    const vb=parseFloat(document.getElementById('bal-'+a.id)?.value)||0;
+    const sp=spends[a.id]||0;
+    const m=acctMeta[a.id]||{};
+    totBal+=vb; totSpend+=sp;
+    if(a.account_status===1) active++;
+    if(a.account_status===2||a.account_status===101) disabled++;
+    const layer=getAlertLayer(vb,sp);
+    if(layer===5) flags.push(`  🚨 EMERGENCY — ${a.name} | Vendor: ${m.vendor||'—'} | Buyer: ${m.buyer||'—'} | Overspent by $${Math.round(sp-vb)}`);
+    else if(layer===4) flags.push(`  🚨 ZERO BALANCE — ${a.name} | Vendor: ${m.vendor||'—'} | Buyer: ${m.buyer||'—'}`);
+    else if(layer===3) flags.push(`  🔴 CRITICAL (5%) — ${a.name} | Vendor: ${m.vendor||'—'} | Buyer: ${m.buyer||'—'} | $${Math.round(vb-sp)} left`);
+    else if(layer===2) flags.push(`  🔶 ALERT (10%) — ${a.name} | Vendor: ${m.vendor||'—'} | Buyer: ${m.buyer||'—'} | $${Math.round(vb-sp)} left`);
+    else if(layer===1) flags.push(`  ⚠️  ATTENTION (20%) — ${a.name} | Vendor: ${m.vendor||'—'} | Buyer: ${m.buyer||'—'} | $${Math.round(vb-sp)} left`);
+    if(a.account_status===2) flags.push(`  🔴 DISABLED — ${a.name} | Vendor: ${m.vendor||'—'} | Buyer: ${m.buyer||'—'}`);
+  });
+  const rw=totSpend>0?Math.round(totBal/totSpend):0;
+  let report=`UMBRA OPS — DAILY REPORT\n${ds} | ${fmtTime()}\n${'─'.repeat(52)}\n\nSUMMARY\n  Total vendor balance:  ${fmt(totBal)}\n  Meta spend today:      ${fmt0(totSpend)}\n  Balance runway:        ${rw>0?rw+'d avg':'—'}\n  Active accounts:       ${active}\n  Disabled accounts:     ${disabled}\n  Warming pipeline:      ${warmingAccounts.length} account(s)\n\n`;
+  if(flags.length){report+=`FLAGS (${flags.length} requiring attention)\n${flags.join('\n')}\n\n`;}
+  else{report+=`STATUS\n  All accounts operating normally. No flags.\n\n`;}
+  if(warmingAccounts.length){
+    report+=`WARMING PIPELINE\n`;
+    warmingAccounts.forEach(w=>{
+      const day=Math.min(14,Math.max(1,Math.floor((Date.now()-new Date(w.startDate))/(864e5))+1));
+      report+=`  ${w.id} — Day ${day}/14 | Vendor: ${w.vendor||'—'} | Buyer: ${w.buyer||'—'} | Vertical: ${w.vertical||'TBD'}\n`;
+    });
+    report+='\n';
+  }
+  report+=`NEXT ACTIONS\n`;
+  if(disabled>0) report+=`  1. Contact vendor for replacement on ${disabled} disabled account(s)\n`;
+  const criticals=flags.filter(f=>f.includes('ZERO')||f.includes('EMERGENCY')||f.includes('CRITICAL'));
+  if(criticals.length) report+=`  ${disabled>0?2:1}. Execute immediate top-up on ${criticals.length} critical account(s)\n`;
+  if(!flags.length&&!disabled) report+=`  1. Continue monitoring — no action required\n`;
+  report+=`\n${'─'.repeat(52)}\nUMBRA Ops Dashboard`;
+  document.getElementById('rbox').textContent=report;
+}
+
+function copyReport(){
+  navigator.clipboard.writeText(document.getElementById('rbox').textContent).then(()=>{
+    const btn=event.target; btn.textContent='Copied!';
+    setTimeout(()=>btn.textContent='Copy to clipboard',2000);
+  });
+}
+
+// ── ACCOUNTS LIST ──────────────────────────────────────────────────────────
+function renderAccountsList(){
+  const tb=document.getElementById('acct-tb');
+  tb.innerHTML='';
+  accounts.forEach(a=>{
+    const m=acctMeta[a.id]||{};
+    const sp=a.amount_spent?fmt(parseFloat(a.amount_spent)/100):'$0';
+    tb.innerHTML+=`<tr><td><div class="aname">${a.name}</div><div class="aid">${a.id}</div></td><td style="color:#888">${m.vendor||'—'}</td><td style="color:#888">${m.buyer||'—'}</td><td class="mono">${sp}</td><td>${sPill(a.account_status)}</td></tr>`;
+  });
+}
+
+// ── AUTO REFRESH ───────────────────────────────────────────────────────────
+function startAutoRefresh(){
+  if(autoTimer) clearInterval(autoTimer);
+  autoTimer=setInterval(()=>{
+    autoSecs--;
+    const el=document.getElementById('m-cd');
+    if(el){
+      const m=Math.floor(autoSecs/60), s=autoSecs%60;
+      el.textContent=m+'m'+String(s).padStart(2,'0')+'s';
+    }
+    if(autoSecs<=0){
+      autoSecs=300;
+      runCheck();
+      runHealthCheck();
+    }
+  },1000);
+}
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+addLog('UMBRA Ops ready','ok');
+addLog('Enter your Meta token to connect','muted');
+</script>
+</body>
+</html>
