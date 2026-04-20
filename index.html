@@ -898,4 +898,24 @@ function renderAccountsList(){
     const m=acctMeta[a.id]||{};
     const sp=a.amount_spent?fmt(parseFloat(a.amount_spent)/100):'$0';
     tb.innerHTML+=`<tr><td><div class="aname">${sanitize(a.name)}</div><div class="aid">${sanitize(a.id)}</div></td><td style="color:var(--t2)">${sanitize(m.vendor||'—')}</td><td style="color:var(--t2)">${sanitize(m.buyer||'—')}</td><td class="mono">${sp}</td><td>${sPill(a.account_status)}</td></tr>`;
- 
+  });
+}
+
+// ═══ AUTO REFRESH ══════════════════════════════════════════
+function startAutoRefresh(){
+  if(autoTimer) clearInterval(autoTimer);
+  autoTimer=setInterval(()=>{
+    autoSecs--;
+    const m=Math.floor(autoSecs/60), s=autoSecs%60;
+    const el=document.getElementById('m-cd');
+    if(el) el.textContent=m+'m'+String(s).padStart(2,'0')+'s';
+    if(autoSecs<=0){autoSecs=300;runCheck();runHealthCheck();}
+  },1000);
+}
+
+// ═══ INIT ══════════════════════════════════════════════════
+addLog('UMBRA Ops v2 ready','ok');
+addLog('Enter password to access dashboard','muted');
+</script>
+</body>
+</html>
