@@ -393,7 +393,9 @@ function sanitize(s) {
           .replace(/"/g,'&quot;').replace(/'/g,'&#x27;').trim().slice(0,512);
 }
 function sanitizeNum(v) {
-  const n = parseFloat(String(v).replace(/[^0-9.]/g,''));
+  // Remove thousand separators (dots when followed by 3 digits) then parse
+  const cleaned = String(v).replace(/\.(?=\d{3}(?:\.|$))/g,'').replace(/,/g,'.');
+  const n = parseFloat(cleaned);
   return isNaN(n)||n<0 ? 0 : Math.min(n, 999999999);
 }
 async function hashPw(pw) {
@@ -459,7 +461,7 @@ async function sendWA(body) {
     const r = await fetch('https://api.telegram.org/bot'+TG_TOKEN+'/sendMessage',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({chat_id:TG_CHAT, text:body})
+      body: JSON.stringify({chat_id:TG_CHAT, text:body, parse_mode:'Markdown'})
     });
     const d = await r.json();
     if(d.ok) addLog('Telegram sent ✓','ok');
@@ -470,26 +472,26 @@ async function sendWA(body) {
 // ═══ ALERT MESSAGES ══════════════════════════════════════
 const MSGS = {
   pt:{
-    l1:(n,v,b,rem,pct)=>`⚠️ UMBRA Ops — ATENÇÃO\n${'─'.repeat(28)}\nConta: ${n}\nVendor: ${v||'—'}\nBuyer: ${b||'—'}\n${'─'.repeat(28)}\nSaldo em ${pct}% → $${Math.round(rem)} restando\nPlaneje o top-up em breve.`,
-    l2:(n,v,b,rem,pct)=>`🔶 UMBRA Ops — ALERTA\n${'─'.repeat(28)}\nConta: ${n}\nVendor: ${v||'—'}\nBuyer: ${b||'—'}\n${'─'.repeat(28)}\nSaldo em ${pct}% → $${Math.round(rem)} restando\nFaça o top-up HOJE.`,
-    l3:(n,v,b,rem,pct)=>`🔴 UMBRA Ops — CRÍTICO\n${'─'.repeat(28)}\nConta: ${n}\nVendor: ${v||'—'}\nBuyer: ${b||'—'}\n${'─'.repeat(28)}\nSaldo em ${pct}% → $${Math.round(rem)} restando\n⚡ Top-up URGENTE agora.`,
-    l4:(n,v,b)=>`🚨 UMBRA Ops — CONTA ZERADA\n${'─'.repeat(28)}\nConta: ${n}\nVendor: ${v||'—'}\nBuyer: ${b||'—'}\n${'─'.repeat(28)}\nSaldo ZERO. Campanhas pausadas.\n⚡ Top-up IMEDIATAMENTE.`,
-    l5:(n,v,b,amt)=>`🚨🚨 UMBRA Ops — EMERGÊNCIA\n${'─'.repeat(28)}\nConta: ${n}\nVendor: ${v||'—'}\nBuyer: ${b||'—'}\n${'─'.repeat(28)}\nGasto EXCEDEU saldo em $${Math.round(amt)}\n🔥 Contate o vendor AGORA.`,
-    disabled:(n,v,b)=>`🔴 UMBRA Ops — CONTA DESATIVADA\n${'─'.repeat(28)}\nConta: ${n}\nVendor: ${v||'—'}\nBuyer: ${b||'—'}\n${'─'.repeat(28)}\nSolicite replacement + balance transfer ao vendor imediatamente.`,
-    warn:(n,v,b)=>`⚠️ UMBRA Ops — AVISO\n${'─'.repeat(28)}\nConta: ${n}\nVendor: ${v||'—'}\nBuyer: ${b||'—'}\n${'─'.repeat(28)}\nProblema de cobrança ou política detectado.`,
-    change:(n,v,b,s1,s2)=>`🚨 UMBRA Ops — MUDANÇA DE STATUS\n${'─'.repeat(28)}\nConta: ${n}\nVendor: ${v||'—'}\nBuyer: ${b||'—'}\n${'─'.repeat(28)}\nStatus: ${s1} → ${s2}\n⚡ Verifique imediatamente.`,
-    repeat:(n,v,b,lbl)=>`⏰ UMBRA Ops — LEMBRETE 24h\n${'─'.repeat(28)}\nConta: ${n}\nVendor: ${v||'—'}\nBuyer: ${b||'—'}\n${'─'.repeat(28)}\nProblema persiste: ${lbl}\nNenhuma ação tomada ainda?`,
+    l1:(n,v,b,rem,pct,cur)=>`⚠️ *UMBRA Ops — ATENÇÃO*\n${'─'.repeat(28)}\n*Conta:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nSaldo em *${pct}%* → *${cur||'$'}${Math.round(rem)} restando*\nPlaneje o top-up em breve.`,
+    l2:(n,v,b,rem,pct,cur)=>`🔶 *UMBRA Ops — ALERTA*\n${'─'.repeat(28)}\n*Conta:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nSaldo em *${pct}%* → *${cur||'$'}${Math.round(rem)} restando*\n⚠️ Faça o top-up *HOJE*.`,
+    l3:(n,v,b,rem,pct,cur)=>`🔴 *UMBRA Ops — CRÍTICO*\n${'─'.repeat(28)}\n*Conta:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nSaldo em *${pct}%* → *${cur||'$'}${Math.round(rem)} restando*\n⚡ Top-up *URGENTE AGORA*.`,
+    l4:(n,v,b,cur)=>`🚨 *UMBRA Ops — CONTA ZERADA*\n${'─'.repeat(28)}\n*Conta:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\n*Saldo ZERO.* Campanhas pausadas.\n⚡ Top-up *IMEDIATAMENTE*.`,
+    l5:(n,v,b,amt,cur)=>`🚨🚨 *UMBRA Ops — EMERGÊNCIA*\n${'─'.repeat(28)}\n*Conta:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\n*Gasto EXCEDEU saldo em ${cur||'$'}${Math.round(amt)}*\n🔥 Contate o vendor *AGORA*.`,
+    disabled:(n,v,b)=>`🔴 *UMBRA Ops — CONTA DESATIVADA*\n${'─'.repeat(28)}\n*Conta:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nSolicite *replacement + balance transfer* ao vendor imediatamente.`,
+    warn:(n,v,b)=>`⚠️ *UMBRA Ops — AVISO*\n${'─'.repeat(28)}\n*Conta:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nProblema de cobrança ou política detectado.`,
+    change:(n,v,b,s1,s2)=>`🚨 *UMBRA Ops — MUDANÇA DE STATUS*\n${'─'.repeat(28)}\n*Conta:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nStatus: *${s1} → ${s2}*\n⚡ Verifique imediatamente.`,
+    repeat:(n,v,b,lbl)=>`⏰ *UMBRA Ops — LEMBRETE 24h*\n${'─'.repeat(28)}\n*Conta:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nProblema persiste: *${lbl}*\nNenhuma ação tomada ainda?`,
   },
   en:{
-    l1:(n,v,b,rem,pct)=>`⚠️ UMBRA Ops — ATTENTION\n${'─'.repeat(28)}\nAccount: ${n}\nVendor: ${v||'—'}\nBuyer: ${b||'—'}\n${'─'.repeat(28)}\nBalance at ${pct}% → $${Math.round(rem)} remaining\nPlan your top-up soon.`,
-    l2:(n,v,b,rem,pct)=>`🔶 UMBRA Ops — ALERT\n${'─'.repeat(28)}\nAccount: ${n}\nVendor: ${v||'—'}\nBuyer: ${b||'—'}\n${'─'.repeat(28)}\nBalance at ${pct}% → $${Math.round(rem)} remaining\nTop up TODAY.`,
-    l3:(n,v,b,rem,pct)=>`🔴 UMBRA Ops — CRITICAL\n${'─'.repeat(28)}\nAccount: ${n}\nVendor: ${v||'—'}\nBuyer: ${b||'—'}\n${'─'.repeat(28)}\nBalance at ${pct}% → $${Math.round(rem)} remaining\n⚡ URGENT top-up required.`,
-    l4:(n,v,b)=>`🚨 UMBRA Ops — ACCOUNT ZEROED\n${'─'.repeat(28)}\nAccount: ${n}\nVendor: ${v||'—'}\nBuyer: ${b||'—'}\n${'─'.repeat(28)}\nBalance ZERO. Campaigns paused.\n⚡ Top up IMMEDIATELY.`,
-    l5:(n,v,b,amt)=>`🚨🚨 UMBRA Ops — EMERGENCY\n${'─'.repeat(28)}\nAccount: ${n}\nVendor: ${v||'—'}\nBuyer: ${b||'—'}\n${'─'.repeat(28)}\nSpend EXCEEDED balance by $${Math.round(amt)}\n🔥 Contact vendor NOW.`,
-    disabled:(n,v,b)=>`🔴 UMBRA Ops — ACCOUNT DISABLED\n${'─'.repeat(28)}\nAccount: ${n}\nVendor: ${v||'—'}\nBuyer: ${b||'—'}\n${'─'.repeat(28)}\nRequest replacement + balance transfer from vendor immediately.`,
-    warn:(n,v,b)=>`⚠️ UMBRA Ops — WARNING\n${'─'.repeat(28)}\nAccount: ${n}\nVendor: ${v||'—'}\nBuyer: ${b||'—'}\n${'─'.repeat(28)}\nBilling or policy issue detected.`,
-    change:(n,v,b,s1,s2)=>`🚨 UMBRA Ops — STATUS CHANGE\n${'─'.repeat(28)}\nAccount: ${n}\nVendor: ${v||'—'}\nBuyer: ${b||'—'}\n${'─'.repeat(28)}\nStatus: ${s1} → ${s2}\n⚡ Check immediately.`,
-    repeat:(n,v,b,lbl)=>`⏰ UMBRA Ops — 24h REMINDER\n${'─'.repeat(28)}\nAccount: ${n}\nVendor: ${v||'—'}\nBuyer: ${b||'—'}\n${'─'.repeat(28)}\nIssue persists: ${lbl}\nNo action taken yet?`,
+    l1:(n,v,b,rem,pct,cur)=>`⚠️ *UMBRA Ops — ATTENTION*\n${'─'.repeat(28)}\n*Account:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nBalance at *${pct}%* → *${cur||'$'}${Math.round(rem)} remaining*\nPlan your top-up soon.`,
+    l2:(n,v,b,rem,pct,cur)=>`🔶 *UMBRA Ops — ALERT*\n${'─'.repeat(28)}\n*Account:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nBalance at *${pct}%* → *${cur||'$'}${Math.round(rem)} remaining*\n⚠️ Top up *TODAY*.`,
+    l3:(n,v,b,rem,pct,cur)=>`🔴 *UMBRA Ops — CRITICAL*\n${'─'.repeat(28)}\n*Account:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nBalance at *${pct}%* → *${cur||'$'}${Math.round(rem)} remaining*\n⚡ *URGENT top-up required*.`,
+    l4:(n,v,b,cur)=>`🚨 *UMBRA Ops — ACCOUNT ZEROED*\n${'─'.repeat(28)}\n*Account:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\n*Balance ZERO.* Campaigns paused.\n⚡ Top up *IMMEDIATELY*.`,
+    l5:(n,v,b,amt,cur)=>`🚨🚨 *UMBRA Ops — EMERGENCY*\n${'─'.repeat(28)}\n*Account:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\n*Spend EXCEEDED balance by ${cur||'$'}${Math.round(amt)}*\n🔥 Contact vendor *NOW*.`,
+    disabled:(n,v,b)=>`🔴 *UMBRA Ops — ACCOUNT DISABLED*\n${'─'.repeat(28)}\n*Account:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nRequest *replacement + balance transfer* from vendor immediately.`,
+    warn:(n,v,b)=>`⚠️ *UMBRA Ops — WARNING*\n${'─'.repeat(28)}\n*Account:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nBilling or policy issue detected.`,
+    change:(n,v,b,s1,s2)=>`🚨 *UMBRA Ops — STATUS CHANGE*\n${'─'.repeat(28)}\n*Account:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nStatus: *${s1} → ${s2}*\n⚡ Check immediately.`,
+    repeat:(n,v,b,lbl)=>`⏰ *UMBRA Ops — 24h REMINDER*\n${'─'.repeat(28)}\n*Account:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nIssue persists: *${lbl}*\nNo action taken yet?`,
   }
 };
 
@@ -677,15 +679,17 @@ function checkAndAlert(a,vb,sp){
   const m=acctMeta[a.id]||{};
   const v=m.vendor||'—', b=m.buyer||'—';
   const rem=vb-sp, pct=vb>0?Math.round((rem/vb)*100):0;
+  const cur=a.currency||'USD';
+  const sym=cur==='BRL'?'R$ ':cur==='EUR'?'€':cur==='GBP'?'£':'$';
   const prev=alertState[a.id], now=Date.now();
   const M=MSGS[alertLang];
   const lbl=['','20%','10%','5%','Zero','Negativo'][layer];
   let msg='';
-  if(layer===1) msg=M.l1(a.name,v,b,rem,pct);
-  else if(layer===2) msg=M.l2(a.name,v,b,rem,pct);
-  else if(layer===3) msg=M.l3(a.name,v,b,rem,pct);
-  else if(layer===4) msg=M.l4(a.name,v,b);
-  else if(layer===5) msg=M.l5(a.name,v,b,sp-vb);
+  if(layer===1) msg=M.l1(a.name,v,b,rem,pct,sym);
+  else if(layer===2) msg=M.l2(a.name,v,b,rem,pct,sym);
+  else if(layer===3) msg=M.l3(a.name,v,b,rem,pct,sym);
+  else if(layer===4) msg=M.l4(a.name,v,b,sym);
+  else if(layer===5) msg=M.l5(a.name,v,b,sp-vb,sym);
   const isNew=!prev, isWorse=prev&&layer>prev.layer, is24h=prev&&prev.layer===layer&&now-prev.ts>=86400000;
   if(isNew||isWorse||is24h){
     if(is24h) msg=M.repeat(a.name,v,b,lbl);
@@ -894,24 +898,4 @@ function renderAccountsList(){
     const m=acctMeta[a.id]||{};
     const sp=a.amount_spent?fmt(parseFloat(a.amount_spent)/100):'$0';
     tb.innerHTML+=`<tr><td><div class="aname">${sanitize(a.name)}</div><div class="aid">${sanitize(a.id)}</div></td><td style="color:var(--t2)">${sanitize(m.vendor||'—')}</td><td style="color:var(--t2)">${sanitize(m.buyer||'—')}</td><td class="mono">${sp}</td><td>${sPill(a.account_status)}</td></tr>`;
-  });
-}
-
-// ═══ AUTO REFRESH ══════════════════════════════════════════
-function startAutoRefresh(){
-  if(autoTimer) clearInterval(autoTimer);
-  autoTimer=setInterval(()=>{
-    autoSecs--;
-    const m=Math.floor(autoSecs/60), s=autoSecs%60;
-    const el=document.getElementById('m-cd');
-    if(el) el.textContent=m+'m'+String(s).padStart(2,'0')+'s';
-    if(autoSecs<=0){autoSecs=300;runCheck();runHealthCheck();}
-  },1000);
-}
-
-// ═══ INIT ══════════════════════════════════════════════════
-addLog('UMBRA Ops v2 ready','ok');
-addLog('Enter password to access dashboard','muted');
-</script>
-</body>
-</html>
+ 
