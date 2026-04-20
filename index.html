@@ -501,7 +501,7 @@ let acctMeta={}, alertState={}, autoTimer=null, autoSecs=300;
 // ═══ UTILS ════════════════════════════════════════════════
 const fmt  = n => (n===null||n===undefined||isNaN(n)) ? '—' : '$'+Math.round(n).toLocaleString();
 const fmt0 = n => '$'+Math.round(n||0).toLocaleString();
-const today= () => { const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+const today= () => new Date().toISOString().slice(0,10);
 const addDays=(d,n)=>{const dt=new Date(d);dt.setDate(dt.getDate()+n);return dt.toISOString().slice(0,10)};
 const fmtTime=()=>new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
 
@@ -811,4 +811,107 @@ function saveWarm(){
   closeWarmModal(); renderWarming();
   addLog('Added '+id+' to warming pipeline','info');
 }
-function removeWarm(idx){const n=warmingAccounts[idx].id;warmingAccounts.splice(idx,1);renderWarming();add
+function removeWarm(idx){const n=warmingAccounts[idx].id;warmingAccounts.splice(idx,1);renderWarming();addLog('Warming complete: '+n,'ok');}
+
+function renderWarming(){
+  const tb=document.getElementById('warm-tb');
+  const empty=document.getElementById('warm-empty');
+  tb.innerHTML='';
+  document.getElementById('tb-warm').textContent=warmingAccounts.length||0;
+  if(!warmingAccounts.length){empty.style.display='block';return;}
+  empty.style.display='none';
+  warmingAccounts.forEach((w,idx)=>{
+    const start=new Date(w.startDate);
+    const day=Math.min(14,Math.max(1,Math.floor((Date.now()-start)/(864e5))+1));
+    const pct=Math.round((day/14)*100);
+    const phase=day>=8?'<span class="pill p-warn">Ramp</span>':day>=4?'<span class="pill p-info">BM setup</span>':'<span class="pill p-info">Behavior</span>';
+    const budget=day>=8?'$'+Math.round(5*Math.pow(1.3,day-7)):day>=4?'$5':'$0';
+    tb.innerHTML+=`<tr>
+      <td><div class="aname" style="font-size:12px">${sanitize(w.id)}</div></td>
+      <td style="color:var(--t2)">${sanitize(w.vendor||'—')}</td>
+      <td style="color:var(--t2)">${sanitize(w.buyer||'—')}</td>
+      <td><span class="mono c-gold" style="font-weight:700">Day ${day}/14</span></td>
+      <td><div class="wbar-w"><div class="wbar" style="width:${pct}%"></div></div><span style="font-size:10px;color:var(--t3);margin-left:6px">${pct}%</span></td>
+      <td>${phase}</td>
+      <td class="mono">${budget}/day</td>
+      <td style="color:var(--t2);font-size:12px">${sanitize(w.vertical||'—')}</td>
+      <td style="font-size:11px;color:var(--t3)">${addDays(w.startDate,14)}</td>
+      <td><button class="btn" style="font-size:11px;padding:4px 9px;color:var(--green)" onclick="removeWarm(${idx})">Done</button></td>
+    </tr>`;
+  });
+}
+
+// ═══ REPORT ════════════════════════════════════════════════
+function generateReport(){
+  const d=new Date();
+  const ds=d.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  let totBal=0,totSpend=0,flags=[];
+  let active=0,disabled=0;
+  accounts.forEach(a=>{
+    const vb=sanitizeNum(document.getElementById('bal-'+a.id)?.value||0);
+    const sp=spends[a.id]||0;
+    const m=acctMeta[a.id]||{};
+    totBal+=vb; totSpend+=sp;
+    if(a.account_status===1) active++;
+    if(a.account_status===2||a.account_status===101) disabled++;
+    const layer=getAlertLayer(vb,sp);
+    if(layer===5) flags.push('  🚨🚨 EMERGENCY — '+a.name+' | Vendor: '+(m.vendor||'—')+' | Buyer: '+(m.buyer||'—')+' | Overspent by $'+Math.round(sp-vb));
+    else if(layer===4) flags.push('  🚨 ZERO — '+a.name+' | Vendor: '+(m.vendor||'—')+' | Buyer: '+(m.buyer||'—'));
+    else if(layer===3) flags.push('  🔴 CRITICAL (5%) — '+a.name+' | '+fmt(vb-sp)+' left');
+    else if(layer===2) flags.push('  🔶 ALERT (10%) — '+a.name+' | '+fmt(vb-sp)+' left');
+    else if(layer===1) flags.push('  ⚠️  ATTENTION (20%) — '+a.name+' | '+fmt(vb-sp)+' left');
+    if(a.account_status===2) flags.push('  🔴 DISABLED — '+a.name+' | Vendor: '+(m.vendor||'—'));
+  });
+  const rw=totSpend>0?Math.round(totBal/totSpend):0;
+  let rep='UMBRA OPS — DAILY REPORT\n'+ds+' | '+fmtTime()+'\n'+'─'.repeat(50)+'\n\nSUMMARY\n  Total vendor balance:  '+fmt(totBal)+'\n  Meta spend today:      '+fmt0(totSpend)+'\n  Balance runway:        '+(rw>0?rw+'d avg':'—')+'\n  Active accounts:       '+active+'\n  Disabled accounts:     '+disabled+'\n  Warming pipeline:      '+warmingAccounts.length+' account(s)\n\n';
+  if(flags.length) rep+='FLAGS ('+flags.length+' requiring attention)\n'+flags.join('\n')+'\n\n';
+  else rep+='STATUS\n  All accounts operating normally. No flags.\n\n';
+  if(warmingAccounts.length){
+    rep+='WARMING PIPELINE\n';
+    warmingAccounts.forEach(w=>{const day=Math.min(14,Math.max(1,Math.floor((Date.now()-new Date(w.startDate))/(864e5))+1));rep+='  '+w.id+' — Day '+day+'/14 | Vendor: '+(w.vendor||'—')+' | Buyer: '+(w.buyer||'—')+'\n';});
+    rep+='\n';
+  }
+  rep+='NEXT ACTIONS\n';
+  if(disabled>0) rep+='  1. Contact vendor for replacement on '+disabled+' disabled account(s)\n';
+  const crits=flags.filter(f=>f.includes('ZERO')||f.includes('EMERGENCY')||f.includes('CRITICAL'));
+  if(crits.length) rep+='  '+(disabled>0?2:1)+'. Execute immediate top-up on '+crits.length+' critical account(s)\n';
+  if(!flags.length&&!disabled) rep+='  1. Continue monitoring — no action required\n';
+  rep+='\n'+'─'.repeat(50)+'\nUMBRA Ops v2';
+  document.getElementById('rbox').textContent=rep;
+}
+
+function copyReport(){
+  navigator.clipboard.writeText(document.getElementById('rbox').textContent).then(()=>{
+    const btn=event.target; btn.textContent='Copied!';
+    setTimeout(()=>btn.textContent='Copy to clipboard',2000);
+  });
+}
+
+function renderAccountsList(){
+  const tb=document.getElementById('acct-tb');
+  tb.innerHTML='';
+  accounts.forEach(a=>{
+    const m=acctMeta[a.id]||{};
+    const sp=a.amount_spent?fmt(parseFloat(a.amount_spent)/100):'$0';
+    tb.innerHTML+=`<tr><td><div class="aname">${sanitize(a.name)}</div><div class="aid">${sanitize(a.id)}</div></td><td style="color:var(--t2)">${sanitize(m.vendor||'—')}</td><td style="color:var(--t2)">${sanitize(m.buyer||'—')}</td><td class="mono">${sp}</td><td>${sPill(a.account_status)}</td></tr>`;
+  });
+}
+
+// ═══ AUTO REFRESH ══════════════════════════════════════════
+function startAutoRefresh(){
+  if(autoTimer) clearInterval(autoTimer);
+  autoTimer=setInterval(()=>{
+    autoSecs--;
+    const m=Math.floor(autoSecs/60), s=autoSecs%60;
+    const el=document.getElementById('m-cd');
+    if(el) el.textContent=m+'m'+String(s).padStart(2,'0')+'s';
+    if(autoSecs<=0){autoSecs=300;runCheck();runHealthCheck();}
+  },1000);
+}
+
+// ═══ INIT ══════════════════════════════════════════════════
+addLog('UMBRA Ops v2 ready','ok');
+addLog('Enter password to access dashboard','muted');
+</script>
+</body>
+</html>
