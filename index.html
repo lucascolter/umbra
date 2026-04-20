@@ -501,7 +501,7 @@ let acctMeta={}, alertState={}, autoTimer=null, autoSecs=300;
 // ═══ UTILS ════════════════════════════════════════════════
 const fmt  = n => (n===null||n===undefined||isNaN(n)) ? '—' : '$'+Math.round(n).toLocaleString();
 const fmt0 = n => '$'+Math.round(n||0).toLocaleString();
-const today= () => new Date().toISOString().slice(0,10);
+const today= () => { const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
 const addDays=(d,n)=>{const dt=new Date(d);dt.setDate(dt.getDate()+n);return dt.toISOString().slice(0,10)};
 const fmtTime=()=>new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
 
