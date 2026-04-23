@@ -277,11 +277,11 @@ tbody tr:hover td{background:var(--bg3)!important}
   </div>
 
   <div class="tabs" id="tabs" style="display:none">
-    <div class="tab on" onclick="switchTab('recon')" id="tab-recon">Reconciliação <span class="tbg" id="tb-recon">—</span></div>
-    <div class="tab" onclick="switchTab('health')" id="tab-health">Saúde das contas <span class="tbg" id="tb-health">—</span></div>
-    <div class="tab" onclick="switchTab('warming')" id="tab-warming">Warming <span class="tbg" id="tb-warm">0</span></div>
-    <div class="tab" onclick="switchTab('report')" id="tab-report">Relatório</div>
-    <div class="tab" onclick="switchTab('log')" id="tab-log">Log <span class="tbg" id="tb-log">0</span></div>
+    <div class="tab on" onclick="switchTab('recon')"><span id="tab-recon">Reconciliação</span> <span class="tbg" id="tb-recon">—</span></div>
+    <div class="tab" onclick="switchTab('health')"><span id="tab-health">Saúde das contas</span> <span class="tbg" id="tb-health">—</span></div>
+    <div class="tab" onclick="switchTab('warming')"><span id="tab-warming">Warming</span> <span class="tbg" id="tb-warm">0</span></div>
+    <div class="tab" onclick="switchTab('report')"><span id="tab-report">Relatório</span></div>
+    <div class="tab" onclick="switchTab('log')"><span id="tab-log">Log</span> <span class="tbg" id="tb-log">0</span></div>
   </div>
 
   <div class="main">
@@ -825,7 +825,6 @@ async function connect(){
     document.getElementById('tb-recon').textContent=accounts.length;
     document.getElementById('acct-count').textContent=accounts.length+(uiLang==='pt'?' contas':' accounts');
     addLog((uiLang==='pt'?'Conectado — ':'Connected — ')+accounts.length+(uiLang==='pt'?' contas carregadas':' accounts loaded'),'ok');
-    buildReconRows();
     renderAccountsList();
     runHealthCheck();
     startAutoRefresh();
@@ -833,30 +832,38 @@ async function connect(){
     showErr(uiLang==='pt'?'Falha na conexão. Verifique o token.':'Connection failed. Check your token.');
     btn.disabled=false;btn.textContent=t('cbtn');
   }
+  buildReconRows(); // outside try-catch so errors surface in console
 }
 
 // ═══ RECONCILIATION ════════════════════════════════════════════════════════
 function buildReconRows(){
   const tb=document.getElementById('recon-tb');
+  if(!tb){ console.error('UMBRA: recon-tb not found'); return; }
   tb.innerHTML='';
+  if(!accounts||!accounts.length){ console.warn('UMBRA: no accounts to render'); return; }
+  console.log('UMBRA: building', accounts.length, 'rows');
   accounts.forEach(a=>{
-    const m=acctMeta[a.id]||{};
-    const tr=document.createElement('tr');
-    tr.id='rrow-'+a.id;
-    tr.innerHTML=`
-      <td><div class="aname">${sanitize(a.name)}</div><div class="aid">${sanitize(a.id)}</div></td>
-      <td><input class="cel" id="vendor-${a.id}" placeholder="${t('vendor-ph')}" value="${sanitize(m.vendor||'')}" onchange="saveMeta('${a.id}')"/></td>
-      <td><input class="cel" id="buyer-${a.id}" placeholder="${t('buyer-ph')}" value="${sanitize(m.buyer||'')}" onchange="saveMeta('${a.id}')"/></td>
-      <td><input class="cel" id="bm-${a.id}" placeholder="${t('bm-ph')}" value="${sanitize(m.bm||'')}" onchange="saveMeta('${a.id}')"/></td>
-      <td><input class="cel" id="vertical-${a.id}" placeholder="${t('vertical-ph')}" value="${sanitize(m.vertical||'')}" onchange="saveMeta('${a.id}')"/></td>
-      <td><input class="cel cel-bal" type="number" id="bal-${a.id}" placeholder="0.00" step="any"/></td>
-      <td class="mono" id="rsp-${a.id}">—</td>
-      <td class="mono" id="rrem-${a.id}" style="font-weight:600">—</td>
-      <td id="rrw-${a.id}">—</td>
-      <td id="rflag-${a.id}"><span class="pill p-info">${t('pill-enter')}</span></td>
-    `;
-    tb.appendChild(tr);
+    try{
+      const m=acctMeta[a.id]||{};
+      const tr=document.createElement('tr');
+      tr.id='rrow-'+a.id;
+      const vph=t('vendor-ph'), bph=t('buyer-ph'), bmph='BM', vertph='Vertical';
+      const pe=t('pill-enter');
+      tr.innerHTML=
+        '<td><div class="aname">'+sanitize(a.name)+'</div><div class="aid">'+sanitize(a.id)+'</div></td>'+
+        '<td><input class="cel" id="vendor-'+a.id+'" placeholder="'+vph+'" value="'+sanitize(m.vendor||'')+'" onchange="saveMeta(\''+a.id+'\')"/></td>'+
+        '<td><input class="cel" id="buyer-'+a.id+'" placeholder="'+bph+'" value="'+sanitize(m.buyer||'')+'" onchange="saveMeta(\''+a.id+'\')"/></td>'+
+        '<td><input class="cel" id="bm-'+a.id+'" placeholder="'+bmph+'" value="'+sanitize(m.bm||'')+'" onchange="saveMeta(\''+a.id+'\')"/></td>'+
+        '<td><input class="cel" id="vertical-'+a.id+'" placeholder="'+vertph+'" value="'+sanitize(m.vertical||'')+'" onchange="saveMeta(\''+a.id+'\')"/></td>'+
+        '<td><input class="cel cel-bal" type="number" id="bal-'+a.id+'" placeholder="0.00" step="any"/></td>'+
+        '<td class="mono" id="rsp-'+a.id+'">—</td>'+
+        '<td class="mono" id="rrem-'+a.id+'" style="font-weight:600">—</td>'+
+        '<td id="rrw-'+a.id+'">—</td>'+
+        '<td id="rflag-'+a.id+'"><span class="pill p-info">'+pe+'</span></td>';
+      tb.appendChild(tr);
+    }catch(e){ console.error('UMBRA: row error for', a.id, e); }
   });
+  console.log('UMBRA: done —', tb.children.length, 'rows in DOM');
 }
 
 function saveMeta(id){
@@ -1153,16 +1160,4 @@ function startAutoRefresh(){
   },1000);
 }
 
-// ═══ INIT ══════════════════════════════════════════════════════════════════
-applyTranslations();
-document.getElementById('rbox').textContent=t('rbox-init');
-document.getElementById('warm-empty').textContent=t('warm-empty');
-document.getElementById('last-lbl').textContent=t('last-lbl-init');
-// Show correct hint on login screen
-const _stored=localStorage.getItem('umbra_pw');
-const _hint=document.getElementById('login-hint');
-if(_hint) _hint.textContent=_stored?t('login-hint-set'):t('login-hint-first');
-addLog('UMBRA Ops v2 pronto','ok');
-</script>
-</body>
-</html>
+// ═══ INIT ════════════════════════
