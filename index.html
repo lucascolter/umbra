@@ -234,24 +234,22 @@ tbody tr:hover td{background:var(--bg3)!important}
 <div class="login-wrap" id="login-screen">
   <div style="position:absolute;top:20px;right:20px;display:flex;gap:8px;align-items:center">
     <div class="ttoggle">
-      <button class="topt on" id="login-lbtn-pt" onclick="setLang('pt')">PT</button>
-      <button class="topt" id="login-lbtn-en" onclick="setLang('en')">EN</button>
     </div>
     <button class="theme-btn" id="login-theme-btn" onclick="toggleTheme()">☀️ Claro</button>
   </div>
   <div class="login-card">
     <div class="login-logo">
       <span class="login-logo-mark">UMBRA</span>
-      <span class="login-logo-sub" id="l-sub">Ops Dashboard</span>
+      <span class="login-logo-sub">Ops Dashboard</span>
       <div class="login-divider"></div>
     </div>
     <div class="mfield">
-      <span class="flabel" id="l-pw-label">Senha</span>
+      <span class="flabel">Password</span>
       <input type="password" class="finp" id="pw-inp" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
     </div>
-    <button class="pbtn" id="l-btn" onclick="doLogin()">Acessar dashboard</button>
+    <button class="pbtn" id="login-btn" onclick="doLogin()">Access dashboard</button>
     <div class="lerr" id="login-err"></div>
-    <div class="lhint" id="login-hint">Primeira vez? Digite uma senha para definir.</div>
+    <div class="lhint" id="login-hint">First time? Set a password.</div>
   </div>
 </div>
 
@@ -264,23 +262,21 @@ tbody tr:hover td{background:var(--bg3)!important}
     </div>
     <div class="tright">
       <div class="ttoggle">
-        <button class="topt on" id="lbtn-pt" onclick="setLang('pt')">PT</button>
-        <button class="topt" id="lbtn-en" onclick="setLang('en')">EN</button>
       </div>
-      <button class="theme-btn" id="theme-btn" onclick="toggleTheme()">☀️ Claro</button>
+      <button class="theme-btn" id="theme-btn" onclick="toggleTheme()">☀️ Light</button>
       <div class="cpill">
         <div class="cdot" id="conn-dot"></div>
-        <span id="conn-label">Desconectado</span>
+        <span id="conn-label">Not connected</span>
       </div>
-      <button class="lout" onclick="doLogout()" id="t-logout">Sair</button>
+      <button class="lout" onclick="doLogout()">Logout</button>
     </div>
   </div>
 
   <div class="tabs" id="tabs" style="display:none">
-    <div class="tab on" onclick="switchTab('recon')"><span id="tab-recon">Reconciliação</span> <span class="tbg" id="tb-recon">—</span></div>
-    <div class="tab" onclick="switchTab('health')"><span id="tab-health">Saúde das contas</span> <span class="tbg" id="tb-health">—</span></div>
+    <div class="tab on" onclick="switchTab('recon')"><span id="tab-recon">Reconciliation</span> <span class="tbg" id="tb-recon">—</span></div>
+    <div class="tab" onclick="switchTab('health')"><span id="tab-health">Account health</span> <span class="tbg" id="tb-health">—</span></div>
     <div class="tab" onclick="switchTab('warming')"><span id="tab-warming">Warming</span> <span class="tbg" id="tb-warm">0</span></div>
-    <div class="tab" onclick="switchTab('report')"><span id="tab-report">Relatório</span></div>
+    <div class="tab" onclick="switchTab('report')"><span id="tab-report">Report</span></div>
     <div class="tab" onclick="switchTab('log')"><span id="tab-log">Log</span> <span class="tbg" id="tb-log">0</span></div>
   </div>
 
@@ -290,11 +286,11 @@ tbody tr:hover td{background:var(--bg3)!important}
     <div id="pane-setup" class="pane on">
       <div class="setup-wrap">
         <div class="setup-card">
-          <h2 id="setup-title">Conectar ao Meta Ads</h2>
-          <p id="setup-desc">Digite seu token de acesso da API do Meta. O sistema puxa o gasto em tempo real, monitora a saúde das contas e envia alertas no Telegram automaticamente.</p>
-          <span class="flabel" id="setup-token-label">Token de acesso</span>
+          <h2>Connect to Meta Ads</h2>
+          <p>Digite seu token de acesso da API do Meta. O sistema puxa o gasto em tempo real, monitora a saúde das contas e envia alertas no Telegram automaticamente.</p>
+          <span class="flabel">Access Token</span>
           <input class="finp" type="password" id="tok" placeholder="EAALHty9jREg..." autocomplete="off" onkeydown="if(event.key==='Enter')connect()"/>
-          <button class="pbtn" id="cbtn" onclick="connect()">Conectar e carregar contas</button>
+          <button class="pbtn" id="cbtn" onclick="connect()">Connect and load accounts</button>
           <div class="errbox" id="errmsg"></div>
         </div>
       </div>
@@ -303,29 +299,29 @@ tbody tr:hover td{background:var(--bg3)!important}
     <!-- RECON -->
     <div id="pane-recon" class="pane">
       <div class="metrics">
-        <div class="met"><div class="mlbl" id="m-lbl-bal">Saldos dos vendors</div><div class="mval gold" id="m-bal">—</div></div>
-        <div class="met"><div class="mlbl" id="m-lbl-spend">Gasto Meta hoje</div><div class="mval" id="m-spend">—</div></div>
-        <div class="met"><div class="mlbl" id="m-lbl-runway">Runway médio</div><div class="mval" id="m-runway">—</div></div>
-        <div class="met"><div class="mlbl" id="m-lbl-flags">Alertas ativos</div><div class="mval" id="m-flags">—</div></div>
-        <div class="met"><div class="mlbl" id="m-lbl-active">Contas ativas</div><div class="mval ok" id="m-active">—</div></div>
-        <div class="met"><div class="mlbl" id="m-lbl-cd">Próxima verificação</div><div class="mval gold" id="m-cd" style="font-size:18px">—</div></div>
+        <div class="met"><div class="mlbl" id="m-lbl-bal">Vendor balances</div><div class="mval gold" id="m-bal">—</div></div>
+        <div class="met"><div class="mlbl" id="m-lbl-spend">Meta spend today</div><div class="mval" id="m-spend">—</div></div>
+        <div class="met"><div class="mlbl" id="m-lbl-runway">Avg runway</div><div class="mval" id="m-runway">—</div></div>
+        <div class="met"><div class="mlbl" id="m-lbl-flags">Active flags</div><div class="mval" id="m-flags">—</div></div>
+        <div class="met"><div class="mlbl" id="m-lbl-active">Active accounts</div><div class="mval ok" id="m-active">—</div></div>
+        <div class="met"><div class="mlbl" id="m-lbl-cd">Next check</div><div class="mval gold" id="m-cd" style="font-size:18px">—</div></div>
       </div>
 
       <div class="layers">
-        <div class="lcard lc1"><div class="lc-t" style="color:#7EC85A">L1 — 20%</div><div class="lc-s" style="color:#7EC85A" id="lc-s1">Atenção</div></div>
-        <div class="lcard lc2"><div class="lc-t" style="color:var(--gold)">L2 — 10%</div><div class="lc-s" style="color:var(--gold)" id="lc-s2">Alerta</div></div>
-        <div class="lcard lc3"><div class="lc-t" style="color:var(--amber)">L3 — 5%</div><div class="lc-s" style="color:var(--amber)" id="lc-s3">Crítico</div></div>
-        <div class="lcard lc4"><div class="lc-t" style="color:var(--red)">L4 — Zero</div><div class="lc-s" style="color:var(--red)" id="lc-s4">Pausado</div></div>
-        <div class="lcard lc5"><div class="lc-t" style="color:#FF4444">L5 — Negativo</div><div class="lc-s" style="color:#FF4444" id="lc-s5">Emergência</div></div>
+        <div class="lcard lc1"><div class="lc-t" style="color:#7EC85A">L1 — 20%</div><div class="lc-s" style="color:#7EC85A" id="lc-s1">Attention</div></div>
+        <div class="lcard lc2"><div class="lc-t" style="color:var(--gold)">L2 — 10%</div><div class="lc-s" style="color:var(--gold)" id="lc-s2">Alert</div></div>
+        <div class="lcard lc3"><div class="lc-t" style="color:var(--amber)">L3 — 5%</div><div class="lc-s" style="color:var(--amber)" id="lc-s3">Critical</div></div>
+        <div class="lcard lc4"><div class="lc-t" style="color:var(--red)">L4 — Zero</div><div class="lc-s" style="color:var(--red)" id="lc-s4">Paused</div></div>
+        <div class="lcard lc5"><div class="lc-t" style="color:#FF4444">L5 — Negativo</div><div class="lc-s" style="color:#FF4444" id="lc-s5">Emergency</div></div>
       </div>
 
       <div class="card">
         <div class="card-hdr">
-          <div class="card-title" id="recon-title">Reconciliação em tempo real</div>
+          <div class="card-title" id="recon-title">Live reconciliation</div>
           <div class="brow">
-            <span style="font-size:11px;color:var(--t3)" id="last-lbl">Ainda não verificado</span>
-            <button class="btn" id="check-btn" onclick="runCheck()">Verificar agora</button>
-            <button class="btn gold" onclick="switchTab('report')" id="btn-report">Relatório diário</button>
+            <span style="font-size:11px;color:var(--t3)" id="last-lbl">Not checked yet</span>
+            <button class="btn" id="check-btn" onclick="runCheck()">Run check now</button>
+            <button class="btn gold" onclick="switchTab('report')" id="btn-report">Daily report</button>
           </div>
         </div>
         <p class="card-hint" id="recon-hint">Digite o saldo do vendor, nome do vendor e buyer por conta. O gasto é puxado da API do Meta automaticamente. Alertas no Telegram disparam a cada nova flag.</p>
@@ -333,16 +329,16 @@ tbody tr:hover td{background:var(--bg3)!important}
           <table>
             <thead>
               <tr>
-                <th id="th-account">Conta</th>
-                <th id="th-vendor">Vendor</th>
-                <th id="th-buyer">Buyer</th>
-                <th id="th-bm">BM</th>
-                <th id="th-vertical">Vertical</th>
-                <th id="th-balance">Saldo ($)</th>
-                <th id="th-spend">Gasto hoje ($)</th>
-                <th id="th-remaining">Restante ($)</th>
-                <th id="th-runway">Runway</th>
-                <th id="th-layer">Alerta</th>
+                <th>Account</th>
+                <th>Vendor</th>
+                <th>Buyer</th>
+                <th>BM</th>
+                <th>Vertical</th>
+                <th>Balance ($)</th>
+                <th>Spend today ($)</th>
+                <th>Remaining ($)</th>
+                <th>Runway</th>
+                <th id="th-layer">Alert</th>
               </tr>
             </thead>
             <tbody id="recon-tb"></tbody>
@@ -354,8 +350,8 @@ tbody tr:hover td{background:var(--bg3)!important}
     <!-- HEALTH -->
     <div id="pane-health" class="pane">
       <div class="card-hdr" style="margin-bottom:14px">
-        <div style="font-size:15px;font-weight:700;color:var(--t1)" id="health-title">Saúde das contas</div>
-        <button class="btn gold" id="health-btn" onclick="runHealthCheck()">Atualizar</button>
+        <div style="font-size:15px;font-weight:700;color:var(--t1)" id="health-title">Account health</div>
+        <button class="btn gold" id="health-btn" onclick="runHealthCheck()">Refresh</button>
       </div>
       <div id="health-sum" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px"></div>
       <div id="hgrid" class="hgrid"><div class="empty-s"><span class="loader"></span></div></div>
@@ -365,7 +361,7 @@ tbody tr:hover td{background:var(--bg3)!important}
     <div id="pane-warming" class="pane">
       <div class="card">
         <div class="card-hdr">
-          <div class="card-title" id="warm-title">Pipeline de Warming</div>
+          <div class="card-title" id="warm-title">Warming pipeline</div>
           <button class="btn gold" onclick="openWarmModal()">+ Adicionar conta</button>
         </div>
         <p class="card-hint" id="warm-hint">Os dias avançam automaticamente pela data de adição. Contas ficam prontas após o Dia 14.</p>
@@ -373,15 +369,15 @@ tbody tr:hover td{background:var(--bg3)!important}
           <table>
             <thead>
               <tr>
-                <th id="wth-id">ID da conta</th>
-                <th id="wth-vendor">Vendor</th>
-                <th id="wth-buyer">Buyer</th>
-                <th id="wth-day">Dia</th>
-                <th id="wth-prog">Progresso</th>
-                <th id="wth-phase">Fase</th>
-                <th id="wth-budget">Budget/dia</th>
-                <th id="wth-vertical">Vertical</th>
-                <th id="wth-ready">Pronto em</th>
+                <th>Account ID</th>
+                <th>Vendor</th>
+                <th>Buyer</th>
+                <th>Day</th>
+                <th>Progress</th>
+                <th>Phase</th>
+                <th>Budget/day</th>
+                <th>Vertical</th>
+                <th>Ready date</th>
                 <th></th>
               </tr>
             </thead>
@@ -396,10 +392,10 @@ tbody tr:hover td{background:var(--bg3)!important}
     <div id="pane-report" class="pane">
       <div class="card">
         <div class="card-hdr">
-          <div class="card-title" id="report-title">Relatório diário</div>
+          <div class="card-title" id="report-title">Daily report</div>
           <div class="brow">
-            <button class="btn" onclick="generateReport()" id="btn-regen">Regenerar</button>
-            <button class="btn gold" onclick="copyReport()" id="btn-copy">Copiar</button>
+            <button class="btn" onclick="generateReport()" id="btn-regen">Regenerate</button>
+            <button class="btn gold" onclick="copyReport()" id="btn-copy">Copy to clipboard</button>
           </div>
         </div>
         <p class="card-hint" id="report-hint">Pronto para colar no Slack ou Telegram. Faça uma verificação primeiro para ter dados atualizados.</p>
@@ -412,20 +408,20 @@ tbody tr:hover td{background:var(--bg3)!important}
       <div class="two-col">
         <div class="card">
           <div class="card-hdr">
-            <div class="card-title" id="log-accts-title">Todas as contas</div>
+            <div class="card-title" id="log-accts-title">All ad accounts</div>
             <span class="c-muted" id="acct-count" style="font-size:12px">—</span>
           </div>
           <div class="tw">
             <table>
               <thead>
                 <tr>
-                  <th id="lth-name">Nome</th>
-                  <th id="lth-vendor">Vendor</th>
-                  <th id="lth-buyer">Buyer</th>
-                  <th id="lth-bm">BM</th>
-                  <th id="lth-vertical">Vertical</th>
-                  <th id="lth-spend">Gasto histórico</th>
-                  <th id="lth-status">Status</th>
+                  <th>Name</th>
+                  <th>Vendor</th>
+                  <th>Buyer</th>
+                  <th>BM</th>
+                  <th>Vertical</th>
+                  <th>Lifetime spend</th>
+                  <th>Status</th>
                 </tr>
               </thead>
               <tbody id="acct-tb"></tbody>
@@ -434,8 +430,8 @@ tbody tr:hover td{background:var(--bg3)!important}
         </div>
         <div class="card">
           <div class="card-hdr">
-            <div class="card-title" id="log-title">Log do sistema</div>
-            <button class="btn" onclick="clearLog()" id="btn-clear">Limpar</button>
+            <div class="card-title" id="log-title">System log</div>
+            <button class="btn" onclick="clearLog()" id="btn-clear">Clear</button>
           </div>
           <div class="log" id="slog"></div>
         </div>
@@ -448,166 +444,30 @@ tbody tr:hover td{background:var(--bg3)!important}
 <!-- WARMING MODAL -->
 <div class="modal-bg" id="warm-modal">
   <div class="modal">
-    <h3 id="wm-title">Adicionar conta ao pipeline</h3>
-    <div class="mfield"><span class="flabel" id="wm-id-lbl">ID da Conta</span><input class="finp" id="w-id" placeholder="act_123456789" style="margin:0"/></div>
-    <div class="mfield"><span class="flabel" id="wm-vendor-lbl">Vendor</span><input class="finp" id="w-vendor" placeholder="Tiger Agency" style="margin:0"/></div>
-    <div class="mfield"><span class="flabel" id="wm-buyer-lbl">Media Buyer</span><input class="finp" id="w-buyer" placeholder="João" style="margin:0"/></div>
-    <div class="mfield"><span class="flabel" id="wm-vert-lbl">Vertical alvo</span><input class="finp" id="w-vertical" placeholder="Nutra / Biz Op" style="margin:0"/></div>
+    <h3>Add account to warming pipeline</h3>
+    <div class="mfield"><span class="flabel">Account ID</span><input class="finp" id="w-id" placeholder="act_123456789" style="margin:0"/></div>
+    <div class="mfield"><span class="flabel">Vendor</span><input class="finp" id="w-vendor" placeholder="Tiger Agency" style="margin:0"/></div>
+    <div class="mfield"><span class="flabel">Media Buyer</span><input class="finp" id="w-buyer" placeholder="João" style="margin:0"/></div>
+    <div class="mfield"><span class="flabel">Target Vertical</span><input class="finp" id="w-vertical" placeholder="Nutra / Biz Op" style="margin:0"/></div>
     <div class="brow" style="margin-top:16px">
-      <button class="btn gold" style="flex:1;padding:10px" onclick="saveWarm()" id="wm-save">Adicionar ao pipeline</button>
-      <button class="btn" style="padding:10px 14px" onclick="closeWarmModal()" id="wm-cancel">Cancelar</button>
+      <button class="btn gold" style="flex:1;padding:10px" onclick="saveWarm()" id="wm-save">Add to pipeline</button>
+      <button class="btn" style="padding:10px 14px" onclick="closeWarmModal()" id="wm-cancel">Cancel</button>
     </div>
   </div>
 </div>
 
 <script>
-// ═══ TRANSLATIONS ════════════════════════════════════════════════════════
-const T = {
-  pt:{
-    'conn-label':'Desconectado','conn-connected':'Conectado — {n} contas',
-    'theme-dark':'☀️ Claro','theme-light':'🌙 Escuro',
-    't-logout':'Sair',
-    'tab-recon':'Reconciliação','tab-health':'Saúde das contas','tab-warming':'Warming','tab-report':'Relatório','tab-log':'Log',
-    'l-sub':'Ops Dashboard','l-pw-label':'Senha','l-btn':'Acessar dashboard',
-    'login-hint-first':'Primeira vez? Digite uma senha para definir.',
-    'login-hint-set':'Senha definida.',
-    'login-err-short':'A senha deve ter pelo menos 4 caracteres.',
-    'login-err-wrong':'Senha incorreta. {n} tentativa(s) restante(s).',
-    'login-err-locked':'Conta bloqueada por 15 minutos após {n} tentativas.',
-    'setup-title':'Conectar ao Meta Ads',
-    'setup-desc':'Digite seu token de acesso da API do Meta. O sistema puxa o gasto em tempo real, monitora a saúde das contas e envia alertas no Telegram automaticamente.',
-    'setup-token-label':'Token de acesso',
-    'cbtn':'Conectar e carregar contas',
-    'm-lbl-bal':'Saldos dos vendors','m-lbl-spend':'Gasto Meta hoje','m-lbl-runway':'Runway médio',
-    'm-lbl-flags':'Alertas ativos','m-lbl-active':'Contas ativas','m-lbl-cd':'Próxima verificação',
-    'lc-s1':'Atenção','lc-s2':'Alerta','lc-s3':'Crítico','lc-s4':'Pausado','lc-s5':'Emergência',
-    'recon-title':'Reconciliação em tempo real',
-    'recon-hint':'Digite o saldo do vendor, nome e buyer por conta. O gasto é puxado da API do Meta automaticamente.',
-    'last-lbl-init':'Ainda não verificado','last-lbl':'Última verificação: {t}',
-    'check-btn':'Verificar agora','btn-report':'Relatório diário',
-    'th-account':'Conta','th-vendor':'Vendor','th-buyer':'Buyer','th-bm':'BM','th-vertical':'Vertical','th-balance':'Saldo ($)',
-    'th-spend':'Gasto hoje ($)','th-remaining':'Restante ($)','th-runway':'Runway','th-layer':'Alerta',
-    'health-title':'Saúde das contas','health-btn':'Atualizar',
-    'hsum-active':'Ativas','hsum-disabled':'Desativadas','hsum-issues':'Com problema','hsum-total':'Total',
-    'warm-title':'Pipeline de Warming',
-    'warm-hint':'Os dias avançam automaticamente. Contas ficam prontas após o Dia 14.',
-    'warm-empty':'Nenhuma conta em warming. Clique em "+ Adicionar conta" para começar.',
-    'wth-id':'ID da conta','wth-vendor':'Vendor','wth-buyer':'Buyer','wth-day':'Dia',
-    'wth-prog':'Progresso','wth-phase':'Fase','wth-budget':'Budget/dia','wth-vertical':'Vertical',
-    'wth-ready':'Pronto em',
-    'warm-done':'Concluído',
-    'report-title':'Relatório diário',
-    'report-hint':'Pronto para colar no Slack ou Telegram. Faça uma verificação primeiro.',
-    'btn-regen':'Regenerar','btn-copy':'Copiar','btn-copied':'Copiado!',
-    'rbox-init':'Faça uma verificação primeiro.',
-    'log-accts-title':'Todas as contas','log-title':'Log do sistema','btn-clear':'Limpar',
-    'lth-name':'Nome','lth-vendor':'Vendor','lth-buyer':'Buyer','lth-bm':'BM','lth-vertical':'Vertical','lth-spend':'Gasto histórico','lth-status':'Status',
-    'wm-title':'Adicionar conta ao pipeline','wm-id-lbl':'ID da Conta','wm-vendor-lbl':'Vendor',
-    'wm-buyer-lbl':'Media Buyer','wm-vert-lbl':'Vertical alvo','wm-save':'Adicionar ao pipeline','wm-cancel':'Cancelar',
-    'vendor-ph':'Vendor','buyer-ph':'Buyer','bm-ph':'BM (ex: BM Nutra)','vertical-ph':'Vertical (ex: Nutra)',
-    'pill-enter':'Aguardando saldo',
-    'phase-behavior':'Comportamento','phase-bm':'Config. BM','phase-ramp':'Ramp',
-    'ab-disabled':'Conta desativada — solicite replacement + balance transfer ao vendor imediatamente',
-    'ab-warn':'Problema de cobrança ou política — pause o gasto se não resolver em 24h',
-  },
-  en:{
-    'conn-label':'Not connected','conn-connected':'Connected — {n} accounts',
-    'theme-dark':'☀️ Light','theme-light':'🌙 Dark',
-    't-logout':'Logout',
-    'tab-recon':'Reconciliation','tab-health':'Account health','tab-warming':'Warming','tab-report':'Report','tab-log':'Log',
-    'l-sub':'Ops Dashboard','l-pw-label':'Password','l-btn':'Access dashboard',
-    'login-hint-first':'First time? Type a password to set it.',
-    'login-hint-set':'Password set.',
-    'login-err-short':'Password must be at least 4 characters.',
-    'login-err-wrong':'Wrong password. {n} attempt(s) remaining.',
-    'login-err-locked':'Locked for 15 min after {n} failed attempts.',
-    'setup-title':'Connect to Meta Ads',
-    'setup-desc':'Enter your Meta API access token. The system pulls live spend, monitors health, and sends Telegram alerts automatically.',
-    'setup-token-label':'Access Token',
-    'cbtn':'Connect and load accounts',
-    'm-lbl-bal':'Vendor balances','m-lbl-spend':'Meta spend today','m-lbl-runway':'Avg runway',
-    'm-lbl-flags':'Active flags','m-lbl-active':'Active accounts','m-lbl-cd':'Next check',
-    'lc-s1':'Attention','lc-s2':'Alert','lc-s3':'Critical','lc-s4':'Paused','lc-s5':'Emergency',
-    'recon-title':'Live reconciliation',
-    'recon-hint':'Enter vendor balance, name and buyer per account. Spend is pulled from Meta API automatically.',
-    'last-lbl-init':'Not checked yet','last-lbl':'Last check: {t}',
-    'check-btn':'Run check now','btn-report':'Daily report',
-    'th-account':'Account','th-vendor':'Vendor','th-buyer':'Buyer','th-bm':'BM','th-vertical':'Vertical','th-balance':'Balance ($)',
-    'th-spend':'Spend today ($)','th-remaining':'Remaining ($)','th-runway':'Runway','th-layer':'Alert',
-    'health-title':'Account health','health-btn':'Refresh',
-    'hsum-active':'Active','hsum-disabled':'Disabled','hsum-issues':'Issues','hsum-total':'Total',
-    'warm-title':'Warming pipeline',
-    'warm-hint':'Days advance automatically. Accounts are ready after Day 14.',
-    'warm-empty':'No accounts warming. Click "+ Add account" to start.',
-    'wth-id':'Account ID','wth-vendor':'Vendor','wth-buyer':'Buyer','wth-day':'Day',
-    'wth-prog':'Progress','wth-phase':'Phase','wth-budget':'Budget/day','wth-vertical':'Vertical',
-    'wth-ready':'Ready date',
-    'warm-done':'Done',
-    'report-title':'Daily report',
-    'report-hint':'Ready to paste into Slack or Telegram. Run a check first to get fresh data.',
-    'btn-regen':'Regenerate','btn-copy':'Copy to clipboard','btn-copied':'Copied!',
-    'rbox-init':'Run a reconciliation check first.',
-    'log-accts-title':'All ad accounts','log-title':'System log','btn-clear':'Clear',
-    'lth-name':'Name','lth-vendor':'Vendor','lth-buyer':'Buyer','lth-bm':'BM','lth-vertical':'Vertical','lth-spend':'Lifetime spend','lth-status':'Status',
-    'wm-title':'Add account to warming pipeline','wm-id-lbl':'Account ID','wm-vendor-lbl':'Vendor',
-    'wm-buyer-lbl':'Media Buyer','wm-vert-lbl':'Target Vertical','wm-save':'Add to pipeline','wm-cancel':'Cancel',
-    'vendor-ph':'Vendor','buyer-ph':'Buyer','bm-ph':'BM (e.g. BM Nutra)','vertical-ph':'Vertical (e.g. Nutra)',
-    'pill-enter':'Enter balance',
-    'phase-behavior':'Behavior','phase-bm':'BM setup','phase-ramp':'Ramp',
-    'ab-disabled':'Account disabled — request replacement + balance transfer from vendor immediately',
-    'ab-warn':'Billing or policy issue — pause spend if unresolved within 24h',
-  }
-};
 
-function t(key, vars){
-  let s = (T[uiLang]||T.pt)[key] || (T.en[key]) || key;
-  if(vars) Object.keys(vars).forEach(k=>{ s=s.replace('{'+k+'}',vars[k]); });
-  return s;
-}
 
-function applyTranslations(){
-  const ids = ['conn-label','theme-dark','t-logout','tab-recon','tab-health','tab-warming',
-    'tab-report','tab-log','l-sub','l-pw-label','l-btn','setup-title','setup-desc',
-    'setup-token-label','cbtn','m-lbl-bal','m-lbl-spend','m-lbl-runway','m-lbl-flags',
-    'm-lbl-active','m-lbl-cd','lc-s1','lc-s2','lc-s3','lc-s4','lc-s5','recon-title',
-    'recon-hint','check-btn','btn-report','th-account','th-vendor','th-buyer','th-bm','th-vertical','th-balance',
-    'th-spend','th-remaining','th-runway','th-layer','health-title','health-btn','warm-title',
-    'warm-hint','wth-id','wth-vendor','wth-buyer','wth-day','wth-prog','wth-phase','wth-budget',
-    'wth-vertical','wth-ready','report-title','report-hint','btn-regen','btn-copy',
-    'log-accts-title','log-title','btn-clear','lth-name','lth-vendor','lth-buyer','lth-bm','lth-vertical',
-    'lth-spend','lth-status','wm-title','wm-id-lbl','wm-vendor-lbl','wm-buyer-lbl',
-    'wm-vert-lbl','wm-save','wm-cancel'];
-  ids.forEach(id=>{
-    const el = document.getElementById(id);
-    if(el) el.textContent = t(id);
-  });
-  // login-hint — use first-time text unless already set
-  const lh = document.getElementById('login-hint');
-  if(lh && (lh.textContent === T.pt['login-hint-first'] || lh.textContent === T.en['login-hint-first'] || lh.textContent === 'login-hint'))
-    lh.textContent = t('login-hint-first');
-  // Theme button
-  const tb = document.getElementById('theme-btn');
-  if(tb) tb.textContent = t(currentTheme==='dark'?'theme-dark':'theme-light');
-  // rbox placeholder
-  const rb = document.getElementById('rbox');
-  if(rb && (rb.textContent.trim()==='' || rb.textContent === T.pt['rbox-init'] || rb.textContent === T.en['rbox-init']))
-    rb.textContent = t('rbox-init');
-  // warm empty
-  const we = document.getElementById('warm-empty');
-  if(we) we.textContent = t('warm-empty');
-  // last check label
-  const ll = document.getElementById('last-lbl');
-  if(ll && (ll.textContent === T.pt['last-lbl-init'] || ll.textContent === T.en['last-lbl-init'] || ll.textContent === 'last-lbl'))
-    ll.textContent = t('last-lbl-init');
-}
+
 
 // ═══ THEME ═══════════════════════════════════════════════════════════════
 let currentTheme = localStorage.getItem('umbra_theme')||'dark';
-let uiLang='pt', alertLang='pt'; // declare early so applyTheme/applyTranslations can use them
+let alertLang='en';
 function applyTheme(th){
   currentTheme=th;
   document.documentElement.setAttribute('data-theme',th);
-  const label=t(th==='dark'?'theme-dark':'theme-light');
+  const label=th==='dark'?'☀️ Light':'🌙 Dark';
   const btn=document.getElementById('theme-btn');
   if(btn) btn.textContent=label;
   const lbtn=document.getElementById('login-theme-btn');
@@ -641,11 +501,11 @@ async function hashPw(pw){
 async function doLogin(){
   const now=Date.now();
   if(now<lockedUntil){
-    showLoginErr(t('login-err-locked',{n:MAX_ATTEMPTS}));
+    showLoginErr('Locked for 15 min after '+MAX_ATTEMPTS+' failed attempts.');
     return;
   }
   const pw=document.getElementById('pw-inp').value;
-  if(!pw||pw.length<4){showLoginErr(t('login-err-short'));return;}
+  if(!pw||pw.length<4){showLoginErr('Password must be at least 4 characters.');return;}
   const hash=await hashPw(pw);
   const stored=localStorage.getItem('umbra_pw');
   if(!stored){
@@ -660,9 +520,9 @@ async function doLogin(){
     loginAttempts++;
     if(loginAttempts>=MAX_ATTEMPTS){
       lockedUntil=Date.now()+LOCKOUT_MS;
-      showLoginErr(t('login-err-locked',{n:MAX_ATTEMPTS}));
+      showLoginErr('Locked for 15 min after '+MAX_ATTEMPTS+' failed attempts.');
     } else {
-      showLoginErr(t('login-err-wrong',{n:MAX_ATTEMPTS-loginAttempts}));
+      showLoginErr('Wrong password. '+(MAX_ATTEMPTS-loginAttempts)+' attempt(s) remaining.');
     }
   }
 }
@@ -670,7 +530,7 @@ function showLoginErr(m){const e=document.getElementById('login-err');e.textCont
 function startSession(){
   document.getElementById('login-screen').style.display='none';
   document.getElementById('app').style.display='block';
-  document.getElementById('login-hint').textContent=t('login-hint-set');
+  document.getElementById('login-hint').textContent='Password set.';
   loadMetaFromStorage();
   addLog('Sessão iniciada','ok');
 }
@@ -734,7 +594,7 @@ const fmt=n=>(n===null||n===undefined||isNaN(n))?'—':'$'+Math.round(n).toLocal
 const fmt0=n=>'$'+Math.round(n||0).toLocaleString();
 const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
 const addDays=(d,n)=>{const dt=new Date(d);dt.setDate(dt.getDate()+n);return dt.toISOString().slice(0,10)};
-const fmtTime=()=>new Date().toLocaleTimeString(uiLang==='pt'?'pt-BR':'en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+const fmtTime=()=>new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
 
 function addLog(msg,tp='info'){
   logCount++;
@@ -757,20 +617,6 @@ function clearLog(){
 }
 function showErr(m){const e=document.getElementById('errmsg');e.textContent=sanitize(m);e.style.display='block';}
 
-function setLang(lang){
-  uiLang=lang; alertLang=lang;
-  ['pt','en'].forEach(l=>{
-    ['lbtn-'+l, 'login-lbtn-'+l].forEach(id=>{
-      const b=document.getElementById(id);
-      if(b) b.classList.toggle('on',l===lang);
-    });
-  });
-  applyTranslations();
-  // sync login theme btn
-  const ltb=document.getElementById('login-theme-btn');
-  if(ltb) ltb.textContent=t(currentTheme==='dark'?'theme-dark':'theme-light');
-  addLog('Idioma: '+lang.toUpperCase(),'info');
-}
 
 function switchTab(name){
   const names=['recon','health','warming','report','log'];
@@ -780,15 +626,15 @@ function switchTab(name){
 }
 
 function sPill(code){
-  const statusMap={1:[uiLang==='pt'?'Ativa':'Active','p-ok'],2:[uiLang==='pt'?'Desativada':'Disabled','p-danger'],
-    3:[uiLang==='pt'?'Pendente':'Unsettled','p-warn'],9:[uiLang==='pt'?'Período de graça':'Grace period','p-warn'],
-    100:[uiLang==='pt'?'Encerrando':'Pending closure','p-warn'],101:[uiLang==='pt'?'Encerrada':'Closed','p-danger']};
+  const statusMap={1:['Active','p-ok'],2:['Disabled','p-danger'],
+    3:['Unsettled','p-warn'],9:['Grace period','p-warn'],
+    100:['Pending closure','p-warn'],101:['Closed','p-danger']};
   const [l,c]=statusMap[code]||['Status '+code,'p-gray'];
   return'<span class="pill '+c+'">'+l+'</span>';
 }
 
 function layerPill(layer){
-  if(!layer||layer===0) return'<span class="pill p-info">'+t('pill-enter')+'</span>';
+  if(!layer||layer===0) return'<span class="pill p-info">'+'Enter balance'+'</span>';
   const cfg=[null,['L1 — 20%','p-l1'],['L2 — 10%','p-l2'],['L3 — 5%','p-l3'],['L4 — Zero','p-l4'],['L5','p-l5']];
   const [l,c]=cfg[layer]||['—','p-gray'];
   return'<span class="pill '+c+'">'+l+'</span>';
@@ -808,29 +654,29 @@ async function apiFetch(path){
 async function connect(){
   const btn=document.getElementById('cbtn');
   TOKEN=document.getElementById('tok').value.trim();
-  if(!TOKEN){showErr(uiLang==='pt'?'Digite o token de acesso.':'Please enter your access token.');return;}
-  btn.disabled=true;btn.innerHTML='<span class="loader"></span>'+(uiLang==='pt'?'Conectando...':'Connecting...');
+  if(!TOKEN){showErr('Please enter your access token.');return;}
+  btn.disabled=true;btn.innerHTML='<span class="loader"></span>'+('Connecting...');
   try{
     const d=await apiFetch('me/adaccounts?fields=id,name,account_status,currency,amount_spent,disable_reason&limit=25');
-    if(d.error){showErr('API error: '+d.error.message);btn.disabled=false;btn.textContent=t('cbtn');return;}
+    if(d.error){showErr('API error: '+d.error.message);btn.disabled=false;btn.textContent='Connect and load accounts';return;}
     accounts=d.data||[];
-    if(!accounts.length){showErr(uiLang==='pt'?'Nenhuma conta encontrada.':'No ad accounts found.');btn.disabled=false;btn.textContent=t('cbtn');return;}
+    if(!accounts.length){showErr('No ad accounts found.');btn.disabled=false;btn.textContent='Connect and load accounts';return;}
     accounts.forEach(a=>{prevStatus[a.id]=a.account_status;if(!acctMeta[a.id])acctMeta[a.id]={vendor:'',buyer:'',bm:'',vertical:''};});
     document.getElementById('pane-setup').classList.remove('on');
     document.getElementById('tabs').style.display='flex';
     document.getElementById('pane-recon').classList.add('on');
     document.getElementById('conn-dot').classList.add('on');
-    document.getElementById('conn-label').textContent=t('conn-connected',{n:accounts.length});
+    document.getElementById('conn-label').textContent='Connected — '+accounts.length+' accounts';
     document.getElementById('m-active').textContent=accounts.filter(a=>a.account_status===1).length;
     document.getElementById('tb-recon').textContent=accounts.length;
-    document.getElementById('acct-count').textContent=accounts.length+(uiLang==='pt'?' contas':' accounts');
-    addLog((uiLang==='pt'?'Conectado — ':'Connected — ')+accounts.length+(uiLang==='pt'?' contas carregadas':' accounts loaded'),'ok');
+    document.getElementById('acct-count').textContent=accounts.length+(' accounts');
+    addLog(('Connected — ')+accounts.length+(' accounts loaded'),'ok');
     renderAccountsList();
     runHealthCheck();
     startAutoRefresh();
   }catch(e){
-    showErr(uiLang==='pt'?'Falha na conexão. Verifique o token.':'Connection failed. Check your token.');
-    btn.disabled=false;btn.textContent=t('cbtn');
+    showErr('Connection failed. Check your token.');
+    btn.disabled=false;btn.textContent='Connect and load accounts';
   }
   buildReconRows(); // outside try-catch so errors surface in console
 }
@@ -847,8 +693,8 @@ function buildReconRows(){
       const m=acctMeta[a.id]||{};
       const tr=document.createElement('tr');
       tr.id='rrow-'+a.id;
-      const vph=t('vendor-ph'), bph=t('buyer-ph'), bmph='BM', vertph='Vertical';
-      const pe=t('pill-enter');
+      const vph='Vendor', bph='Buyer', bmph='BM', vertph='Vertical';
+      const pe='Enter balance';
       tr.innerHTML=
         '<td><div class="aname">'+sanitize(a.name)+'</div><div class="aid">'+sanitize(a.id)+'</div></td>'+
         '<td><input class="cel" id="vendor-'+a.id+'" placeholder="'+vph+'" value="'+sanitize(m.vendor||'')+'" onchange="saveMeta(\''+a.id+'\')"/></td>'+
@@ -886,8 +732,8 @@ async function getSpend(id){
 
 async function runCheck(){
   const btn=document.getElementById('check-btn');
-  btn.disabled=true;btn.innerHTML='<span class="loader"></span>'+(uiLang==='pt'?'Verificando...':'Checking...');
-  addLog(uiLang==='pt'?'Verificação iniciada':'Check started','info');
+  btn.disabled=true;btn.innerHTML='<span class="loader"></span>'+('Checking...');
+  addLog('Check started','info');
   const results=await Promise.all(accounts.map(a=>getSpend(a.id)));
   accounts.forEach((a,i)=>{
     spends[a.id]=results[i];
@@ -895,10 +741,10 @@ async function runCheck(){
     if(el) el.textContent=fmt0(results[i]);
   });
   updateAllRows();
-  btn.disabled=false;btn.textContent=t('check-btn');
-  document.getElementById('last-lbl').textContent=t('last-lbl',{t:fmtTime()});
+  btn.disabled=false;btn.textContent='Run check now';
+  document.getElementById('last-lbl').textContent='Last check: '+fmtTime();
   autoSecs=300;
-  addLog((uiLang==='pt'?'Verificação concluída — ':'Check complete — ')+accounts.length+(uiLang==='pt'?' contas':' accounts'),'ok');
+  addLog(('Check complete — ')+accounts.length+(' accounts'),'ok');
   generateReport();
 }
 
@@ -955,7 +801,7 @@ function updateAllRows(){
     if(vb===0){
       if(remEl) remEl.innerHTML='<span style="color:var(--t3)">—</span>';
       if(rwEl) rwEl.textContent='—';
-      if(flEl) flEl.innerHTML='<span class="pill p-info">'+t('pill-enter')+'</span>';
+      if(flEl) flEl.innerHTML='<span class="pill p-info">'+'Enter balance'+'</span>';
       rowEl.className='';return;
     }
     if(remEl){
@@ -990,7 +836,7 @@ async function getCampaigns(id){
 async function runHealthCheck(){
   const btn=document.getElementById('health-btn');
   const grid=document.getElementById('hgrid');
-  if(btn){btn.disabled=true;btn.innerHTML='<span class="loader"></span>'+(uiLang==='pt'?'Verificando...':'Checking...');}
+  if(btn){btn.disabled=true;btn.innerHTML='<span class="loader"></span>'+('Checking...');}
   grid.innerHTML='<div class="empty-s"><span class="loader"></span></div>';
   const cams=await Promise.all(accounts.map(a=>getCampaigns(a.id)));
   grid.innerHTML='';
@@ -1013,34 +859,34 @@ async function runHealthCheck(){
     const lifetime=a.amount_spent?fmt(parseFloat(a.amount_spent)/100):'$0';
     const statusColor=isOk?'c-ok':isDisabled?'c-danger':'c-warn';
     let alertHtml='';
-    if(isDisabled) alertHtml='<div class="abanner ab-danger">'+t('ab-disabled')+'</div>';
-    else if(isWarn) alertHtml='<div class="abanner ab-warn">'+t('ab-warn')+'</div>';
+    if(isDisabled) alertHtml='<div class="abanner ab-danger">'+'Account disabled — request replacement + balance transfer from vendor immediately'+'</div>';
+    else if(isWarn) alertHtml='<div class="abanner ab-warn">'+'Billing or policy issue — pause spend if unresolved within 24h'+'</div>';
     grid.innerHTML+=`<div class="hcard ${cardCls}">
       <div class="hc-top">
         <div><div class="hc-name">${sanitize(a.name)}</div><div class="hc-id">${sanitize(a.id)}</div></div>
         ${sPill(a.account_status)}
       </div>
       <div class="hc-rows">
-        <div class="hc-row"><span class="hc-key">${t('th-vendor')}</span><span class="hc-val">${sanitize(m.vendor||'—')}</span></div>
-        <div class="hc-row"><span class="hc-key">${t('th-buyer')}</span><span class="hc-val">${sanitize(m.buyer||'—')}</span></div>
-        <div class="hc-row"><span class="hc-key">${t('th-bm')}</span><span class="hc-val">${sanitize(m.bm||'—')}</span></div>
-        <div class="hc-row"><span class="hc-key">${t('th-vertical')}</span><span class="hc-val">${sanitize(m.vertical||'—')}</span></div>
+        <div class="hc-row"><span class="hc-key">${'Vendor'}</span><span class="hc-val">${sanitize(m.vendor||'—')}</span></div>
+        <div class="hc-row"><span class="hc-key">${'Buyer'}</span><span class="hc-val">${sanitize(m.buyer||'—')}</span></div>
+        <div class="hc-row"><span class="hc-key">${'BM'}</span><span class="hc-val">${sanitize(m.bm||'—')}</span></div>
+        <div class="hc-row"><span class="hc-key">${'Vertical'}</span><span class="hc-val">${sanitize(m.vertical||'—')}</span></div>
         <div class="hc-row"><span class="hc-key">Status</span><span class="hc-val ${statusColor}">${sPill(a.account_status).replace(/<[^>]*>/g,'')}</span></div>
-        <div class="hc-row"><span class="hc-key">${t('lth-spend')}</span><span class="hc-val">${lifetime}</span></div>
-        <div class="hc-row"><span class="hc-key">${uiLang==='pt'?'Campanhas ativas':'Active campaigns'}</span><span class="hc-val ${cams[i]>0?'c-ok':'c-muted'}">${cams[i]}</span></div>
+        <div class="hc-row"><span class="hc-key">${'Lifetime spend'}</span><span class="hc-val">${lifetime}</span></div>
+        <div class="hc-row"><span class="hc-key">${'Active campaigns'}</span><span class="hc-val ${cams[i]>0?'c-ok':'c-muted'}">${cams[i]}</span></div>
       </div>${alertHtml}
     </div>`;
   });
   const el=document.getElementById('tb-health');
-  el.textContent=issues>0?issues+(uiLang==='pt'?' problemas':' issues'):'OK';
+  el.textContent=issues>0?issues+(' issues'):'OK';
   if(issues>0)el.classList.add('red');else el.classList.remove('red');
   const active=accounts.filter(a=>a.account_status===1).length;
   document.getElementById('health-sum').innerHTML=`
-    <div class="met"><div class="mlbl">${t('hsum-active')}</div><div class="mval ok">${active}</div></div>
-    <div class="met"><div class="mlbl">${t('hsum-disabled')}</div><div class="mval ${disabled>0?'danger':''}">${disabled}</div></div>
-    <div class="met"><div class="mlbl">${t('hsum-issues')}</div><div class="mval ${issues>0?'warn':''}">${issues}</div></div>
-    <div class="met"><div class="mlbl">${t('hsum-total')}</div><div class="mval">${accounts.length}</div></div>`;
-  if(btn){btn.disabled=false;btn.textContent=t('health-btn');}
+    <div class="met"><div class="mlbl">${'Active'}</div><div class="mval ok">${active}</div></div>
+    <div class="met"><div class="mlbl">${'Disabled'}</div><div class="mval ${disabled>0?'danger':''}">${disabled}</div></div>
+    <div class="met"><div class="mlbl">${'Issues'}</div><div class="mval ${issues>0?'warn':''}">${issues}</div></div>
+    <div class="met"><div class="mlbl">${'Total'}</div><div class="mval">${accounts.length}</div></div>`;
+  if(btn){btn.disabled=false;btn.textContent='Refresh';}
 }
 
 // ═══ WARMING ═══════════════════════════════════════════════════════════════
@@ -1051,7 +897,7 @@ function saveWarm(){
   if(!id) return;
   warmingAccounts.push({id,vendor:sanitize(document.getElementById('w-vendor').value),buyer:sanitize(document.getElementById('w-buyer').value),vertical:sanitize(document.getElementById('w-vertical').value),startDate:today()});
   closeWarmModal();renderWarming();
-  addLog((uiLang==='pt'?'Adicionado ao warming: ':'Added to warming: ')+id,'info');
+  addLog(('Added to warming: ')+id,'info');
 }
 function removeWarm(idx){warmingAccounts.splice(idx,1);renderWarming();}
 
@@ -1060,13 +906,13 @@ function renderWarming(){
   const empty=document.getElementById('warm-empty');
   tb.innerHTML='';
   document.getElementById('tb-warm').textContent=warmingAccounts.length||0;
-  if(!warmingAccounts.length){empty.style.display='block';empty.textContent=t('warm-empty');return;}
+  if(!warmingAccounts.length){empty.style.display='block';empty.textContent='No accounts warming. Click + Add account to start.';return;}
   empty.style.display='none';
   warmingAccounts.forEach((w,idx)=>{
     const start=new Date(w.startDate);
     const day=Math.min(14,Math.max(1,Math.floor((Date.now()-start)/(864e5))+1));
     const pct=Math.round((day/14)*100);
-    const phase=day>=8?'<span class="pill p-warn">'+t('phase-ramp')+'</span>':day>=4?'<span class="pill p-info">'+t('phase-bm')+'</span>':'<span class="pill p-info">'+t('phase-behavior')+'</span>';
+    const phase=day>=8?'<span class="pill p-warn">'+'Ramp'+'</span>':day>=4?'<span class="pill p-info">'+'BM setup'+'</span>':'<span class="pill p-info">'+'Behavior'+'</span>';
     const budget=day>=8?'$'+Math.round(5*Math.pow(1.3,day-7)):day>=4?'$5':'$0';
     tb.innerHTML+=`<tr>
       <td><div class="aname" style="font-size:12px">${sanitize(w.id)}</div></td>
@@ -1076,7 +922,7 @@ function renderWarming(){
       <td>${phase}</td><td class="mono">${budget}/day</td>
       <td>${sanitize(w.vertical||'—')}</td>
       <td style="font-size:11px;color:var(--t3)">${addDays(w.startDate,14)}</td>
-      <td><button class="btn" style="font-size:11px;padding:4px 9px;color:var(--green)" onclick="removeWarm(${idx})">${t('warm-done')}</button></td>
+      <td><button class="btn" style="font-size:11px;padding:4px 9px;color:var(--green)" onclick="removeWarm(${idx})">${'Done'}</button></td>
     </tr>`;
   });
 }
@@ -1084,9 +930,9 @@ function renderWarming(){
 // ═══ REPORT ════════════════════════════════════════════════════════════════
 function generateReport(){
   const d=new Date();
-  const ds=d.toLocaleDateString(uiLang==='pt'?'pt-BR':'en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const ds=d.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   let totBal=0,totSpend=0,flags=[],active=0,disabled=0;
-  const isPt=uiLang==='pt';
+  const isPt=false;
   accounts.forEach(a=>{
     const vb=sanitizeNum(document.getElementById('bal-'+a.id)?.value||0);
     const sp=spends[a.id]||0;
@@ -1134,7 +980,7 @@ function generateReport(){
 function copyReport(){
   navigator.clipboard.writeText(document.getElementById('rbox').textContent).then(()=>{
     const btn=event.target;const orig=btn.textContent;
-    btn.textContent=t('btn-copied');
+    btn.textContent='Copied!';
     setTimeout(()=>btn.textContent=orig,2000);
   });
 }
@@ -1160,4 +1006,15 @@ function startAutoRefresh(){
   },1000);
 }
 
-// ═══ INIT ════════════════════════
+// ═══ INIT ══════════════════════════════════════════════════════════════════
+document.getElementById('rbox').textContent='Run a reconciliation check first.';
+document.getElementById('warm-empty').textContent='No accounts warming. Click + Add account to start.';
+document.getElementById('last-lbl').textContent='Not checked yet';
+// Show correct hint on login screen
+const _stored=localStorage.getItem('umbra_pw');
+const _hint=document.getElementById('login-hint');
+if(_hint) _hint.textContent=_stored?'Password set.':'First time? Set a password.';
+addLog('UMBRA Ops v2 pronto','ok');
+</script>
+</body>
+</html>
