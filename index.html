@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,237 +9,279 @@
 <meta http-equiv="Referrer-Policy" content="no-referrer">
 <title>UMBRA Ops</title>
 <style>
-:root{
-  --bg0:#07070F;--bg1:#0D0D1A;--bg2:#131320;--bg3:#1A1A2A;--bg4:#222235;
-  --b1:#ffffff0A;--b2:#ffffff14;--b3:#ffffff1E;
-  --t1:#EEEEF8;--t2:#9898B8;--t3:#555570;
-  --gold:#C8A96E;--gold2:#D4B87A;--gd3:#C8A96E18;--gd4:#C8A96E35;
-  --green:#2DBE7A;--gn2:#0F2A1E;--gn3:#2DBE7A20;
-  --red:#E24B4A;--rd2:#2A0F0F;--rd3:#E24B4A20;
-  --amber:#E8922A;--am2:#2A1A0F;--am3:#E8922A20;
-  --blue:#4A9EE8;--bl2:#0F1E30;--bl3:#4A9EE820;
-  --r:10px;--rs:7px;--rx:5px;
+/* ═══ THEMES ═══════════════════════════════════════════════════════════ */
+[data-theme="dark"]{
+  --bg0:#080810;--bg1:#0E0E1C;--bg2:#141422;--bg3:#1C1C2C;--bg4:#242438;
+  --b1:#ffffff0C;--b2:#ffffff16;--b3:#ffffff22;
+  --t1:#F2F2FA;--t2:#9090B0;--t3:#50506A;--t4:#2C2C40;
+  --gold:#D4A853;--gold2:#E0BC70;--gd3:#D4A85318;--gd4:#D4A85338;--gd5:#D4A85358;
+  --green:#28C87A;--gn3:#28C87A18;--gn4:#28C87A35;
+  --red:#E84A48;--rd2:#220C0C;--rd3:#E84A4820;--rd4:#E84A4838;
+  --amber:#F09428;--am2:#221408;--am3:#F0942820;--am4:#F0942838;
+  --blue:#4EA8F0;--bl3:#4EA8F018;
+  --shadow:0 8px 40px #00000070;--shadow-sm:0 2px 12px #00000050;
 }
+[data-theme="light"]{
+  --bg0:#EEEEE8;--bg1:#FAFAF8;--bg2:#FFFFFF;--bg3:#F4F4F0;--bg4:#EAEAE6;
+  --b1:#00000009;--b2:#00000014;--b3:#00000020;
+  --t1:#18181E;--t2:#48485E;--t3:#90909A;--t4:#C8C8D4;
+  --gold:#8A6020;--gold2:#A07030;--gd3:#8A602016;--gd4:#8A602030;--gd5:#8A602050;
+  --green:#167A48;--gn3:#167A4818;--gn4:#167A4832;
+  --red:#C02828;--rd2:#FEF0F0;--rd3:#C0282818;--rd4:#C0282830;
+  --amber:#A85010;--am2:#FEF6F0;--am3:#A8501018;--am4:#A8501030;
+  --blue:#1860B8;--bl3:#1860B818;
+  --shadow:0 8px 40px #00000014;--shadow-sm:0 2px 12px #0000000C;
+}
+/* ═══ BASE ══════════════════════════════════════════════════════════════ */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg0);color:var(--t1);min-height:100vh;font-size:14px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif;background:var(--bg0);color:var(--t1);min-height:100vh;font-size:14px;transition:background .3s,color .3s}
 ::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--b3);border-radius:4px}
 
-/* LOGIN */
-.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--bg0)}
-.login-card{background:var(--bg2);border:1px solid var(--gd4);border-radius:var(--r);padding:40px;width:100%;max-width:380px}
-.login-logo{text-align:center;margin-bottom:32px}
-.logo-mark{font-size:26px;font-weight:700;letter-spacing:3px;color:var(--gold)}
-.logo-sub{font-size:10px;color:var(--t3);letter-spacing:2px;margin-top:4px;text-transform:uppercase}
-.flabel{display:block;font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px;font-weight:600}
-.finp{width:100%;background:var(--bg3);border:1px solid var(--b2);border-radius:var(--rs);padding:11px 14px;color:var(--t1);font-size:13px;outline:none;transition:border .15s,background .15s;margin-bottom:14px}
-.finp:focus{border-color:var(--gd4);background:var(--bg4)}
-.pbtn{width:100%;background:var(--gold);color:#000;border:none;border-radius:var(--rs);padding:13px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.3px;transition:all .15s}
-.pbtn:hover{background:var(--gold2);transform:translateY(-1px)}
-.pbtn:active{transform:none}
-.pbtn:disabled{background:var(--bg4);color:var(--t3);cursor:not-allowed;transform:none}
-.lerr{background:var(--rd2);border:1px solid var(--rd3);border-radius:var(--rx);padding:10px 14px;font-size:12px;color:var(--red);margin-top:12px;display:none}
-.lhint{text-align:center;font-size:11px;color:var(--t3);margin-top:16px}
+/* ═══ LOGIN ═════════════════════════════════════════════════════════════ */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--bg0);position:relative;overflow:hidden}
+.login-wrap::before{content:'';position:absolute;width:600px;height:600px;background:radial-gradient(circle,var(--gd4) 0%,transparent 70%);top:-200px;left:50%;transform:translateX(-50%);pointer-events:none}
+.login-card{background:var(--bg2);border:1px solid var(--gd4);border-radius:16px;padding:44px;width:100%;max-width:380px;box-shadow:var(--shadow);position:relative;z-index:1}
+.login-logo{text-align:center;margin-bottom:36px}
+.login-logo-mark{font-size:32px;font-weight:800;letter-spacing:6px;color:var(--gold);display:block}
+.login-logo-sub{font-size:11px;color:var(--t2);letter-spacing:3px;margin-top:6px;text-transform:uppercase}
+.login-divider{width:40px;height:2px;background:var(--gd4);margin:16px auto 0;border-radius:2px}
+.flabel{display:block;font-size:11px;color:var(--t2);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;font-weight:700}
+.finp{width:100%;background:var(--bg3);border:1px solid var(--b2);border-radius:8px;padding:12px 16px;color:var(--t1);font-size:14px;outline:none;transition:all .2s;margin-bottom:14px}
+.finp:focus{border-color:var(--gd5);background:var(--bg4);box-shadow:0 0 0 3px var(--gd3)}
+.pbtn{width:100%;background:var(--gold);color:#000;border:none;border-radius:8px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.5px}
+.pbtn:hover{background:var(--gold2);transform:translateY(-1px);box-shadow:0 4px 16px var(--gd4)}
+.pbtn:active{transform:none;box-shadow:none}
+.pbtn:disabled{background:var(--bg4);color:var(--t3);cursor:not-allowed;transform:none;box-shadow:none}
+.lerr{background:var(--rd2);border:1px solid var(--rd4);border-radius:7px;padding:10px 14px;font-size:12px;color:var(--red);margin-top:12px;display:none}
+.lhint{text-align:center;font-size:12px;color:var(--t2);margin-top:18px}
 
-/* TOPBAR */
-.topbar{background:var(--bg1);border-bottom:1px solid var(--b1);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:54px;position:sticky;top:0;z-index:100;backdrop-filter:blur(10px)}
-.tbrand{font-size:14px;font-weight:700;letter-spacing:2px;color:var(--gold)}
-.tbadge-v{background:var(--gd3);border:1px solid var(--gd4);color:var(--gold);font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600;margin-left:8px}
-.tright{display:flex;align-items:center;gap:10px}
-.cpill{display:flex;align-items:center;gap:5px;background:var(--bg3);border:1px solid var(--b2);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--t2)}
-.cdot{width:6px;height:6px;border-radius:50%;background:var(--t3);flex-shrink:0}
+/* ═══ TOPBAR ════════════════════════════════════════════════════════════ */
+.topbar{background:var(--bg1);border-bottom:1px solid var(--b1);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
+.tbrand{display:flex;align-items:center;gap:10px}
+.tbrand-name{font-size:15px;font-weight:800;letter-spacing:3px;color:var(--gold)}
+.tbadge-v{background:var(--gd3);border:1px solid var(--gd4);color:var(--gold);font-size:9px;padding:2px 8px;border-radius:20px;font-weight:700;letter-spacing:.5px}
+.tright{display:flex;align-items:center;gap:8px}
+.cpill{display:flex;align-items:center;gap:5px;background:var(--bg3);border:1px solid var(--b2);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--t2)}
+.cdot{width:6px;height:6px;border-radius:50%;background:var(--t3);flex-shrink:0;transition:background .3s}
 .cdot.on{background:var(--green);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-.ltog{display:flex;background:var(--bg3);border:1px solid var(--b2);border-radius:20px;padding:3px;gap:2px}
-.lopt{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;color:var(--t3);transition:all .15s;border:none;background:transparent}
-.lopt.on{background:var(--gd3);color:var(--gold);border:1px solid var(--gd4)}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 var(--gn3)}50%{opacity:.8;box-shadow:0 0 0 4px transparent}}
+.ttoggle{display:flex;background:var(--bg3);border:1px solid var(--b2);border-radius:20px;padding:3px;gap:2px}
+.topt{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;color:var(--t3);transition:all .15s;border:none;background:transparent}
+.topt.on{background:var(--gd3);color:var(--gold);border:1px solid var(--gd4)}
+.theme-btn{background:var(--bg3);border:1px solid var(--b2);color:var(--t2);padding:6px 12px;border-radius:20px;font-size:11px;cursor:pointer;transition:all .15s;font-weight:500}
+.theme-btn:hover{border-color:var(--gd4);color:var(--gold)}
 .lout{background:transparent;border:1px solid var(--b2);color:var(--t3);padding:5px 12px;border-radius:20px;font-size:11px;cursor:pointer;transition:all .15s}
-.lout:hover{border-color:var(--rd3);color:var(--red)}
+.lout:hover{border-color:var(--rd4);color:var(--red)}
 
-/* TABS */
-.tabs{background:var(--bg1);border-bottom:1px solid var(--b1);padding:0 24px;display:flex;overflow-x:auto}
-.tab{padding:14px 16px;font-size:13px;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;font-weight:500;user-select:none}
+/* ═══ TABS ══════════════════════════════════════════════════════════════ */
+.tabs{background:var(--bg1);border-bottom:1px solid var(--b1);padding:0 28px;display:flex;overflow-x:auto;gap:0}
+.tabs::-webkit-scrollbar{height:0}
+.tab{padding:15px 18px;font-size:13px;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;font-weight:500;user-select:none}
 .tab:hover{color:var(--t2)}
-.tab.on{color:var(--gold);border-bottom-color:var(--gold)}
-.tbg{font-size:10px;padding:2px 7px;border-radius:20px;margin-left:5px;background:var(--bg3);color:var(--t3)}
+.tab.on{color:var(--gold);border-bottom-color:var(--gold);font-weight:600}
+.tbg{font-size:10px;padding:2px 7px;border-radius:20px;margin-left:5px;background:var(--bg3);color:var(--t3);font-weight:600;transition:all .15s}
 .tab.on .tbg{background:var(--gd3);color:var(--gold)}
 .tbg.red{background:var(--rd2);color:var(--red)}
 
-/* MAIN */
-.main{padding:20px 24px;max-width:1440px;margin:0 auto}
+/* ═══ MAIN ══════════════════════════════════════════════════════════════ */
+.main{padding:22px 28px;max-width:1480px;margin:0 auto}
 .pane{display:none}.pane.on{display:block}
 
-/* METRICS */
-.metrics{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:18px}
-@media(max-width:960px){.metrics{grid-template-columns:repeat(3,1fr)}}
+/* ═══ METRICS ═══════════════════════════════════════════════════════════ */
+.metrics{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:20px}
+@media(max-width:1000px){.metrics{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:560px){.metrics{grid-template-columns:repeat(2,1fr)}}
-.met{background:var(--bg2);border:1px solid var(--b1);border-radius:var(--rs);padding:15px 16px;transition:border .2s}
-.met:hover{border-color:var(--b2)}
-.mlbl{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:9px;font-weight:600}
-.mval{font-size:21px;font-weight:700;color:var(--t2);font-variant-numeric:tabular-nums}
+.met{background:var(--bg2);border:1px solid var(--b1);border-radius:10px;padding:16px 18px;transition:all .2s;cursor:default}
+.met:hover{border-color:var(--b2);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.mlbl{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;font-weight:700}
+.mval{font-size:22px;font-weight:700;color:var(--t2);font-variant-numeric:tabular-nums;line-height:1}
 .mval.ok{color:var(--green)}.mval.warn{color:var(--amber)}.mval.danger{color:var(--red)}.mval.gold{color:var(--gold)}
+.msub{font-size:11px;color:var(--t3);margin-top:5px}
 
-/* CARD */
-.card{background:var(--bg2);border:1px solid var(--b1);border-radius:var(--r);padding:20px 22px;margin-bottom:14px}
-.card-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+/* ═══ CARD ══════════════════════════════════════════════════════════════ */
+.card{background:var(--bg2);border:1px solid var(--b1);border-radius:12px;padding:20px 24px;margin-bottom:14px;transition:border .2s}
+.card:hover{border-color:var(--b2)}
+.card-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
 .card-title{font-size:15px;font-weight:600;color:var(--t1)}
-.card-hint{font-size:12px;color:var(--t3);margin-bottom:14px;line-height:1.6}
+.card-hint{font-size:12px;color:var(--t3);margin-bottom:16px;line-height:1.7}
 .brow{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
 
-/* BUTTONS */
-.btn{background:var(--bg3);border:1px solid var(--b2);color:var(--t2);padding:7px 14px;border-radius:var(--rx);font-size:12px;cursor:pointer;transition:all .15s;font-weight:500;white-space:nowrap}
+/* ═══ BUTTONS ═══════════════════════════════════════════════════════════ */
+.btn{background:var(--bg3);border:1px solid var(--b2);color:var(--t2);padding:7px 16px;border-radius:7px;font-size:12px;cursor:pointer;transition:all .15s;font-weight:500;white-space:nowrap}
 .btn:hover{border-color:var(--gd4);color:var(--gold)}
-.btn:disabled{color:var(--t3);cursor:not-allowed}
+.btn:disabled{color:var(--t3);cursor:not-allowed;border-color:var(--b1)}
 .btn.gold{background:var(--gd3);border-color:var(--gd4);color:var(--gold)}
 .btn.gold:hover{background:var(--gd4)}
+.btn.primary{background:var(--gold);color:#000;border-color:var(--gold);font-weight:700}
+.btn.primary:hover{background:var(--gold2)}
 
-/* TABLE */
-.tw{overflow-x:auto;border-radius:var(--rs);border:1px solid var(--b1)}
+/* ═══ TABLE ═════════════════════════════════════════════════════════════ */
+.tw{overflow-x:auto;border-radius:9px;border:1px solid var(--b1)}
 table{width:100%;border-collapse:collapse;font-size:13px}
-th{text-align:left;padding:9px 13px;font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.7px;border-bottom:1px solid var(--b1);background:var(--bg3);white-space:nowrap}
-td{padding:11px 13px;border-bottom:1px solid var(--b1);color:var(--t2);vertical-align:middle}
+th{text-align:left;padding:10px 14px;font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;border-bottom:1px solid var(--b1);background:var(--bg3);white-space:nowrap}
+td{padding:11px 14px;border-bottom:1px solid var(--b1);color:var(--t2);vertical-align:middle}
 tr:last-child td{border-bottom:none}
-tr.rdanger td{background:#1A08081A}
-tr.rwarn td{background:#1A12001A}
-tr.rwatch td{background:#0A141A1A}
+tr.rdanger td{background:var(--rd2)}
+tr.rwarn td{background:var(--am2)}
+tr.rwatch td{background:var(--bl3)}
 tbody tr{transition:background .1s}
 tbody tr:hover td{background:var(--bg3)!important}
 
-/* PILLS */
-.pill{font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;white-space:nowrap;display:inline-block}
-.p-ok{background:var(--gn3);color:var(--green);border:1px solid #2DBE7A22}
-.p-warn{background:var(--am3);color:var(--amber);border:1px solid #E8922A22}
-.p-danger{background:var(--rd3);color:var(--red);border:1px solid #E24B4A22}
-.p-info{background:var(--bl3);color:var(--blue);border:1px solid #4A9EE822}
+/* ═══ PILLS ═════════════════════════════════════════════════════════════ */
+.pill{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;display:inline-block;letter-spacing:.3px}
+.p-ok{background:var(--gn3);color:var(--green);border:1px solid var(--gn4)}
+.p-warn{background:var(--am3);color:var(--amber);border:1px solid var(--am4)}
+.p-danger{background:var(--rd3);color:var(--red);border:1px solid var(--rd4)}
+.p-info{background:var(--bl3);color:var(--blue);border:1px solid #4A9EE830}
 .p-gray{background:var(--bg3);color:var(--t3);border:1px solid var(--b2)}
-.p-l1{background:#1A2A1018;color:#7EC85A;border:1px solid #7EC85A22}
+.p-l1{background:#1A2A1018;color:#7EC85A;border:1px solid #7EC85A30}
 .p-l2{background:var(--gd3);color:var(--gold);border:1px solid var(--gd4)}
-.p-l3{background:var(--am3);color:var(--amber);border:1px solid #E8922A22}
-.p-l4{background:var(--rd3);color:var(--red);border:1px solid var(--rd3)}
-.p-l5{background:#2A080818;color:#FF4444;border:1px solid #FF444440;animation:blink 1s infinite}
+.p-l3{background:var(--am3);color:var(--amber);border:1px solid var(--am4)}
+.p-l4{background:var(--rd3);color:var(--red);border:1px solid var(--rd4)}
+.p-l5{background:var(--rd2);color:#FF4444;border:1px solid #FF444440;animation:blink 1s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.5}}
 
-/* INPUTS */
-.cel{background:var(--bg3);border:1px solid var(--b1);border-radius:var(--rx);padding:6px 10px;color:var(--t1);font-size:13px;width:100%;outline:none;transition:border .15s}
-.cel:focus{border-color:var(--gd4)}
-.cel-bal{width:110px;font-family:monospace}
+/* ═══ INPUTS ════════════════════════════════════════════════════════════ */
+.cel{background:var(--bg3);border:1px solid var(--b1);border-radius:6px;padding:7px 10px;color:var(--t1);font-size:13px;width:100%;outline:none;transition:all .15s}
+.cel:focus{border-color:var(--gd5);box-shadow:0 0 0 2px var(--gd3)}
+.cel-bal{width:115px;font-family:monospace;font-size:13px}
 
-/* NAMES */
+/* ═══ NAMES ═════════════════════════════════════════════════════════════ */
 .aname{font-weight:600;color:var(--t1);font-size:13px}
 .aid{font-size:10px;color:var(--t3);font-family:monospace;margin-top:2px}
 
-/* LOG */
-.log{background:var(--bg0);border:1px solid var(--b1);border-radius:var(--rs);padding:12px;font-size:11px;font-family:monospace;max-height:240px;overflow-y:auto;line-height:1.6}
+/* ═══ LOG ═══════════════════════════════════════════════════════════════ */
+.log{background:var(--bg0);border:1px solid var(--b1);border-radius:9px;padding:14px;font-size:11px;font-family:monospace;max-height:260px;overflow-y:auto;line-height:1.7}
 .ll{padding:2px 0;border-bottom:1px solid var(--b1)}.ll:last-child{border-bottom:none}
 .lok{color:var(--green)}.lwarn{color:var(--amber)}.lerr{color:var(--red)}.linfo{color:var(--blue)}.lmuted{color:var(--t3)}
 
-/* HEALTH */
-.hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:11px}
-.hcard{background:var(--bg2);border:1px solid var(--b1);border-radius:var(--r);padding:17px;transition:all .2s}
-.hcard:hover{border-color:var(--b2);transform:translateY(-1px)}
-.hcard.hc-ok{border-color:#2DBE7A22}
-.hcard.hc-warn{border-color:#E8922A33}
-.hcard.hc-danger{border-color:#E24B4A44;background:#1A08080A}
-.hc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
-.hc-name{font-size:13px;font-weight:600;color:var(--t1);margin-bottom:2px}
+/* ═══ HEALTH CARDS ══════════════════════════════════════════════════════ */
+.hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.hcard{background:var(--bg2);border:1px solid var(--b1);border-radius:12px;padding:18px;transition:all .2s}
+.hcard:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+.hcard.hc-ok{border-color:var(--gn4)}
+.hcard.hc-warn{border-color:var(--am4)}
+.hcard.hc-danger{border-color:var(--rd4);background:var(--rd2)}
+.hc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+.hc-name{font-size:14px;font-weight:700;color:var(--t1);margin-bottom:2px}
 .hc-id{font-size:10px;color:var(--t3);font-family:monospace}
-.hc-rows{display:flex;flex-direction:column;gap:6px}
-.hc-row{display:flex;justify-content:space-between;font-size:12px}
-.hc-key{color:var(--t3)}.hc-val{color:var(--t2);font-family:monospace}
-.abanner{margin-top:11px;padding:9px 11px;border-radius:var(--rx);font-size:12px;font-weight:500;line-height:1.5}
-.ab-danger{background:var(--rd2);color:var(--red);border:1px solid var(--rd3)}
-.ab-warn{background:var(--am2);color:var(--amber);border:1px solid var(--am3)}
+.hc-rows{display:flex;flex-direction:column;gap:7px}
+.hc-row{display:flex;justify-content:space-between;align-items:center;font-size:12px}
+.hc-key{color:var(--t3)}.hc-val{color:var(--t2);font-family:monospace;font-weight:500}
+.abanner{margin-top:12px;padding:10px 12px;border-radius:7px;font-size:12px;font-weight:600;line-height:1.5}
+.ab-danger{background:var(--rd3);color:var(--red);border:1px solid var(--rd4)}
+.ab-warn{background:var(--am3);color:var(--amber);border:1px solid var(--am4)}
 
-/* WARMING */
+/* ═══ WARMING ═══════════════════════════════════════════════════════════ */
 .wbar-w{background:var(--bg3);border-radius:20px;height:5px;width:64px;overflow:hidden;display:inline-block;vertical-align:middle}
 .wbar{height:100%;border-radius:20px;background:var(--gold);transition:width .5s}
 
-/* LAYERS LEGEND */
-.layers{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
+/* ═══ LAYER LEGEND ══════════════════════════════════════════════════════ */
+.layers{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:18px}
 @media(max-width:700px){.layers{grid-template-columns:repeat(2,1fr)}}
-.lcard{border-radius:var(--rx);padding:10px 12px}
-.lc1{background:#1A2A1010;border:1px solid #7EC85A20}
+.lcard{border-radius:8px;padding:11px 14px;transition:transform .2s;cursor:default}
+.lcard:hover{transform:translateY(-1px)}
+.lc1{background:#1A2A1012;border:1px solid #7EC85A22}
 .lc2{background:var(--gd3);border:1px solid var(--gd4)}
-.lc3{background:var(--am3);border:1px solid #E8922A20}
-.lc4{background:var(--rd3);border:1px solid var(--rd3)}
-.lc5{background:#2A080810;border:1px solid #FF444420;animation:blink 2s infinite}
-.lc-t{font-weight:700;font-size:12px;margin-bottom:2px}
-.lc-s{font-size:10px;opacity:.65}
+.lc3{background:var(--am3);border:1px solid var(--am4)}
+.lc4{background:var(--rd3);border:1px solid var(--rd4)}
+.lc5{background:var(--rd2);border:1px solid #FF444430;animation:blink 2s infinite}
+.lc-t{font-weight:700;font-size:12px;margin-bottom:3px}
+.lc-s{font-size:10px;opacity:.7}
 
-/* REPORT */
-.rbox{background:var(--bg0);border:1px solid var(--b1);border-radius:var(--rs);padding:18px;font-size:12px;font-family:monospace;line-height:1.9;color:var(--t2);white-space:pre-wrap;max-height:400px;overflow-y:auto}
+/* ═══ REPORT ════════════════════════════════════════════════════════════ */
+.rbox{background:var(--bg0);border:1px solid var(--b1);border-radius:9px;padding:20px;font-size:12px;font-family:monospace;line-height:2;color:var(--t2);white-space:pre-wrap;max-height:420px;overflow-y:auto}
 
-/* LAYOUT */
-.two-col{display:grid;grid-template-columns:1.3fr 1fr;gap:13px}
+/* ═══ SETUP ════════════════════════════════════════════════════════════ */
+.setup-wrap{min-height:calc(100vh - 112px);display:flex;align-items:center;justify-content:center;padding:40px 20px}
+.setup-card{background:var(--bg2);border:1px solid var(--gd4);border-radius:16px;padding:36px;width:100%;max-width:440px;box-shadow:var(--shadow)}
+.setup-card h2{color:var(--gold);font-size:18px;font-weight:700;margin-bottom:8px}
+.setup-card p{color:var(--t3);font-size:13px;line-height:1.7;margin-bottom:24px}
+.errbox{background:var(--rd2);border:1px solid var(--rd4);border-radius:7px;padding:11px 14px;font-size:12px;color:var(--red);margin-top:12px;display:none}
+
+/* ═══ LAYOUT ════════════════════════════════════════════════════════════ */
+.two-col{display:grid;grid-template-columns:1.3fr 1fr;gap:14px}
 @media(max-width:800px){.two-col{grid-template-columns:1fr}}
 .mono{font-family:monospace}
 .c-ok{color:var(--green)}.c-danger{color:var(--red)}.c-warn{color:var(--amber)}.c-muted{color:var(--t3)}.c-gold{color:var(--gold)}
 
-/* MODAL */
-.modal-bg{display:none;position:fixed;inset:0;background:#00000090;z-index:200;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
+/* ═══ MODAL ════════════════════════════════════════════════════════════ */
+.modal-bg{display:none;position:fixed;inset:0;background:#00000088;z-index:200;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
 .modal-bg.open{display:flex}
-.modal{background:var(--bg2);border:1px solid var(--b2);border-radius:var(--r);padding:26px;width:100%;max-width:420px}
-.modal h3{color:var(--gold);font-size:15px;font-weight:600;margin-bottom:16px}
-.mfield{margin-bottom:11px}
+.modal{background:var(--bg2);border:1px solid var(--b2);border-radius:14px;padding:28px;width:100%;max-width:420px;box-shadow:var(--shadow)}
+.modal h3{color:var(--gold);font-size:15px;font-weight:700;margin-bottom:18px}
+.mfield{margin-bottom:12px}
 
-/* SETUP */
-.setup-wrap{min-height:calc(100vh - 112px);display:flex;align-items:center;justify-content:center;padding:40px 20px}
-.setup-card{background:var(--bg2);border:1px solid var(--gd4);border-radius:var(--r);padding:34px;width:100%;max-width:440px}
-.setup-card h2{color:var(--gold);font-size:17px;font-weight:600;margin-bottom:6px}
-.setup-card p{color:var(--t3);font-size:13px;line-height:1.7;margin-bottom:22px}
-.errbox{background:var(--rd2);border:1px solid var(--rd3);border-radius:var(--rx);padding:10px 13px;font-size:12px;color:var(--red);margin-top:11px;display:none}
-
-/* LOADER */
+/* ═══ LOADER ════════════════════════════════════════════════════════════ */
 .loader{display:inline-block;width:13px;height:13px;border:2px solid var(--b2);border-top-color:var(--gold);border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px}
 @keyframes spin{to{transform:rotate(360deg)}}
-.empty-s{text-align:center;padding:44px;color:var(--t3);font-size:13px}
+.empty-s{text-align:center;padding:48px;color:var(--t3);font-size:13px}
+
+/* ═══ RESPONSIVE ════════════════════════════════════════════════════════ */
+@media(max-width:600px){
+  .topbar{padding:0 16px;height:52px}
+  .tabs{padding:0 16px}
+  .main{padding:16px}
+  .tbrand-name{font-size:13px}
+}
 </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
+<!-- LOGIN -->
 <div class="login-wrap" id="login-screen">
+  <div style="position:absolute;top:20px;right:20px;display:flex;gap:8px;align-items:center">
+    <div class="ttoggle">
+      <button class="topt on" id="login-lbtn-pt" onclick="setLang('pt')">PT</button>
+      <button class="topt" id="login-lbtn-en" onclick="setLang('en')">EN</button>
+    </div>
+    <button class="theme-btn" id="login-theme-btn" onclick="toggleTheme()">☀️ Claro</button>
+  </div>
   <div class="login-card">
     <div class="login-logo">
-      <div class="logo-mark">UMBRA</div>
-      <div class="logo-sub">Ops Dashboard</div>
+      <span class="login-logo-mark">UMBRA</span>
+      <span class="login-logo-sub" id="l-sub">Ops Dashboard</span>
+      <div class="login-divider"></div>
     </div>
     <div class="mfield">
-      <span class="flabel">Password</span>
-      <input type="password" class="finp" id="pw-inp" placeholder="Enter password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
+      <span class="flabel" id="l-pw-label">Senha</span>
+      <input type="password" class="finp" id="pw-inp" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
     </div>
-    <button class="pbtn" id="login-btn" onclick="doLogin()">Access dashboard</button>
+    <button class="pbtn" id="l-btn" onclick="doLogin()">Acessar dashboard</button>
     <div class="lerr" id="login-err"></div>
-    <div class="lhint" id="login-hint">First time? Type a password to set it.</div>
+    <div class="lhint" id="login-hint">Primeira vez? Digite uma senha para definir.</div>
   </div>
 </div>
 
 <!-- APP -->
 <div id="app" style="display:none">
   <div class="topbar">
-    <div style="display:flex;align-items:center">
-      <span class="tbrand">UMBRA</span>
+    <div class="tbrand">
+      <span class="tbrand-name">UMBRA</span>
       <span class="tbadge-v">v2</span>
     </div>
     <div class="tright">
-      <div class="ltog">
-        <button class="lopt on" id="lbtn-pt" onclick="setLang('pt')">PT</button>
-        <button class="lopt" id="lbtn-en" onclick="setLang('en')">EN</button>
+      <div class="ttoggle">
+        <button class="topt on" id="lbtn-pt" onclick="setLang('pt')">PT</button>
+        <button class="topt" id="lbtn-en" onclick="setLang('en')">EN</button>
       </div>
+      <button class="theme-btn" id="theme-btn" onclick="toggleTheme()">☀️ Claro</button>
       <div class="cpill">
         <div class="cdot" id="conn-dot"></div>
-        <span id="conn-label">Not connected</span>
+        <span id="conn-label">Desconectado</span>
       </div>
-      <button class="lout" onclick="doLogout()">Logout</button>
+      <button class="lout" onclick="doLogout()" id="t-logout">Sair</button>
     </div>
   </div>
 
   <div class="tabs" id="tabs" style="display:none">
-    <div class="tab on" onclick="switchTab('recon')">Reconciliation <span class="tbg" id="tb-recon">—</span></div>
-    <div class="tab" onclick="switchTab('health')">Health <span class="tbg" id="tb-health">—</span></div>
-    <div class="tab" onclick="switchTab('warming')">Warming <span class="tbg" id="tb-warm">0</span></div>
-    <div class="tab" onclick="switchTab('report')">Report</div>
-    <div class="tab" onclick="switchTab('log')">Log <span class="tbg" id="tb-log">0</span></div>
+    <div class="tab on" onclick="switchTab('recon')" id="tab-recon">Reconciliação <span class="tbg" id="tb-recon">—</span></div>
+    <div class="tab" onclick="switchTab('health')" id="tab-health">Saúde das contas <span class="tbg" id="tb-health">—</span></div>
+    <div class="tab" onclick="switchTab('warming')" id="tab-warming">Warming <span class="tbg" id="tb-warm">0</span></div>
+    <div class="tab" onclick="switchTab('report')" id="tab-report">Relatório</div>
+    <div class="tab" onclick="switchTab('log')" id="tab-log">Log <span class="tbg" id="tb-log">0</span></div>
   </div>
 
   <div class="main">
@@ -248,11 +290,11 @@ tbody tr:hover td{background:var(--bg3)!important}
     <div id="pane-setup" class="pane on">
       <div class="setup-wrap">
         <div class="setup-card">
-          <h2>Connect to Meta Ads</h2>
-          <p>Enter your Meta API access token. The system pulls live spend, monitors health, and sends Telegram alerts automatically.</p>
-          <span class="flabel">Access Token</span>
+          <h2 id="setup-title">Conectar ao Meta Ads</h2>
+          <p id="setup-desc">Digite seu token de acesso da API do Meta. O sistema puxa o gasto em tempo real, monitora a saúde das contas e envia alertas no Telegram automaticamente.</p>
+          <span class="flabel" id="setup-token-label">Token de acesso</span>
           <input class="finp" type="password" id="tok" placeholder="EAALHty9jREg..." autocomplete="off" onkeydown="if(event.key==='Enter')connect()"/>
-          <button class="pbtn" id="cbtn" onclick="connect()">Connect and load accounts</button>
+          <button class="pbtn" id="cbtn" onclick="connect()">Conectar e carregar contas</button>
           <div class="errbox" id="errmsg"></div>
         </div>
       </div>
@@ -261,33 +303,48 @@ tbody tr:hover td{background:var(--bg3)!important}
     <!-- RECON -->
     <div id="pane-recon" class="pane">
       <div class="metrics">
-        <div class="met"><div class="mlbl">Vendor balances</div><div class="mval gold" id="m-bal">—</div></div>
-        <div class="met"><div class="mlbl">Meta spend today</div><div class="mval" id="m-spend">—</div></div>
-        <div class="met"><div class="mlbl">Avg runway</div><div class="mval" id="m-runway">—</div></div>
-        <div class="met"><div class="mlbl">Flags active</div><div class="mval" id="m-flags">—</div></div>
-        <div class="met"><div class="mlbl">Active accounts</div><div class="mval ok" id="m-active">—</div></div>
-        <div class="met"><div class="mlbl">Next check</div><div class="mval gold" id="m-cd" style="font-size:18px">—</div></div>
+        <div class="met"><div class="mlbl" id="m-lbl-bal">Saldos dos vendors</div><div class="mval gold" id="m-bal">—</div></div>
+        <div class="met"><div class="mlbl" id="m-lbl-spend">Gasto Meta hoje</div><div class="mval" id="m-spend">—</div></div>
+        <div class="met"><div class="mlbl" id="m-lbl-runway">Runway médio</div><div class="mval" id="m-runway">—</div></div>
+        <div class="met"><div class="mlbl" id="m-lbl-flags">Alertas ativos</div><div class="mval" id="m-flags">—</div></div>
+        <div class="met"><div class="mlbl" id="m-lbl-active">Contas ativas</div><div class="mval ok" id="m-active">—</div></div>
+        <div class="met"><div class="mlbl" id="m-lbl-cd">Próxima verificação</div><div class="mval gold" id="m-cd" style="font-size:18px">—</div></div>
       </div>
+
       <div class="layers">
-        <div class="lcard lc1"><div class="lc-t" style="color:#7EC85A">L1 — 20%</div><div class="lc-s" style="color:#7EC85A">Attention</div></div>
-        <div class="lcard lc2"><div class="lc-t" style="color:var(--gold)">L2 — 10%</div><div class="lc-s" style="color:var(--gold)">Alert</div></div>
-        <div class="lcard lc3"><div class="lc-t" style="color:var(--amber)">L3 — 5%</div><div class="lc-s" style="color:var(--amber)">Critical</div></div>
-        <div class="lcard lc4"><div class="lc-t" style="color:var(--red)">L4 — Zero</div><div class="lc-s" style="color:var(--red)">Paused</div></div>
-        <div class="lcard lc5"><div class="lc-t" style="color:#FF4444">L5 — Negative</div><div class="lc-s" style="color:#FF4444">Emergency</div></div>
+        <div class="lcard lc1"><div class="lc-t" style="color:#7EC85A">L1 — 20%</div><div class="lc-s" style="color:#7EC85A" id="lc-s1">Atenção</div></div>
+        <div class="lcard lc2"><div class="lc-t" style="color:var(--gold)">L2 — 10%</div><div class="lc-s" style="color:var(--gold)" id="lc-s2">Alerta</div></div>
+        <div class="lcard lc3"><div class="lc-t" style="color:var(--amber)">L3 — 5%</div><div class="lc-s" style="color:var(--amber)" id="lc-s3">Crítico</div></div>
+        <div class="lcard lc4"><div class="lc-t" style="color:var(--red)">L4 — Zero</div><div class="lc-s" style="color:var(--red)" id="lc-s4">Pausado</div></div>
+        <div class="lcard lc5"><div class="lc-t" style="color:#FF4444">L5 — Negativo</div><div class="lc-s" style="color:#FF4444" id="lc-s5">Emergência</div></div>
       </div>
+
       <div class="card">
         <div class="card-hdr">
-          <div class="card-title">Live reconciliation</div>
+          <div class="card-title" id="recon-title">Reconciliação em tempo real</div>
           <div class="brow">
-            <span style="font-size:11px;color:var(--t3)" id="last-lbl">Not checked yet</span>
-            <button class="btn" id="check-btn" onclick="runCheck()">Run check now</button>
-            <button class="btn gold" onclick="switchTab('report')">Daily report</button>
+            <span style="font-size:11px;color:var(--t3)" id="last-lbl">Ainda não verificado</span>
+            <button class="btn" id="check-btn" onclick="runCheck()">Verificar agora</button>
+            <button class="btn gold" onclick="switchTab('report')" id="btn-report">Relatório diário</button>
           </div>
         </div>
-        <p class="card-hint">Enter vendor balance, vendor name and buyer. Spend is pulled from Meta API automatically. Telegram alerts fire on every new flag.</p>
+        <p class="card-hint" id="recon-hint">Digite o saldo do vendor, nome do vendor e buyer por conta. O gasto é puxado da API do Meta automaticamente. Alertas no Telegram disparam a cada nova flag.</p>
         <div class="tw">
           <table>
-            <thead><tr><th>Account</th><th>Vendor</th><th>Buyer</th><th>Balance ($)</th><th>Spend today ($)</th><th>Remaining ($)</th><th>Runway</th><th>Alert layer</th></tr></thead>
+            <thead>
+              <tr>
+                <th id="th-account">Conta</th>
+                <th id="th-vendor">Vendor</th>
+                <th id="th-buyer">Buyer</th>
+                <th id="th-bm">BM</th>
+                <th id="th-vertical">Vertical</th>
+                <th id="th-balance">Saldo ($)</th>
+                <th id="th-spend">Gasto hoje ($)</th>
+                <th id="th-remaining">Restante ($)</th>
+                <th id="th-runway">Runway</th>
+                <th id="th-layer">Alerta</th>
+              </tr>
+            </thead>
             <tbody id="recon-tb"></tbody>
           </table>
         </div>
@@ -297,28 +354,41 @@ tbody tr:hover td{background:var(--bg3)!important}
     <!-- HEALTH -->
     <div id="pane-health" class="pane">
       <div class="card-hdr" style="margin-bottom:14px">
-        <div style="font-size:15px;font-weight:600;color:var(--t1)">Account health</div>
-        <button class="btn gold" id="health-btn" onclick="runHealthCheck()">Refresh</button>
+        <div style="font-size:15px;font-weight:700;color:var(--t1)" id="health-title">Saúde das contas</div>
+        <button class="btn gold" id="health-btn" onclick="runHealthCheck()">Atualizar</button>
       </div>
-      <div id="health-sum" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px"></div>
-      <div id="hgrid" class="hgrid"><div class="empty-s"><span class="loader"></span>Loading...</div></div>
+      <div id="health-sum" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px"></div>
+      <div id="hgrid" class="hgrid"><div class="empty-s"><span class="loader"></span></div></div>
     </div>
 
     <!-- WARMING -->
     <div id="pane-warming" class="pane">
       <div class="card">
         <div class="card-hdr">
-          <div class="card-title">Warming pipeline</div>
-          <button class="btn gold" onclick="openWarmModal()">+ Add account</button>
+          <div class="card-title" id="warm-title">Pipeline de Warming</div>
+          <button class="btn gold" onclick="openWarmModal()">+ Adicionar conta</button>
         </div>
-        <p class="card-hint">Days advance automatically from the date added. Accounts are ready after Day 14.</p>
+        <p class="card-hint" id="warm-hint">Os dias avançam automaticamente pela data de adição. Contas ficam prontas após o Dia 14.</p>
         <div class="tw">
           <table>
-            <thead><tr><th>Account ID</th><th>Vendor</th><th>Buyer</th><th>Day</th><th>Progress</th><th>Phase</th><th>Budget/day</th><th>Vertical</th><th>Ready</th><th></th></tr></thead>
+            <thead>
+              <tr>
+                <th id="wth-id">ID da conta</th>
+                <th id="wth-vendor">Vendor</th>
+                <th id="wth-buyer">Buyer</th>
+                <th id="wth-day">Dia</th>
+                <th id="wth-prog">Progresso</th>
+                <th id="wth-phase">Fase</th>
+                <th id="wth-budget">Budget/dia</th>
+                <th id="wth-vertical">Vertical</th>
+                <th id="wth-ready">Pronto em</th>
+                <th></th>
+              </tr>
+            </thead>
             <tbody id="warm-tb"></tbody>
           </table>
         </div>
-        <div id="warm-empty" class="empty-s" style="display:none">No accounts warming. Click "+ Add account" to start.</div>
+        <div id="warm-empty" class="empty-s" style="display:none"></div>
       </div>
     </div>
 
@@ -326,14 +396,14 @@ tbody tr:hover td{background:var(--bg3)!important}
     <div id="pane-report" class="pane">
       <div class="card">
         <div class="card-hdr">
-          <div class="card-title">Daily report</div>
+          <div class="card-title" id="report-title">Relatório diário</div>
           <div class="brow">
-            <button class="btn" onclick="generateReport()">Regenerate</button>
-            <button class="btn gold" onclick="copyReport()">Copy to clipboard</button>
+            <button class="btn" onclick="generateReport()" id="btn-regen">Regenerar</button>
+            <button class="btn gold" onclick="copyReport()" id="btn-copy">Copiar</button>
           </div>
         </div>
-        <p class="card-hint">Ready to paste into Slack or Telegram. Run a check first to get fresh data.</p>
-        <div class="rbox" id="rbox">Run a reconciliation check first.</div>
+        <p class="card-hint" id="report-hint">Pronto para colar no Slack ou Telegram. Faça uma verificação primeiro para ter dados atualizados.</p>
+        <div class="rbox" id="rbox"></div>
       </div>
     </div>
 
@@ -342,20 +412,30 @@ tbody tr:hover td{background:var(--bg3)!important}
       <div class="two-col">
         <div class="card">
           <div class="card-hdr">
-            <div class="card-title">All ad accounts</div>
+            <div class="card-title" id="log-accts-title">Todas as contas</div>
             <span class="c-muted" id="acct-count" style="font-size:12px">—</span>
           </div>
           <div class="tw">
             <table>
-              <thead><tr><th>Name</th><th>Vendor</th><th>Buyer</th><th>Lifetime spend</th><th>Status</th></tr></thead>
+              <thead>
+                <tr>
+                  <th id="lth-name">Nome</th>
+                  <th id="lth-vendor">Vendor</th>
+                  <th id="lth-buyer">Buyer</th>
+                  <th id="lth-bm">BM</th>
+                  <th id="lth-vertical">Vertical</th>
+                  <th id="lth-spend">Gasto histórico</th>
+                  <th id="lth-status">Status</th>
+                </tr>
+              </thead>
               <tbody id="acct-tb"></tbody>
             </table>
           </div>
         </div>
         <div class="card">
           <div class="card-hdr">
-            <div class="card-title">System log</div>
-            <button class="btn" onclick="clearLog()">Clear</button>
+            <div class="card-title" id="log-title">Log do sistema</div>
+            <button class="btn" onclick="clearLog()" id="btn-clear">Limpar</button>
           </div>
           <div class="log" id="slog"></div>
         </div>
@@ -368,126 +448,275 @@ tbody tr:hover td{background:var(--bg3)!important}
 <!-- WARMING MODAL -->
 <div class="modal-bg" id="warm-modal">
   <div class="modal">
-    <h3>Add account to warming pipeline</h3>
-    <div class="mfield"><span class="flabel">Account ID</span><input class="finp" id="w-id" placeholder="act_123456789" style="margin:0"/></div>
-    <div class="mfield"><span class="flabel">Vendor</span><input class="finp" id="w-vendor" placeholder="Tiger Agency" style="margin:0"/></div>
-    <div class="mfield"><span class="flabel">Media Buyer</span><input class="finp" id="w-buyer" placeholder="John" style="margin:0"/></div>
-    <div class="mfield"><span class="flabel">Target Vertical</span><input class="finp" id="w-vertical" placeholder="Nutra / Biz Op" style="margin:0"/></div>
+    <h3 id="wm-title">Adicionar conta ao pipeline</h3>
+    <div class="mfield"><span class="flabel" id="wm-id-lbl">ID da Conta</span><input class="finp" id="w-id" placeholder="act_123456789" style="margin:0"/></div>
+    <div class="mfield"><span class="flabel" id="wm-vendor-lbl">Vendor</span><input class="finp" id="w-vendor" placeholder="Tiger Agency" style="margin:0"/></div>
+    <div class="mfield"><span class="flabel" id="wm-buyer-lbl">Media Buyer</span><input class="finp" id="w-buyer" placeholder="João" style="margin:0"/></div>
+    <div class="mfield"><span class="flabel" id="wm-vert-lbl">Vertical alvo</span><input class="finp" id="w-vertical" placeholder="Nutra / Biz Op" style="margin:0"/></div>
     <div class="brow" style="margin-top:16px">
-      <button class="btn gold" style="flex:1;padding:10px" onclick="saveWarm()">Add to pipeline</button>
-      <button class="btn" style="padding:10px 14px" onclick="closeWarmModal()">Cancel</button>
+      <button class="btn gold" style="flex:1;padding:10px" onclick="saveWarm()" id="wm-save">Adicionar ao pipeline</button>
+      <button class="btn" style="padding:10px 14px" onclick="closeWarmModal()" id="wm-cancel">Cancelar</button>
     </div>
   </div>
 </div>
 
 <script>
-// ═══ SECURITY ═══════════════════════════════════════════
-const MAX_ATTEMPTS = 5;
-const LOCKOUT_MS   = 15 * 60 * 1000;
-let loginAttempts  = 0;
-let lockedUntil    = 0;
+// ═══ TRANSLATIONS ════════════════════════════════════════════════════════
+const T = {
+  pt:{
+    'conn-label':'Desconectado','conn-connected':'Conectado — {n} contas',
+    'theme-dark':'☀️ Claro','theme-light':'🌙 Escuro',
+    't-logout':'Sair',
+    'tab-recon':'Reconciliação','tab-health':'Saúde das contas','tab-warming':'Warming','tab-report':'Relatório','tab-log':'Log',
+    'l-sub':'Ops Dashboard','l-pw-label':'Senha','l-btn':'Acessar dashboard',
+    'login-hint-first':'Primeira vez? Digite uma senha para definir.',
+    'login-hint-set':'Senha definida.',
+    'login-err-short':'A senha deve ter pelo menos 4 caracteres.',
+    'login-err-wrong':'Senha incorreta. {n} tentativa(s) restante(s).',
+    'login-err-locked':'Conta bloqueada por 15 minutos após {n} tentativas.',
+    'setup-title':'Conectar ao Meta Ads',
+    'setup-desc':'Digite seu token de acesso da API do Meta. O sistema puxa o gasto em tempo real, monitora a saúde das contas e envia alertas no Telegram automaticamente.',
+    'setup-token-label':'Token de acesso',
+    'cbtn':'Conectar e carregar contas',
+    'm-lbl-bal':'Saldos dos vendors','m-lbl-spend':'Gasto Meta hoje','m-lbl-runway':'Runway médio',
+    'm-lbl-flags':'Alertas ativos','m-lbl-active':'Contas ativas','m-lbl-cd':'Próxima verificação',
+    'lc-s1':'Atenção','lc-s2':'Alerta','lc-s3':'Crítico','lc-s4':'Pausado','lc-s5':'Emergência',
+    'recon-title':'Reconciliação em tempo real',
+    'recon-hint':'Digite o saldo do vendor, nome e buyer por conta. O gasto é puxado da API do Meta automaticamente.',
+    'last-lbl-init':'Ainda não verificado','last-lbl':'Última verificação: {t}',
+    'check-btn':'Verificar agora','btn-report':'Relatório diário',
+    'th-account':'Conta','th-vendor':'Vendor','th-buyer':'Buyer','th-bm':'BM','th-vertical':'Vertical','th-balance':'Saldo ($)',
+    'th-spend':'Gasto hoje ($)','th-remaining':'Restante ($)','th-runway':'Runway','th-layer':'Alerta',
+    'health-title':'Saúde das contas','health-btn':'Atualizar',
+    'hsum-active':'Ativas','hsum-disabled':'Desativadas','hsum-issues':'Com problema','hsum-total':'Total',
+    'warm-title':'Pipeline de Warming',
+    'warm-hint':'Os dias avançam automaticamente. Contas ficam prontas após o Dia 14.',
+    'warm-empty':'Nenhuma conta em warming. Clique em "+ Adicionar conta" para começar.',
+    'wth-id':'ID da conta','wth-vendor':'Vendor','wth-buyer':'Buyer','wth-day':'Dia',
+    'wth-prog':'Progresso','wth-phase':'Fase','wth-budget':'Budget/dia','wth-vertical':'Vertical',
+    'wth-ready':'Pronto em',
+    'warm-done':'Concluído',
+    'report-title':'Relatório diário',
+    'report-hint':'Pronto para colar no Slack ou Telegram. Faça uma verificação primeiro.',
+    'btn-regen':'Regenerar','btn-copy':'Copiar','btn-copied':'Copiado!',
+    'rbox-init':'Faça uma verificação primeiro.',
+    'log-accts-title':'Todas as contas','log-title':'Log do sistema','btn-clear':'Limpar',
+    'lth-name':'Nome','lth-vendor':'Vendor','lth-buyer':'Buyer','lth-bm':'BM','lth-vertical':'Vertical','lth-spend':'Gasto histórico','lth-status':'Status',
+    'wm-title':'Adicionar conta ao pipeline','wm-id-lbl':'ID da Conta','wm-vendor-lbl':'Vendor',
+    'wm-buyer-lbl':'Media Buyer','wm-vert-lbl':'Vertical alvo','wm-save':'Adicionar ao pipeline','wm-cancel':'Cancelar',
+    'vendor-ph':'Vendor','buyer-ph':'Buyer','bm-ph':'BM (ex: BM Nutra)','vertical-ph':'Vertical (ex: Nutra)',
+    'pill-enter':'Aguardando saldo',
+    'phase-behavior':'Comportamento','phase-bm':'Config. BM','phase-ramp':'Ramp',
+    'ab-disabled':'Conta desativada — solicite replacement + balance transfer ao vendor imediatamente',
+    'ab-warn':'Problema de cobrança ou política — pause o gasto se não resolver em 24h',
+  },
+  en:{
+    'conn-label':'Not connected','conn-connected':'Connected — {n} accounts',
+    'theme-dark':'☀️ Light','theme-light':'🌙 Dark',
+    't-logout':'Logout',
+    'tab-recon':'Reconciliation','tab-health':'Account health','tab-warming':'Warming','tab-report':'Report','tab-log':'Log',
+    'l-sub':'Ops Dashboard','l-pw-label':'Password','l-btn':'Access dashboard',
+    'login-hint-first':'First time? Type a password to set it.',
+    'login-hint-set':'Password set.',
+    'login-err-short':'Password must be at least 4 characters.',
+    'login-err-wrong':'Wrong password. {n} attempt(s) remaining.',
+    'login-err-locked':'Locked for 15 min after {n} failed attempts.',
+    'setup-title':'Connect to Meta Ads',
+    'setup-desc':'Enter your Meta API access token. The system pulls live spend, monitors health, and sends Telegram alerts automatically.',
+    'setup-token-label':'Access Token',
+    'cbtn':'Connect and load accounts',
+    'm-lbl-bal':'Vendor balances','m-lbl-spend':'Meta spend today','m-lbl-runway':'Avg runway',
+    'm-lbl-flags':'Active flags','m-lbl-active':'Active accounts','m-lbl-cd':'Next check',
+    'lc-s1':'Attention','lc-s2':'Alert','lc-s3':'Critical','lc-s4':'Paused','lc-s5':'Emergency',
+    'recon-title':'Live reconciliation',
+    'recon-hint':'Enter vendor balance, name and buyer per account. Spend is pulled from Meta API automatically.',
+    'last-lbl-init':'Not checked yet','last-lbl':'Last check: {t}',
+    'check-btn':'Run check now','btn-report':'Daily report',
+    'th-account':'Account','th-vendor':'Vendor','th-buyer':'Buyer','th-balance':'Balance ($)',
+    'th-spend':'Spend today ($)','th-remaining':'Remaining ($)','th-runway':'Runway','th-layer':'Alert',
+    'health-title':'Account health','health-btn':'Refresh',
+    'hsum-active':'Active','hsum-disabled':'Disabled','hsum-issues':'Issues','hsum-total':'Total',
+    'warm-title':'Warming pipeline',
+    'warm-hint':'Days advance automatically. Accounts are ready after Day 14.',
+    'warm-empty':'No accounts warming. Click "+ Add account" to start.',
+    'wth-id':'Account ID','wth-vendor':'Vendor','wth-buyer':'Buyer','wth-day':'Day',
+    'wth-prog':'Progress','wth-phase':'Phase','wth-budget':'Budget/day','wth-vertical':'Vertical',
+    'wth-ready':'Ready date',
+    'warm-done':'Done',
+    'report-title':'Daily report',
+    'report-hint':'Ready to paste into Slack or Telegram. Run a check first to get fresh data.',
+    'btn-regen':'Regenerate','btn-copy':'Copy to clipboard','btn-copied':'Copied!',
+    'rbox-init':'Run a reconciliation check first.',
+    'log-accts-title':'All ad accounts','log-title':'System log','btn-clear':'Clear',
+    'lth-name':'Name','lth-vendor':'Vendor','lth-buyer':'Buyer','lth-bm':'BM','lth-vertical':'Vertical','lth-spend':'Lifetime spend','lth-status':'Status',
+    'wm-title':'Add account to warming pipeline','wm-id-lbl':'Account ID','wm-vendor-lbl':'Vendor',
+    'wm-buyer-lbl':'Media Buyer','wm-vert-lbl':'Target Vertical','wm-save':'Add to pipeline','wm-cancel':'Cancel',
+    'vendor-ph':'Vendor','buyer-ph':'Buyer','bm-ph':'BM (e.g. BM Nutra)','vertical-ph':'Vertical (e.g. Nutra)',
+    'pill-enter':'Enter balance',
+    'phase-behavior':'Behavior','phase-bm':'BM setup','phase-ramp':'Ramp',
+    'ab-disabled':'Account disabled — request replacement + balance transfer from vendor immediately',
+    'ab-warn':'Billing or policy issue — pause spend if unresolved within 24h',
+  }
+};
 
-function sanitize(s) {
-  if (typeof s !== 'string') return '';
+function t(key, vars){
+  let s = (T[uiLang]||T.pt)[key] || (T.en[key]) || key;
+  if(vars) Object.keys(vars).forEach(k=>{ s=s.replace('{'+k+'}',vars[k]); });
+  return s;
+}
+
+function applyTranslations(){
+  const ids = ['conn-label','theme-dark','t-logout','tab-recon','tab-health','tab-warming',
+    'tab-report','tab-log','l-sub','l-pw-label','l-btn','setup-title','setup-desc',
+    'setup-token-label','cbtn','m-lbl-bal','m-lbl-spend','m-lbl-runway','m-lbl-flags',
+    'm-lbl-active','m-lbl-cd','lc-s1','lc-s2','lc-s3','lc-s4','lc-s5','recon-title',
+    'recon-hint','check-btn','btn-report','th-account','th-vendor','th-buyer','th-bm','th-vertical','th-balance',
+    'th-spend','th-remaining','th-runway','th-layer','health-title','health-btn','warm-title',
+    'warm-hint','wth-id','wth-vendor','wth-buyer','wth-day','wth-prog','wth-phase','wth-budget',
+    'wth-vertical','wth-ready','report-title','report-hint','btn-regen','btn-copy',
+    'log-accts-title','log-title','btn-clear','lth-name','lth-vendor','lth-buyer','lth-bm','lth-vertical',
+    'lth-spend','lth-status','wm-title','wm-id-lbl','wm-vendor-lbl','wm-buyer-lbl',
+    'wm-vert-lbl','wm-save','wm-cancel'];
+  ids.forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.textContent = t(id);
+  });
+  // login-hint — use first-time text unless already set
+  const lh = document.getElementById('login-hint');
+  if(lh && (lh.textContent === T.pt['login-hint-first'] || lh.textContent === T.en['login-hint-first'] || lh.textContent === 'login-hint'))
+    lh.textContent = t('login-hint-first');
+  // Theme button
+  const tb = document.getElementById('theme-btn');
+  if(tb) tb.textContent = t(currentTheme==='dark'?'theme-dark':'theme-light');
+  // rbox placeholder
+  const rb = document.getElementById('rbox');
+  if(rb && (rb.textContent.trim()==='' || rb.textContent === T.pt['rbox-init'] || rb.textContent === T.en['rbox-init']))
+    rb.textContent = t('rbox-init');
+  // warm empty
+  const we = document.getElementById('warm-empty');
+  if(we) we.textContent = t('warm-empty');
+  // last check label
+  const ll = document.getElementById('last-lbl');
+  if(ll && (ll.textContent === T.pt['last-lbl-init'] || ll.textContent === T.en['last-lbl-init'] || ll.textContent === 'last-lbl'))
+    ll.textContent = t('last-lbl-init');
+}
+
+// ═══ THEME ═══════════════════════════════════════════════════════════════
+let currentTheme = localStorage.getItem('umbra_theme')||'dark';
+let uiLang='pt', alertLang='pt'; // declare early so applyTheme/applyTranslations can use them
+function applyTheme(th){
+  currentTheme=th;
+  document.documentElement.setAttribute('data-theme',th);
+  const label=t(th==='dark'?'theme-dark':'theme-light');
+  const btn=document.getElementById('theme-btn');
+  if(btn) btn.textContent=label;
+  const lbtn=document.getElementById('login-theme-btn');
+  if(lbtn) lbtn.textContent=label;
+  localStorage.setItem('umbra_theme',th);
+}
+function toggleTheme(){
+  applyTheme(currentTheme==='dark'?'light':'dark');
+}
+applyTheme(currentTheme);
+
+// ═══ SECURITY ════════════════════════════════════════════════════════════
+const MAX_ATTEMPTS=5, LOCKOUT_MS=15*60*1000;
+let loginAttempts=0, lockedUntil=0;
+
+function sanitize(s){
+  if(typeof s!=='string') return '';
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
           .replace(/"/g,'&quot;').replace(/'/g,'&#x27;').trim().slice(0,512);
 }
-function sanitizeNum(v) {
-  // Remove thousand separators (dots when followed by 3 digits) then parse
-  const cleaned = String(v).replace(/\.(?=\d{3}(?:\.|$))/g,'').replace(/,/g,'.');
-  const n = parseFloat(cleaned);
-  return isNaN(n)||n<0 ? 0 : Math.min(n, 999999999);
+function sanitizeNum(v){
+  const cleaned=String(v).replace(/\.(?=\d{3}(?:\.|$))/g,'').replace(/,/g,'.');
+  const n=parseFloat(cleaned);
+  return isNaN(n)||n<0?0:Math.min(n,999999999);
 }
-async function hashPw(pw) {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
+async function hashPw(pw){
+  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(pw));
   return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
 }
 
-async function doLogin() {
-  const now = Date.now();
-  if (now < lockedUntil) {
-    const m = Math.ceil((lockedUntil-now)/60000);
-    showLoginErr('Locked. Try again in '+m+' minute(s).');
+async function doLogin(){
+  const now=Date.now();
+  if(now<lockedUntil){
+    showLoginErr(t('login-err-locked',{n:MAX_ATTEMPTS}));
     return;
   }
-  const pw = document.getElementById('pw-inp').value;
-  if (!pw || pw.length < 4) { showLoginErr('Password must be at least 4 characters.'); return; }
-  const hash   = await hashPw(pw);
-  const stored = localStorage.getItem('umbra_pw');
-  if (!stored) {
-    localStorage.setItem('umbra_pw', hash);
+  const pw=document.getElementById('pw-inp').value;
+  if(!pw||pw.length<4){showLoginErr(t('login-err-short'));return;}
+  const hash=await hashPw(pw);
+  const stored=localStorage.getItem('umbra_pw');
+  if(!stored){
+    // First time — set password permanently
+    localStorage.setItem('umbra_pw',hash);
     startSession();
     return;
   }
-  if (hash === stored) {
-    loginAttempts = 0;
-    startSession();
-  } else {
+  // Password already set — only accept correct password, no way to reset
+  if(hash===stored){loginAttempts=0;startSession();}
+  else{
     loginAttempts++;
-    if (loginAttempts >= MAX_ATTEMPTS) {
-      lockedUntil = Date.now() + LOCKOUT_MS;
-      showLoginErr('Locked for 15 min after '+MAX_ATTEMPTS+' failed attempts.');
+    if(loginAttempts>=MAX_ATTEMPTS){
+      lockedUntil=Date.now()+LOCKOUT_MS;
+      showLoginErr(t('login-err-locked',{n:MAX_ATTEMPTS}));
     } else {
-      showLoginErr('Wrong password. '+(MAX_ATTEMPTS-loginAttempts)+' attempt(s) left.');
+      showLoginErr(t('login-err-wrong',{n:MAX_ATTEMPTS-loginAttempts}));
     }
   }
 }
-function showLoginErr(m) {
-  const e = document.getElementById('login-err');
-  e.textContent = m; e.style.display = 'block';
-}
-function startSession() {
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-  document.getElementById('login-hint').textContent = 'Password set.';
+function showLoginErr(m){const e=document.getElementById('login-err');e.textContent=m;e.style.display='block';}
+function startSession(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('login-hint').textContent=t('login-hint-set');
   loadMetaFromStorage();
-  addLog('Session started','ok');
+  addLog('Sessão iniciada','ok');
 }
-function doLogout() {
+function doLogout(){
   clearInterval(autoTimer);
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('pw-inp').value = '';
-  TOKEN = ''; accounts = [];
-  addLog('Logged out','muted');
+  document.getElementById('app').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('pw-inp').value='';
+  TOKEN='';accounts=[];
 }
 
-// ═══ TELEGRAM ════════════════════════════════════════════
-const TG_TOKEN = '8700935512:AAFakfGqVPuCVdh9ihu5Sre11VnLjKow4bs';
-const TG_CHAT  = '5245753077';
+// ═══ TELEGRAM ════════════════════════════════════════════════════════════
+const TG_TOKEN='8700935512:AAF1oz_Ynv4cCq9lyA_7fXaAIAoXPdSweBw';
+const TG_CHAT='5245753077';
 
-async function sendWA(body) {
-  try {
-    const r = await fetch('https://api.telegram.org/bot'+TG_TOKEN+'/sendMessage',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({chat_id:TG_CHAT, text:body, parse_mode:'Markdown'})
+async function sendWA(body){
+  try{
+    const r=await fetch('https://api.telegram.org/bot'+TG_TOKEN+'/sendMessage',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({chat_id:TG_CHAT,text:body,parse_mode:'Markdown'})
     });
-    const d = await r.json();
-    if(d.ok) addLog('Telegram sent ✓','ok');
-    else addLog('Telegram error: '+d.description,'err');
-  } catch(e){ addLog('Telegram failed: '+e.message,'err'); }
+    const d=await r.json();
+    if(d.ok) addLog('Telegram ✓','ok');
+    else addLog('Telegram erro: '+d.description,'err');
+  }catch(e){addLog('Telegram falhou: '+e.message,'err');}
 }
 
-// ═══ ALERT MESSAGES ══════════════════════════════════════
-const MSGS = {
+// ═══ ALERT MESSAGES ══════════════════════════════════════════════════════
+const MSGS={
   pt:{
-    l1:(n,v,b,rem,pct,cur)=>`⚠️ *UMBRA Ops — ATENÇÃO*\n${'─'.repeat(28)}\n*Conta:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nSaldo em *${pct}%* → *${cur||'$'}${Math.round(rem)} restando*\nPlaneje o top-up em breve.`,
-    l2:(n,v,b,rem,pct,cur)=>`🔶 *UMBRA Ops — ALERTA*\n${'─'.repeat(28)}\n*Conta:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nSaldo em *${pct}%* → *${cur||'$'}${Math.round(rem)} restando*\n⚠️ Faça o top-up *HOJE*.`,
-    l3:(n,v,b,rem,pct,cur)=>`🔴 *UMBRA Ops — CRÍTICO*\n${'─'.repeat(28)}\n*Conta:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nSaldo em *${pct}%* → *${cur||'$'}${Math.round(rem)} restando*\n⚡ Top-up *URGENTE AGORA*.`,
-    l4:(n,v,b,cur)=>`🚨 *UMBRA Ops — CONTA ZERADA*\n${'─'.repeat(28)}\n*Conta:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\n*Saldo ZERO.* Campanhas pausadas.\n⚡ Top-up *IMEDIATAMENTE*.`,
-    l5:(n,v,b,amt,cur)=>`🚨🚨 *UMBRA Ops — EMERGÊNCIA*\n${'─'.repeat(28)}\n*Conta:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\n*Gasto EXCEDEU saldo em ${cur||'$'}${Math.round(amt)}*\n🔥 Contate o vendor *AGORA*.`,
+    l1:(n,v,b,rem,pct,sym)=>`⚠️ *UMBRA Ops — ATENÇÃO*\n${'─'.repeat(28)}\n*Conta:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nSaldo em *${pct}%* → *${sym}${Math.round(rem)} restando*\nPlaneje o top-up em breve.`,
+    l2:(n,v,b,rem,pct,sym)=>`🔶 *UMBRA Ops — ALERTA*\n${'─'.repeat(28)}\n*Conta:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nSaldo em *${pct}%* → *${sym}${Math.round(rem)} restando*\n⚠️ Faça o top-up *HOJE*.`,
+    l3:(n,v,b,rem,pct,sym)=>`🔴 *UMBRA Ops — CRÍTICO*\n${'─'.repeat(28)}\n*Conta:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nSaldo em *${pct}%* → *${sym}${Math.round(rem)} restando*\n⚡ Top-up *URGENTE AGORA*.`,
+    l4:(n,v,b,sym)=>`🚨 *UMBRA Ops — CONTA ZERADA*\n${'─'.repeat(28)}\n*Conta:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\n*Saldo ZERO.* Campanhas pausadas.\n⚡ Top-up *IMEDIATAMENTE*.`,
+    l5:(n,v,b,amt,sym)=>`🚨🚨 *UMBRA Ops — EMERGÊNCIA*\n${'─'.repeat(28)}\n*Conta:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\n*Gasto EXCEDEU saldo em ${sym}${Math.round(amt)}*\n🔥 Contate o vendor *AGORA*.`,
     disabled:(n,v,b)=>`🔴 *UMBRA Ops — CONTA DESATIVADA*\n${'─'.repeat(28)}\n*Conta:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nSolicite *replacement + balance transfer* ao vendor imediatamente.`,
     warn:(n,v,b)=>`⚠️ *UMBRA Ops — AVISO*\n${'─'.repeat(28)}\n*Conta:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nProblema de cobrança ou política detectado.`,
     change:(n,v,b,s1,s2)=>`🚨 *UMBRA Ops — MUDANÇA DE STATUS*\n${'─'.repeat(28)}\n*Conta:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nStatus: *${s1} → ${s2}*\n⚡ Verifique imediatamente.`,
     repeat:(n,v,b,lbl)=>`⏰ *UMBRA Ops — LEMBRETE 24h*\n${'─'.repeat(28)}\n*Conta:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nProblema persiste: *${lbl}*\nNenhuma ação tomada ainda?`,
   },
   en:{
-    l1:(n,v,b,rem,pct,cur)=>`⚠️ *UMBRA Ops — ATTENTION*\n${'─'.repeat(28)}\n*Account:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nBalance at *${pct}%* → *${cur||'$'}${Math.round(rem)} remaining*\nPlan your top-up soon.`,
-    l2:(n,v,b,rem,pct,cur)=>`🔶 *UMBRA Ops — ALERT*\n${'─'.repeat(28)}\n*Account:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nBalance at *${pct}%* → *${cur||'$'}${Math.round(rem)} remaining*\n⚠️ Top up *TODAY*.`,
-    l3:(n,v,b,rem,pct,cur)=>`🔴 *UMBRA Ops — CRITICAL*\n${'─'.repeat(28)}\n*Account:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nBalance at *${pct}%* → *${cur||'$'}${Math.round(rem)} remaining*\n⚡ *URGENT top-up required*.`,
-    l4:(n,v,b,cur)=>`🚨 *UMBRA Ops — ACCOUNT ZEROED*\n${'─'.repeat(28)}\n*Account:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\n*Balance ZERO.* Campaigns paused.\n⚡ Top up *IMMEDIATELY*.`,
-    l5:(n,v,b,amt,cur)=>`🚨🚨 *UMBRA Ops — EMERGENCY*\n${'─'.repeat(28)}\n*Account:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\n*Spend EXCEEDED balance by ${cur||'$'}${Math.round(amt)}*\n🔥 Contact vendor *NOW*.`,
+    l1:(n,v,b,rem,pct,sym)=>`⚠️ *UMBRA Ops — ATTENTION*\n${'─'.repeat(28)}\n*Account:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nBalance at *${pct}%* → *${sym}${Math.round(rem)} remaining*\nPlan your top-up soon.`,
+    l2:(n,v,b,rem,pct,sym)=>`🔶 *UMBRA Ops — ALERT*\n${'─'.repeat(28)}\n*Account:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nBalance at *${pct}%* → *${sym}${Math.round(rem)} remaining*\n⚠️ Top up *TODAY*.`,
+    l3:(n,v,b,rem,pct,sym)=>`🔴 *UMBRA Ops — CRITICAL*\n${'─'.repeat(28)}\n*Account:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nBalance at *${pct}%* → *${sym}${Math.round(rem)} remaining*\n⚡ *URGENT top-up required*.`,
+    l4:(n,v,b,sym)=>`🚨 *UMBRA Ops — ACCOUNT ZEROED*\n${'─'.repeat(28)}\n*Account:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\n*Balance ZERO.* Campaigns paused.\n⚡ Top up *IMMEDIATELY*.`,
+    l5:(n,v,b,amt,sym)=>`🚨🚨 *UMBRA Ops — EMERGENCY*\n${'─'.repeat(28)}\n*Account:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\n*Spend EXCEEDED balance by ${sym}${Math.round(amt)}*\n🔥 Contact vendor *NOW*.`,
     disabled:(n,v,b)=>`🔴 *UMBRA Ops — ACCOUNT DISABLED*\n${'─'.repeat(28)}\n*Account:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nRequest *replacement + balance transfer* from vendor immediately.`,
     warn:(n,v,b)=>`⚠️ *UMBRA Ops — WARNING*\n${'─'.repeat(28)}\n*Account:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nBilling or policy issue detected.`,
     change:(n,v,b,s1,s2)=>`🚨 *UMBRA Ops — STATUS CHANGE*\n${'─'.repeat(28)}\n*Account:* ${n}\n*Vendor:* ${v||'—'}\n*Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nStatus: *${s1} → ${s2}*\n⚡ Check immediately.`,
@@ -495,19 +724,19 @@ const MSGS = {
   }
 };
 
-// ═══ STATE ════════════════════════════════════════════════
-let TOKEN='', accounts=[], spends={}, prevStatus={};
-let warmingAccounts=[], logCount=0, alertLang='pt';
-let acctMeta={}, alertState={}, autoTimer=null, autoSecs=300;
+// ═══ STATE ════════════════════════════════════════════════════════════════
+let TOKEN='',accounts=[],spends={},prevStatus={};
+let warmingAccounts=[],logCount=0;
+let acctMeta={},alertState={},autoTimer=null,autoSecs=300;
 
-// ═══ UTILS ════════════════════════════════════════════════
-const fmt  = n => (n===null||n===undefined||isNaN(n)) ? '—' : '$'+Math.round(n).toLocaleString();
-const fmt0 = n => '$'+Math.round(n||0).toLocaleString();
-const today= () => { const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+// ═══ UTILS ════════════════════════════════════════════════════════════════
+const fmt=n=>(n===null||n===undefined||isNaN(n))?'—':'$'+Math.round(n).toLocaleString();
+const fmt0=n=>'$'+Math.round(n||0).toLocaleString();
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
 const addDays=(d,n)=>{const dt=new Date(d);dt.setDate(dt.getDate()+n);return dt.toISOString().slice(0,10)};
-const fmtTime=()=>new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+const fmtTime=()=>new Date().toLocaleTimeString(uiLang==='pt'?'pt-BR':'en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
 
-function addLog(msg,t='info'){
+function addLog(msg,tp='info'){
   logCount++;
   const el=document.getElementById('tb-log');
   if(el) el.textContent=logCount>99?'99+':logCount;
@@ -515,7 +744,7 @@ function addLog(msg,t='info'){
   if(!log) return;
   const ts=new Date().toTimeString().slice(0,8);
   const d=document.createElement('div');
-  d.className='ll l'+t;
+  d.className='ll l'+tp;
   d.textContent='['+ts+'] '+sanitize(msg);
   log.prepend(d);
 }
@@ -524,89 +753,89 @@ function clearLog(){
   logCount=0;
   const el=document.getElementById('tb-log');
   if(el) el.textContent='0';
-  addLog('Log cleared','muted');
+  addLog('Log limpo','muted');
 }
 function showErr(m){const e=document.getElementById('errmsg');e.textContent=sanitize(m);e.style.display='block';}
 
 function setLang(lang){
-  alertLang=lang;
+  uiLang=lang; alertLang=lang;
   ['pt','en'].forEach(l=>{
-    const b=document.getElementById('lbtn-'+l);
-    if(b) b.classList.toggle('on',l===lang);
+    ['lbtn-'+l, 'login-lbtn-'+l].forEach(id=>{
+      const b=document.getElementById(id);
+      if(b) b.classList.toggle('on',l===lang);
+    });
   });
-  addLog('Alert language: '+lang.toUpperCase(),'info');
+  applyTranslations();
+  // sync login theme btn
+  const ltb=document.getElementById('login-theme-btn');
+  if(ltb) ltb.textContent=t(currentTheme==='dark'?'theme-dark':'theme-light');
+  addLog('Idioma: '+lang.toUpperCase(),'info');
 }
 
 function switchTab(name){
   const names=['recon','health','warming','report','log'];
-  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('on',names[i]===name));
+  document.querySelectorAll('.tab').forEach((tab,i)=>tab.classList.toggle('on',names[i]===name));
   document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
   document.getElementById('pane-'+name).classList.add('on');
 }
 
 function sPill(code){
-  const map={1:['Active','p-ok'],2:['Disabled','p-danger'],3:['Unsettled','p-warn'],
-    9:['Grace period','p-warn'],100:['Pending closure','p-warn'],101:['Closed','p-danger']};
-  const [l,c]=map[code]||['Status '+code,'p-gray'];
+  const statusMap={1:[uiLang==='pt'?'Ativa':'Active','p-ok'],2:[uiLang==='pt'?'Desativada':'Disabled','p-danger'],
+    3:[uiLang==='pt'?'Pendente':'Unsettled','p-warn'],9:[uiLang==='pt'?'Período de graça':'Grace period','p-warn'],
+    100:[uiLang==='pt'?'Encerrando':'Pending closure','p-warn'],101:[uiLang==='pt'?'Encerrada':'Closed','p-danger']};
+  const [l,c]=statusMap[code]||['Status '+code,'p-gray'];
   return'<span class="pill '+c+'">'+l+'</span>';
 }
 
 function layerPill(layer){
-  if(!layer||layer===0) return '<span class="pill p-info">Enter balance</span>';
-  const cfg=[null,
-    ['L1 — 20%','p-l1'],['L2 — 10%','p-l2'],['L3 — 5%','p-l3'],
-    ['L4 — Zero','p-l4'],['L5 — Emergency','p-l5']
-  ];
+  if(!layer||layer===0) return'<span class="pill p-info">'+t('pill-enter')+'</span>';
+  const cfg=[null,['L1 — 20%','p-l1'],['L2 — 10%','p-l2'],['L3 — 5%','p-l3'],['L4 — Zero','p-l4'],['L5','p-l5']];
   const [l,c]=cfg[layer]||['—','p-gray'];
   return'<span class="pill '+c+'">'+l+'</span>';
 }
-
-function rowClass(layer){
-  return['','rwatch','rwarn','rwarn','rdanger','rdanger'][layer]||'';
-}
-
+function rowClass(layer){return['','rwatch','rwarn','rwarn','rdanger','rdanger'][layer]||'';}
 function saveMetaToStorage(){try{localStorage.setItem('umbra_meta',JSON.stringify(acctMeta));}catch(e){}}
 function loadMetaFromStorage(){try{const d=localStorage.getItem('umbra_meta');if(d)acctMeta=JSON.parse(d);}catch(e){}}
 
-// ═══ API ══════════════════════════════════════════════════
+// ═══ API ══════════════════════════════════════════════════════════════════
 async function apiFetch(path){
   const sep=path.includes('?')?'&':'?';
   const r=await fetch('https://graph.facebook.com/v19.0/'+path+sep+'access_token='+TOKEN);
   return r.json();
 }
 
-// ═══ CONNECT ══════════════════════════════════════════════
+// ═══ CONNECT ══════════════════════════════════════════════════════════════
 async function connect(){
   const btn=document.getElementById('cbtn');
   TOKEN=document.getElementById('tok').value.trim();
-  if(!TOKEN){showErr('Please enter your access token.');return;}
-  btn.disabled=true; btn.innerHTML='<span class="loader"></span>Connecting...';
+  if(!TOKEN){showErr(uiLang==='pt'?'Digite o token de acesso.':'Please enter your access token.');return;}
+  btn.disabled=true;btn.innerHTML='<span class="loader"></span>'+(uiLang==='pt'?'Conectando...':'Connecting...');
   try{
     const d=await apiFetch('me/adaccounts?fields=id,name,account_status,currency,amount_spent,disable_reason&limit=25');
-    if(d.error){showErr('API error: '+d.error.message);btn.disabled=false;btn.textContent='Connect and load accounts';return;}
+    if(d.error){showErr('API error: '+d.error.message);btn.disabled=false;btn.textContent=t('cbtn');return;}
     accounts=d.data||[];
-    if(!accounts.length){showErr('No ad accounts found.');btn.disabled=false;btn.textContent='Connect and load accounts';return;}
-    accounts.forEach(a=>{prevStatus[a.id]=a.account_status;if(!acctMeta[a.id])acctMeta[a.id]={vendor:'',buyer:''};});
+    if(!accounts.length){showErr(uiLang==='pt'?'Nenhuma conta encontrada.':'No ad accounts found.');btn.disabled=false;btn.textContent=t('cbtn');return;}
+    accounts.forEach(a=>{prevStatus[a.id]=a.account_status;if(!acctMeta[a.id])acctMeta[a.id]={vendor:'',buyer:'',bm:'',vertical:''};});
     document.getElementById('pane-setup').classList.remove('on');
     document.getElementById('tabs').style.display='flex';
     document.getElementById('pane-recon').classList.add('on');
     document.getElementById('conn-dot').classList.add('on');
-    document.getElementById('conn-label').textContent='Connected — '+accounts.length+' accounts';
+    document.getElementById('conn-label').textContent=t('conn-connected',{n:accounts.length});
     document.getElementById('m-active').textContent=accounts.filter(a=>a.account_status===1).length;
     document.getElementById('tb-recon').textContent=accounts.length;
-    document.getElementById('acct-count').textContent=accounts.length+' accounts';
-    addLog('Connected — '+accounts.length+' accounts loaded','ok');
+    document.getElementById('acct-count').textContent=accounts.length+(uiLang==='pt'?' contas':' accounts');
+    addLog((uiLang==='pt'?'Conectado — ':'Connected — ')+accounts.length+(uiLang==='pt'?' contas carregadas':' accounts loaded'),'ok');
     buildReconRows();
     renderAccountsList();
     runHealthCheck();
     startAutoRefresh();
   }catch(e){
-    showErr('Connection failed. Check your token.');
-    btn.disabled=false; btn.textContent='Connect and load accounts';
+    showErr(uiLang==='pt'?'Falha na conexão. Verifique o token.':'Connection failed. Check your token.');
+    btn.disabled=false;btn.textContent=t('cbtn');
   }
 }
 
-// ═══ RECONCILIATION ════════════════════════════════════════
+// ═══ RECONCILIATION ════════════════════════════════════════════════════════
 function buildReconRows(){
   const tb=document.getElementById('recon-tb');
   tb.innerHTML='';
@@ -616,13 +845,15 @@ function buildReconRows(){
     tr.id='rrow-'+a.id;
     tr.innerHTML=`
       <td><div class="aname">${sanitize(a.name)}</div><div class="aid">${sanitize(a.id)}</div></td>
-      <td><input class="cel" id="vendor-${a.id}" placeholder="Vendor" value="${sanitize(m.vendor||'')}" onchange="saveMeta('${a.id}')"/></td>
-      <td><input class="cel" id="buyer-${a.id}" placeholder="Buyer" value="${sanitize(m.buyer||'')}" onchange="saveMeta('${a.id}')"/></td>
+      <td><input class="cel" id="vendor-${a.id}" placeholder="${t('vendor-ph')}" value="${sanitize(m.vendor||'')}" onchange="saveMeta('${a.id}')"/></td>
+      <td><input class="cel" id="buyer-${a.id}" placeholder="${t('buyer-ph')}" value="${sanitize(m.buyer||'')}" onchange="saveMeta('${a.id}')"/></td>
+      <td><input class="cel" id="bm-${a.id}" placeholder="${t('bm-ph')}" value="${sanitize(m.bm||'')}" onchange="saveMeta('${a.id}')"/></td>
+      <td><input class="cel" id="vertical-${a.id}" placeholder="${t('vertical-ph')}" value="${sanitize(m.vertical||'')}" onchange="saveMeta('${a.id}')"/></td>
       <td><input class="cel cel-bal" type="number" id="bal-${a.id}" placeholder="0.00" step="any"/></td>
-      <td class="mono" id="rsp-${a.id}" style="font-size:13px">—</td>
-      <td class="mono" id="rrem-${a.id}" style="font-size:13px;font-weight:600">—</td>
+      <td class="mono" id="rsp-${a.id}">—</td>
+      <td class="mono" id="rrem-${a.id}" style="font-weight:600">—</td>
       <td id="rrw-${a.id}">—</td>
-      <td id="rflag-${a.id}"><span class="pill p-info">Enter balance</span></td>
+      <td id="rflag-${a.id}"><span class="pill p-info">${t('pill-enter')}</span></td>
     `;
     tb.appendChild(tr);
   });
@@ -630,24 +861,26 @@ function buildReconRows(){
 
 function saveMeta(id){
   acctMeta[id]={
-    vendor:sanitize(document.getElementById('vendor-'+id)?.value||''),
-    buyer: sanitize(document.getElementById('buyer-'+id)?.value||'')
+    vendor:   sanitize(document.getElementById('vendor-'+id)?.value||''),
+    buyer:    sanitize(document.getElementById('buyer-'+id)?.value||''),
+    bm:       sanitize(document.getElementById('bm-'+id)?.value||''),
+    vertical: sanitize(document.getElementById('vertical-'+id)?.value||'')
   };
   saveMetaToStorage();
 }
 
 async function getSpend(id){
-  const t=today();
+  const td=today();
   try{
-    const d=await apiFetch(id+'/insights?fields=spend&time_range={"since":"'+t+'","until":"'+t+'"}');
+    const d=await apiFetch(id+'/insights?fields=spend&time_range={"since":"'+td+'","until":"'+td+'"}');
     return d.data&&d.data.length?parseFloat(d.data[0].spend)||0:0;
   }catch{return 0;}
 }
 
 async function runCheck(){
   const btn=document.getElementById('check-btn');
-  btn.disabled=true; btn.innerHTML='<span class="loader"></span>Checking...';
-  addLog('Reconciliation check started','info');
+  btn.disabled=true;btn.innerHTML='<span class="loader"></span>'+(uiLang==='pt'?'Verificando...':'Checking...');
+  addLog(uiLang==='pt'?'Verificação iniciada':'Check started','info');
   const results=await Promise.all(accounts.map(a=>getSpend(a.id)));
   accounts.forEach((a,i)=>{
     spends[a.id]=results[i];
@@ -655,16 +888,16 @@ async function runCheck(){
     if(el) el.textContent=fmt0(results[i]);
   });
   updateAllRows();
-  btn.disabled=false; btn.textContent='Run check now';
-  document.getElementById('last-lbl').textContent='Last check: '+fmtTime();
+  btn.disabled=false;btn.textContent=t('check-btn');
+  document.getElementById('last-lbl').textContent=t('last-lbl',{t:fmtTime()});
   autoSecs=300;
-  addLog('Check complete — '+accounts.length+' accounts reconciled','ok');
+  addLog((uiLang==='pt'?'Verificação concluída — ':'Check complete — ')+accounts.length+(uiLang==='pt'?' contas':' accounts'),'ok');
   generateReport();
 }
 
 function getAlertLayer(vb,sp){
   if(vb<=0) return null;
-  const rem=vb-sp, pct=(rem/vb)*100;
+  const rem=vb-sp,pct=(rem/vb)*100;
   if(sp>vb) return 5;
   if(rem<=0) return 4;
   if(pct<=5) return 3;
@@ -677,11 +910,11 @@ function checkAndAlert(a,vb,sp){
   const layer=getAlertLayer(vb,sp);
   if(layer===null||layer===0){alertState[a.id]=null;return;}
   const m=acctMeta[a.id]||{};
-  const v=m.vendor||'—', b=m.buyer||'—';
-  const rem=vb-sp, pct=vb>0?Math.round((rem/vb)*100):0;
+  const v=m.vendor||'—',b=m.buyer||'—';
+  const rem=vb-sp,pct=vb>0?Math.round((rem/vb)*100):0;
   const cur=a.currency||'USD';
   const sym=cur==='BRL'?'R$ ':cur==='EUR'?'€':cur==='GBP'?'£':'$';
-  const prev=alertState[a.id], now=Date.now();
+  const prev=alertState[a.id],now=Date.now();
   const M=MSGS[alertLang];
   const lbl=['','20%','10%','5%','Zero','Negativo'][layer];
   let msg='';
@@ -690,11 +923,11 @@ function checkAndAlert(a,vb,sp){
   else if(layer===3) msg=M.l3(a.name,v,b,rem,pct,sym);
   else if(layer===4) msg=M.l4(a.name,v,b,sym);
   else if(layer===5) msg=M.l5(a.name,v,b,sp-vb,sym);
-  const isNew=!prev, isWorse=prev&&layer>prev.layer, is24h=prev&&prev.layer===layer&&now-prev.ts>=86400000;
+  const isNew=!prev,isWorse=prev&&layer>prev.layer,is24h=prev&&prev.layer===layer&&now-prev.ts>=86400000;
   if(isNew||isWorse||is24h){
     if(is24h) msg=M.repeat(a.name,v,b,lbl);
     sendWA(msg);
-    addLog((isNew?'🚨 New':isWorse?'🔺 Escalated':'⏰ 24h')+' L'+layer+': '+a.name,'warn');
+    addLog((isNew?'🚨 L'+layer:isWorse?'🔺 L'+layer:'⏰ 24h L'+layer)+': '+a.name,'warn');
     alertState[a.id]={layer,ts:now};
   }
 }
@@ -704,8 +937,8 @@ function updateAllRows(){
   accounts.forEach(a=>{
     const vb=sanitizeNum(document.getElementById('bal-'+a.id)?.value||0);
     const sp=spends[a.id]||0;
-    const rem=vb-sp, layer=getAlertLayer(vb,sp);
-    totBal+=vb; totSpend+=sp;
+    const rem=vb-sp,layer=getAlertLayer(vb,sp);
+    totBal+=vb;totSpend+=sp;
     if(layer>0) flagCount++;
     const remEl=document.getElementById('rrem-'+a.id);
     const rwEl=document.getElementById('rrw-'+a.id);
@@ -715,8 +948,8 @@ function updateAllRows(){
     if(vb===0){
       if(remEl) remEl.innerHTML='<span style="color:var(--t3)">—</span>';
       if(rwEl) rwEl.textContent='—';
-      if(flEl) flEl.innerHTML='<span class="pill p-info">Enter balance</span>';
-      rowEl.className=''; return;
+      if(flEl) flEl.innerHTML='<span class="pill p-info">'+t('pill-enter')+'</span>';
+      rowEl.className='';return;
     }
     if(remEl){
       const rc=rem<0?'#FF4444':rem<vb*0.05?'var(--red)':rem<vb*0.1?'var(--amber)':rem<vb*0.2?'var(--gold)':'var(--green)';
@@ -726,7 +959,7 @@ function updateAllRows(){
     if(rw<999){totalRw+=rw;rwCount++;}
     const rwc=rw<3?'var(--red)':rw<7?'var(--amber)':'var(--green)';
     const rwp=Math.min(100,Math.round((rw/14)*100));
-    if(rwEl) rwEl.innerHTML='<span style="color:'+rwc+';font-family:monospace;font-weight:600">'+(rw>99?'99+':rw)+'d</span><div class="wbar-w" style="margin-left:6px"><div class="wbar" style="width:'+rwp+'%;background:'+rwc+'"></div></div>';
+    if(rwEl) rwEl.innerHTML='<span style="color:'+rwc+';font-family:monospace;font-weight:700">'+(rw>99?'99+':rw)+'d</span><div class="wbar-w" style="margin-left:6px"><div class="wbar" style="width:'+rwp+'%;background:'+rwc+'"></div></div>';
     if(flEl) flEl.innerHTML=layerPill(layer);
     if(rowEl) rowEl.className=rowClass(layer);
     checkAndAlert(a,vb,sp);
@@ -734,22 +967,24 @@ function updateAllRows(){
   document.getElementById('m-bal').textContent=totBal>0?fmt(totBal):'—';
   document.getElementById('m-bal').className='mval '+(totBal>0?'gold':'');
   document.getElementById('m-spend').textContent=fmt0(totSpend);
-  const mf=document.getElementById('m-flags'); mf.textContent=flagCount; mf.className='mval '+(flagCount>0?'danger':'ok');
+  const mf=document.getElementById('m-flags');mf.textContent=flagCount;mf.className='mval '+(flagCount>0?'danger':'ok');
   const avgRw=rwCount>0?Math.round(totalRw/rwCount):0;
-  const mr=document.getElementById('m-runway'); mr.textContent=avgRw>0?avgRw+'d':'—'; mr.className='mval '+(avgRw<3?'danger':avgRw<7?'warn':'ok');
+  const mr=document.getElementById('m-runway');mr.textContent=avgRw>0?avgRw+'d':'—';mr.className='mval '+(avgRw<3?'danger':avgRw<7?'warn':'ok');
 }
 
-// ═══ HEALTH ════════════════════════════════════════════════
+// ═══ HEALTH ════════════════════════════════════════════════════════════════
 async function getCampaigns(id){
-  try{const d=await apiFetch(id+'/campaigns?fields=effective_status&limit=10');return d.data?d.data.filter(c=>c.effective_status==='ACTIVE').length:0;}catch{return 0;}
+  try{
+    const d=await apiFetch(id+'/campaigns?fields=effective_status&effective_status=["ACTIVE"]&limit=100');
+    return d.data?d.data.length:0;
+  }catch{return 0;}
 }
 
 async function runHealthCheck(){
   const btn=document.getElementById('health-btn');
   const grid=document.getElementById('hgrid');
-  if(btn){btn.disabled=true;btn.innerHTML='<span class="loader"></span>Checking...';}
-  grid.innerHTML='<div class="empty-s"><span class="loader"></span>Loading health data...</div>';
-  addLog('Health check started','info');
+  if(btn){btn.disabled=true;btn.innerHTML='<span class="loader"></span>'+(uiLang==='pt'?'Verificando...':'Checking...');}
+  grid.innerHTML='<div class="empty-s"><span class="loader"></span></div>';
   const cams=await Promise.all(accounts.map(a=>getCampaigns(a.id)));
   grid.innerHTML='';
   let issues=0,disabled=0;
@@ -761,161 +996,173 @@ async function runHealthCheck(){
     if(isDisabled) disabled++;
     const m=acctMeta[a.id]||{};
     if(prevStatus[a.id]&&prevStatus[a.id]!==a.account_status&&!isOk){
-      addLog('STATUS CHANGE: '+a.name+' → '+a.account_status,'err');
       sendWA(MSGS[alertLang].change(a.name,m.vendor,m.buyer,prevStatus[a.id],a.account_status));
+      addLog('STATUS: '+a.name+' → '+a.account_status,'err');
     }
-    if(isDisabled&&prevStatus[a.id]!==a.account_status){addLog('DISABLED: '+a.name,'err');sendWA(MSGS[alertLang].disabled(a.name,m.vendor,m.buyer));}
-    else if(isWarn&&prevStatus[a.id]!==a.account_status){addLog('WARNING: '+a.name,'warn');sendWA(MSGS[alertLang].warn(a.name,m.vendor,m.buyer));}
+    if(isDisabled&&prevStatus[a.id]!==a.account_status){sendWA(MSGS[alertLang].disabled(a.name,m.vendor,m.buyer));addLog('DISABLED: '+a.name,'err');}
+    else if(isWarn&&prevStatus[a.id]!==a.account_status){sendWA(MSGS[alertLang].warn(a.name,m.vendor,m.buyer));addLog('WARNING: '+a.name,'warn');}
     prevStatus[a.id]=a.account_status;
     const cardCls=isDisabled?'hc-danger':isWarn?'hc-warn':'hc-ok';
     const lifetime=a.amount_spent?fmt(parseFloat(a.amount_spent)/100):'$0';
-    const statusMap={1:'Active',2:'Disabled',3:'Unsettled',9:'In grace period',100:'Pending closure',101:'Closed'};
     const statusColor=isOk?'c-ok':isDisabled?'c-danger':'c-warn';
     let alertHtml='';
-    if(isDisabled) alertHtml='<div class="abanner ab-danger">Account disabled — request replacement + balance transfer from vendor immediately</div>';
-    else if(isWarn) alertHtml='<div class="abanner ab-warn">Billing or policy issue — pause spend if unresolved within 24h</div>';
-    grid.innerHTML+=`
-      <div class="hcard ${cardCls}">
-        <div class="hc-top">
-          <div><div class="hc-name">${sanitize(a.name)}</div><div class="hc-id">${sanitize(a.id)}</div></div>
-          ${sPill(a.account_status)}
-        </div>
-        <div class="hc-rows">
-          <div class="hc-row"><span class="hc-key">Vendor</span><span class="hc-val">${sanitize(m.vendor||'—')}</span></div>
-          <div class="hc-row"><span class="hc-key">Buyer</span><span class="hc-val">${sanitize(m.buyer||'—')}</span></div>
-          <div class="hc-row"><span class="hc-key">Status</span><span class="hc-val ${statusColor}">${statusMap[a.account_status]||'Status '+a.account_status}</span></div>
-          <div class="hc-row"><span class="hc-key">Lifetime spend</span><span class="hc-val">${lifetime}</span></div>
-          <div class="hc-row"><span class="hc-key">Active campaigns</span><span class="hc-val ${cams[i]>0?'c-ok':'c-muted'}">${cams[i]}</span></div>
-        </div>${alertHtml}
-      </div>`;
-    if(isDisabled) addLog('DISABLED: '+a.name,'err');
-    else if(isWarn) addLog('WARNING: '+a.name,'warn');
+    if(isDisabled) alertHtml='<div class="abanner ab-danger">'+t('ab-disabled')+'</div>';
+    else if(isWarn) alertHtml='<div class="abanner ab-warn">'+t('ab-warn')+'</div>';
+    grid.innerHTML+=`<div class="hcard ${cardCls}">
+      <div class="hc-top">
+        <div><div class="hc-name">${sanitize(a.name)}</div><div class="hc-id">${sanitize(a.id)}</div></div>
+        ${sPill(a.account_status)}
+      </div>
+      <div class="hc-rows">
+        <div class="hc-row"><span class="hc-key">${t('th-vendor')}</span><span class="hc-val">${sanitize(m.vendor||'—')}</span></div>
+        <div class="hc-row"><span class="hc-key">${t('th-buyer')}</span><span class="hc-val">${sanitize(m.buyer||'—')}</span></div>
+        <div class="hc-row"><span class="hc-key">${t('th-bm')}</span><span class="hc-val">${sanitize(m.bm||'—')}</span></div>
+        <div class="hc-row"><span class="hc-key">${t('th-vertical')}</span><span class="hc-val">${sanitize(m.vertical||'—')}</span></div>
+        <div class="hc-row"><span class="hc-key">Status</span><span class="hc-val ${statusColor}">${sPill(a.account_status).replace(/<[^>]*>/g,'')}</span></div>
+        <div class="hc-row"><span class="hc-key">${t('lth-spend')}</span><span class="hc-val">${lifetime}</span></div>
+        <div class="hc-row"><span class="hc-key">${uiLang==='pt'?'Campanhas ativas':'Active campaigns'}</span><span class="hc-val ${cams[i]>0?'c-ok':'c-muted'}">${cams[i]}</span></div>
+      </div>${alertHtml}
+    </div>`;
   });
   const el=document.getElementById('tb-health');
-  el.textContent=issues>0?issues+' issues':'OK';
-  if(issues>0) el.classList.add('red'); else el.classList.remove('red');
-  const sumEl=document.getElementById('health-sum');
+  el.textContent=issues>0?issues+(uiLang==='pt'?' problemas':' issues'):'OK';
+  if(issues>0)el.classList.add('red');else el.classList.remove('red');
   const active=accounts.filter(a=>a.account_status===1).length;
-  sumEl.innerHTML=`
-    <div class="met"><div class="mlbl">Active</div><div class="mval ok">${active}</div></div>
-    <div class="met"><div class="mlbl">Disabled</div><div class="mval ${disabled>0?'danger':''}">${disabled}</div></div>
-    <div class="met"><div class="mlbl">Issues</div><div class="mval ${issues>0?'warn':''}">${issues}</div></div>
-    <div class="met"><div class="mlbl">Total</div><div class="mval">${accounts.length}</div></div>`;
-  if(btn){btn.disabled=false;btn.textContent='Refresh';}
-  addLog('Health check complete — '+disabled+' disabled, '+issues+' issues',issues>0?'warn':'ok');
+  document.getElementById('health-sum').innerHTML=`
+    <div class="met"><div class="mlbl">${t('hsum-active')}</div><div class="mval ok">${active}</div></div>
+    <div class="met"><div class="mlbl">${t('hsum-disabled')}</div><div class="mval ${disabled>0?'danger':''}">${disabled}</div></div>
+    <div class="met"><div class="mlbl">${t('hsum-issues')}</div><div class="mval ${issues>0?'warn':''}">${issues}</div></div>
+    <div class="met"><div class="mlbl">${t('hsum-total')}</div><div class="mval">${accounts.length}</div></div>`;
+  if(btn){btn.disabled=false;btn.textContent=t('health-btn');}
 }
 
-// ═══ WARMING ═══════════════════════════════════════════════
+// ═══ WARMING ═══════════════════════════════════════════════════════════════
 function openWarmModal(){document.getElementById('warm-modal').classList.add('open');['w-id','w-vendor','w-buyer','w-vertical'].forEach(id=>document.getElementById(id).value='');}
 function closeWarmModal(){document.getElementById('warm-modal').classList.remove('open');}
 function saveWarm(){
   const id=sanitize(document.getElementById('w-id').value.trim());
   if(!id) return;
   warmingAccounts.push({id,vendor:sanitize(document.getElementById('w-vendor').value),buyer:sanitize(document.getElementById('w-buyer').value),vertical:sanitize(document.getElementById('w-vertical').value),startDate:today()});
-  closeWarmModal(); renderWarming();
-  addLog('Added '+id+' to warming pipeline','info');
+  closeWarmModal();renderWarming();
+  addLog((uiLang==='pt'?'Adicionado ao warming: ':'Added to warming: ')+id,'info');
 }
-function removeWarm(idx){const n=warmingAccounts[idx].id;warmingAccounts.splice(idx,1);renderWarming();addLog('Warming complete: '+n,'ok');}
+function removeWarm(idx){warmingAccounts.splice(idx,1);renderWarming();}
 
 function renderWarming(){
   const tb=document.getElementById('warm-tb');
   const empty=document.getElementById('warm-empty');
   tb.innerHTML='';
   document.getElementById('tb-warm').textContent=warmingAccounts.length||0;
-  if(!warmingAccounts.length){empty.style.display='block';return;}
+  if(!warmingAccounts.length){empty.style.display='block';empty.textContent=t('warm-empty');return;}
   empty.style.display='none';
   warmingAccounts.forEach((w,idx)=>{
     const start=new Date(w.startDate);
     const day=Math.min(14,Math.max(1,Math.floor((Date.now()-start)/(864e5))+1));
     const pct=Math.round((day/14)*100);
-    const phase=day>=8?'<span class="pill p-warn">Ramp</span>':day>=4?'<span class="pill p-info">BM setup</span>':'<span class="pill p-info">Behavior</span>';
+    const phase=day>=8?'<span class="pill p-warn">'+t('phase-ramp')+'</span>':day>=4?'<span class="pill p-info">'+t('phase-bm')+'</span>':'<span class="pill p-info">'+t('phase-behavior')+'</span>';
     const budget=day>=8?'$'+Math.round(5*Math.pow(1.3,day-7)):day>=4?'$5':'$0';
     tb.innerHTML+=`<tr>
       <td><div class="aname" style="font-size:12px">${sanitize(w.id)}</div></td>
-      <td style="color:var(--t2)">${sanitize(w.vendor||'—')}</td>
-      <td style="color:var(--t2)">${sanitize(w.buyer||'—')}</td>
+      <td>${sanitize(w.vendor||'—')}</td><td>${sanitize(w.buyer||'—')}</td>
       <td><span class="mono c-gold" style="font-weight:700">Day ${day}/14</span></td>
       <td><div class="wbar-w"><div class="wbar" style="width:${pct}%"></div></div><span style="font-size:10px;color:var(--t3);margin-left:6px">${pct}%</span></td>
-      <td>${phase}</td>
-      <td class="mono">${budget}/day</td>
-      <td style="color:var(--t2);font-size:12px">${sanitize(w.vertical||'—')}</td>
+      <td>${phase}</td><td class="mono">${budget}/day</td>
+      <td>${sanitize(w.vertical||'—')}</td>
       <td style="font-size:11px;color:var(--t3)">${addDays(w.startDate,14)}</td>
-      <td><button class="btn" style="font-size:11px;padding:4px 9px;color:var(--green)" onclick="removeWarm(${idx})">Done</button></td>
+      <td><button class="btn" style="font-size:11px;padding:4px 9px;color:var(--green)" onclick="removeWarm(${idx})">${t('warm-done')}</button></td>
     </tr>`;
   });
 }
 
-// ═══ REPORT ════════════════════════════════════════════════
+// ═══ REPORT ════════════════════════════════════════════════════════════════
 function generateReport(){
   const d=new Date();
-  const ds=d.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  let totBal=0,totSpend=0,flags=[];
-  let active=0,disabled=0;
+  const ds=d.toLocaleDateString(uiLang==='pt'?'pt-BR':'en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  let totBal=0,totSpend=0,flags=[],active=0,disabled=0;
+  const isPt=uiLang==='pt';
   accounts.forEach(a=>{
     const vb=sanitizeNum(document.getElementById('bal-'+a.id)?.value||0);
     const sp=spends[a.id]||0;
     const m=acctMeta[a.id]||{};
-    totBal+=vb; totSpend+=sp;
+    totBal+=vb;totSpend+=sp;
     if(a.account_status===1) active++;
     if(a.account_status===2||a.account_status===101) disabled++;
     const layer=getAlertLayer(vb,sp);
-    if(layer===5) flags.push('  🚨🚨 EMERGENCY — '+a.name+' | Vendor: '+(m.vendor||'—')+' | Buyer: '+(m.buyer||'—')+' | Overspent by $'+Math.round(sp-vb));
-    else if(layer===4) flags.push('  🚨 ZERO — '+a.name+' | Vendor: '+(m.vendor||'—')+' | Buyer: '+(m.buyer||'—'));
-    else if(layer===3) flags.push('  🔴 CRITICAL (5%) — '+a.name+' | '+fmt(vb-sp)+' left');
-    else if(layer===2) flags.push('  🔶 ALERT (10%) — '+a.name+' | '+fmt(vb-sp)+' left');
-    else if(layer===1) flags.push('  ⚠️  ATTENTION (20%) — '+a.name+' | '+fmt(vb-sp)+' left');
-    if(a.account_status===2) flags.push('  🔴 DISABLED — '+a.name+' | Vendor: '+(m.vendor||'—'));
+    if(layer===5) flags.push('  🚨🚨 '+(isPt?'EMERGÊNCIA':'EMERGENCY')+' — '+a.name+' | Vendor: '+(m.vendor||'—')+' | Buyer: '+(m.buyer||'—')+' | BM: '+(m.bm||'—')+' | Vertical: '+(m.vertical||'—')+' | '+(isPt?'Excedeu':'Overspent by')+' $'+Math.round(sp-vb));
+    else if(layer===4) flags.push('  🚨 '+(isPt?'ZERADA':'ZERO')+' — '+a.name+' | Vendor: '+(m.vendor||'—')+' | BM: '+(m.bm||'—')+' | Vertical: '+(m.vertical||'—'));
+    else if(layer===3) flags.push('  🔴 '+(isPt?'CRÍTICO':'CRITICAL')+' (5%) — '+a.name+' | '+fmt(vb-sp)+' restando | Buyer: '+(m.buyer||'—'));
+    else if(layer===2) flags.push('  🔶 '+(isPt?'ALERTA':'ALERT')+' (10%) — '+a.name+' | '+fmt(vb-sp)+' restando | Buyer: '+(m.buyer||'—'));
+    else if(layer===1) flags.push('  ⚠️  '+(isPt?'ATENÇÃO':'ATTENTION')+' (20%) — '+a.name+' | '+fmt(vb-sp)+' restando | Buyer: '+(m.buyer||'—'));
+    if(a.account_status===2) flags.push('  🔴 '+(isPt?'DESATIVADA':'DISABLED')+' — '+a.name+' | Vendor: '+(m.vendor||'—')+' | BM: '+(m.bm||'—'));
   });
   const rw=totSpend>0?Math.round(totBal/totSpend):0;
-  let rep='UMBRA OPS — DAILY REPORT\n'+ds+' | '+fmtTime()+'\n'+'─'.repeat(50)+'\n\nSUMMARY\n  Total vendor balance:  '+fmt(totBal)+'\n  Meta spend today:      '+fmt0(totSpend)+'\n  Balance runway:        '+(rw>0?rw+'d avg':'—')+'\n  Active accounts:       '+active+'\n  Disabled accounts:     '+disabled+'\n  Warming pipeline:      '+warmingAccounts.length+' account(s)\n\n';
-  if(flags.length) rep+='FLAGS ('+flags.length+' requiring attention)\n'+flags.join('\n')+'\n\n';
-  else rep+='STATUS\n  All accounts operating normally. No flags.\n\n';
+  const sep='─'.repeat(50);
+  let rep=(isPt?'UMBRA OPS — RELATÓRIO DIÁRIO':'UMBRA OPS — DAILY REPORT')+'\n'+ds+' | '+fmtTime()+'\n'+sep+'\n\n';
+  rep+=(isPt?'RESUMO':'SUMMARY')+'\n';
+  rep+='  '+(isPt?'Total saldos vendors:  ':'Total vendor balance:  ')+fmt(totBal)+'\n';
+  rep+='  '+(isPt?'Gasto Meta hoje:       ':'Meta spend today:      ')+fmt0(totSpend)+'\n';
+  rep+='  Runway:               '+(rw>0?rw+'d avg':'—')+'\n';
+  rep+='  '+(isPt?'Contas ativas:         ':'Active accounts:       ')+active+'\n';
+  rep+='  '+(isPt?'Contas desativadas:    ':'Disabled accounts:     ')+disabled+'\n';
+  rep+='  Warming:              '+warmingAccounts.length+(isPt?' conta(s)':' account(s)')+'\n\n';
+  if(flags.length) rep+=(isPt?'FLAGS ('+flags.length+' requerem atenção)':'FLAGS ('+flags.length+' requiring attention)')+'\n'+flags.join('\n')+'\n\n';
+  else rep+=(isPt?'STATUS\n  Todas as contas operando normalmente.':'STATUS\n  All accounts operating normally.')+'\n\n';
   if(warmingAccounts.length){
-    rep+='WARMING PIPELINE\n';
-    warmingAccounts.forEach(w=>{const day=Math.min(14,Math.max(1,Math.floor((Date.now()-new Date(w.startDate))/(864e5))+1));rep+='  '+w.id+' — Day '+day+'/14 | Vendor: '+(w.vendor||'—')+' | Buyer: '+(w.buyer||'—')+'\n';});
+    rep+=isPt?'WARMING\n':'WARMING PIPELINE\n';
+    warmingAccounts.forEach(w=>{
+      const day=Math.min(14,Math.max(1,Math.floor((Date.now()-new Date(w.startDate))/(864e5))+1));
+      rep+='  '+w.id+' — Day '+day+'/14 | Vendor: '+(w.vendor||'—')+' | Buyer: '+(w.buyer||'—')+'\n';
+    });
     rep+='\n';
   }
-  rep+='NEXT ACTIONS\n';
-  if(disabled>0) rep+='  1. Contact vendor for replacement on '+disabled+' disabled account(s)\n';
-  const crits=flags.filter(f=>f.includes('ZERO')||f.includes('EMERGENCY')||f.includes('CRITICAL'));
-  if(crits.length) rep+='  '+(disabled>0?2:1)+'. Execute immediate top-up on '+crits.length+' critical account(s)\n';
-  if(!flags.length&&!disabled) rep+='  1. Continue monitoring — no action required\n';
-  rep+='\n'+'─'.repeat(50)+'\nUMBRA Ops v2';
+  rep+=(isPt?'PRÓXIMAS AÇÕES':'NEXT ACTIONS')+'\n';
+  if(disabled>0) rep+='  1. '+(isPt?'Contatar vendor para replacement em ':'Contact vendor for replacement on ')+disabled+(isPt?' conta(s) desativada(s)':' disabled account(s)')+'\n';
+  const crits=flags.filter(f=>f.includes('ZERO')||f.includes('EMERGÊNCIA')||f.includes('EMERGENCY')||f.includes('CRÍTICO')||f.includes('CRITICAL'));
+  if(crits.length) rep+='  '+(disabled>0?2:1)+'. '+(isPt?'Top-up imediato em ':'Immediate top-up on ')+crits.length+(isPt?' conta(s) crítica(s)':' critical account(s)')+'\n';
+  if(!flags.length&&!disabled) rep+='  1. '+(isPt?'Continuar monitorando — nenhuma ação necessária':'Continue monitoring — no action required')+'\n';
+  rep+='\n'+sep+'\nUMBRA Ops v2';
   document.getElementById('rbox').textContent=rep;
 }
 
 function copyReport(){
   navigator.clipboard.writeText(document.getElementById('rbox').textContent).then(()=>{
-    const btn=event.target; btn.textContent='Copied!';
-    setTimeout(()=>btn.textContent='Copy to clipboard',2000);
+    const btn=event.target;const orig=btn.textContent;
+    btn.textContent=t('btn-copied');
+    setTimeout(()=>btn.textContent=orig,2000);
   });
 }
 
 function renderAccountsList(){
-  const tb=document.getElementById('acct-tb');
-  tb.innerHTML='';
+  const tb=document.getElementById('acct-tb');tb.innerHTML='';
   accounts.forEach(a=>{
     const m=acctMeta[a.id]||{};
     const sp=a.amount_spent?fmt(parseFloat(a.amount_spent)/100):'$0';
-    tb.innerHTML+=`<tr><td><div class="aname">${sanitize(a.name)}</div><div class="aid">${sanitize(a.id)}</div></td><td style="color:var(--t2)">${sanitize(m.vendor||'—')}</td><td style="color:var(--t2)">${sanitize(m.buyer||'—')}</td><td class="mono">${sp}</td><td>${sPill(a.account_status)}</td></tr>`;
+    tb.innerHTML+=`<tr><td><div class="aname">${sanitize(a.name)}</div><div class="aid">${sanitize(a.id)}</div></td><td>${sanitize(m.vendor||'—')}</td><td>${sanitize(m.buyer||'—')}</td><td>${sanitize(m.bm||'—')}</td><td>${sanitize(m.vertical||'—')}</td><td class="mono">${sp}</td><td>${sPill(a.account_status)}</td></tr>`;
   });
 }
 
-// ═══ AUTO REFRESH ══════════════════════════════════════════
+// ═══ AUTO REFRESH ══════════════════════════════════════════════════════════
 function startAutoRefresh(){
   if(autoTimer) clearInterval(autoTimer);
   autoTimer=setInterval(()=>{
     autoSecs--;
-    const m=Math.floor(autoSecs/60), s=autoSecs%60;
+    const m=Math.floor(autoSecs/60),s=autoSecs%60;
     const el=document.getElementById('m-cd');
     if(el) el.textContent=m+'m'+String(s).padStart(2,'0')+'s';
     if(autoSecs<=0){autoSecs=300;runCheck();runHealthCheck();}
   },1000);
 }
 
-// ═══ INIT ══════════════════════════════════════════════════
-addLog('UMBRA Ops v2 ready','ok');
-addLog('Enter password to access dashboard','muted');
+// ═══ INIT ══════════════════════════════════════════════════════════════════
+applyTranslations();
+document.getElementById('rbox').textContent=t('rbox-init');
+document.getElementById('warm-empty').textContent=t('warm-empty');
+document.getElementById('last-lbl').textContent=t('last-lbl-init');
+// Show correct hint on login screen
+const _stored=localStorage.getItem('umbra_pw');
+const _hint=document.getElementById('login-hint');
+if(_hint) _hint.textContent=_stored?t('login-hint-set'):t('login-hint-first');
+addLog('UMBRA Ops v2 pronto','ok');
 </script>
 </body>
 </html>
