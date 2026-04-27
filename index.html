@@ -369,4 +369,59 @@ function renderActive() {
                 <div class="metric-card" style="border-left:4px solid ${acc.account_status === 1 ? 'var(--green)' : 'var(--red)'}">
                     <span class="ws-tag" style="background:${ws.color}22; color:${ws.color};">${ws.name}</span>
                     <div style="font-weight:800; font-size:18px; margin:5px 0;">${acc.name}</div>
-                    <div class="pill
+                    <div class="pill ${acc.account_status === 1 ? 'p-ok' : 'p-l5'}" style="display:inline-block">${acc.account_status === 1 ? 'ACTIVE' : 'DISABLED'}</div>
+                    <div style="font-size:11px; margin-top:10px; color:var(--text-muted)">ID: ${acc.id}</div>
+                </div>
+            `;
+        });
+    });
+    
+    document.getElementById('m-bal').textContent = '$' + Math.round(tBal).toLocaleString();
+    document.getElementById('m-spend').textContent = '$' + Math.round(tSp).toLocaleString();
+    document.getElementById('m-flags').textContent = tFlags;
+}
+
+// LOGICA INPUTS
+function upMeta(wsId, aid, key, val) {
+    const ws = workspaces.find(w => w.id === wsId);
+    if(!ws.acctMeta[aid]) ws.acctMeta[aid] = {};
+    ws.acctMeta[aid][key] = val;
+    saveStorage();
+}
+function upBal(wsId, aid, val) {
+    const ws = workspaces.find(w => w.id === wsId);
+    ws.balances[aid] = sanitizeNum(val);
+    saveStorage();
+    renderActive();
+}
+
+// UI HELPERS
+function tick() {
+  autoSecs--;
+  const m = Math.floor(autoSecs/60), s = autoSecs%60;
+  document.getElementById('m-cd').textContent = `${m}:${s < 10 ? '0' : ''}${s}`;
+  if(autoSecs <= 0) runCheck();
+}
+function calcInterval() {
+  let accs = 0; workspaces.forEach(w => { accs += (w.accounts.length || 10); });
+  return Math.max(300, Math.ceil((accs + workspaces.length) * 3600 / 144));
+}
+function switchTab(id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  document.querySelectorAll('.pane').forEach(p => p.style.display = 'none');
+  document.getElementById('pane-' + id).style.display = 'block';
+  event.currentTarget.classList.add('on');
+}
+function renderDropdown() {
+    const s = document.getElementById('ws-select');
+    s.innerHTML = '<option value="all">🌐 All Workspaces</option>';
+    workspaces.forEach(w => { const o = document.createElement('option'); o.value=w.id; o.textContent=w.name; s.appendChild(o); });
+}
+function switchWorkspace(id) {
+    activeWsId = id;
+    renderActive();
+}
+function doLogout() { localStorage.removeItem('umbra_pw'); location.reload(); }
+</script>
+</body>
+</html>
