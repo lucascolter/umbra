@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UMBRA | Command Center v4.1</title>
+<title>UMBRA | Global Command Center v4.2</title>
 <style>
 :root {
   --bg-deep: #050608; --bg-card: #11131a; --bg-input: #1a1d26;
@@ -22,35 +22,47 @@ body { font-family: 'Inter', sans-serif; background: var(--bg-deep); color: var(
 #login-screen { height: 100vh; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at top, #1a1d26 0%, var(--bg-deep) 100%); }
 .login-card { background: var(--bg-card); padding: 50px; border-radius: 24px; width: 100%; max-width: 400px; text-align: center; border: 1px solid var(--border); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
 
-/* UI ELEMENTS */
+/* TOPBAR */
 .topbar { background: var(--bg-card); height: 80px; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+.t-brand { font-weight: 900; font-size: 24px; letter-spacing: 4px; color: var(--gold); }
+
+/* DASHBOARD METRICS */
 .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin: 30px 40px; }
 .metric-card { background: var(--bg-card); padding: 30px; border-radius: 20px; border: 1px solid var(--border); }
 .m-label { font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; letter-spacing: 1px; }
 .m-value { font-size: 38px; font-weight: 800; display: block; margin-top: 5px; }
 
+/* TABS */
 .tabs { display: flex; margin: 0 40px; gap: 10px; border-bottom: 1px solid var(--border); overflow-x: auto; }
 .tab { padding: 18px 25px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; }
 .tab.on { color: var(--gold); border-bottom-color: var(--gold); background: var(--gold-dim); }
 
-.card-main { background: var(--bg-card); border-radius: 20px; border: 1px solid var(--border); overflow: hidden; margin: 20px 40px; }
-table { width: 100%; border-collapse: collapse; min-width: 800px; }
+/* CONTENT */
+.content-area { padding: 20px 40px; }
+.card-main { background: var(--bg-card); border-radius: 20px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 30px; }
+table { width: 100%; border-collapse: collapse; }
 th { text-align: left; padding: 18px; background: rgba(0,0,0,0.1); color: var(--text-muted); font-size: 11px; text-transform: uppercase; }
-td { padding: 18px; border-bottom: 1px solid var(--border); font-size: 15px; }
+td { padding: 18px; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: middle; }
 
-.cel { background: var(--bg-input); border: 1px solid var(--border); color: white; padding: 10px; border-radius: 8px; width: 100%; outline: none; font-weight: 600; }
+/* INPUTS */
+.cel { background: var(--bg-input); border: 1px solid var(--border); color: white; padding: 10px; border-radius: 8px; width: 100%; outline: none; font-weight: 600; font-size: 14px; }
 .cel:focus { border-color: var(--gold); }
 
+/* WS TAGS */
+.ws-tag { font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 4px; display: inline-block; margin-bottom: 4px; text-transform: uppercase; }
+
+/* PILLS */
 .pill { padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 800; }
 .p-l5 { background: var(--red); color: white; animation: pulse 1.5s infinite; }
 .p-ok { background: var(--gold-dim); color: var(--gold); }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
 
-.modal-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:200; align-items:center; justify-content:center; backdrop-filter:blur(10px); }
-.modal { background:var(--bg-card); padding:40px; border-radius:30px; width:450px; border: 1px solid var(--gold); }
-
-.btn { padding: 12px 24px; border-radius: 10px; font-weight: 700; cursor: pointer; border: none; transition: 0.2s; white-space: nowrap; }
+.btn { padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; border: none; transition: 0.2s; white-space: nowrap; }
 .btn-gold { background: var(--gold); color: black; }
+.btn-red { background: #ef444420; color: #ef4444; }
+
+.modal-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:200; align-items:center; justify-content:center; backdrop-filter:blur(10px); }
+.modal { background:var(--bg-card); padding:40px; border-radius:30px; width:500px; border: 1px solid var(--gold); }
 </style>
 </head>
 <body>
@@ -58,90 +70,91 @@ td { padding: 18px; border-bottom: 1px solid var(--border); font-size: 15px; }
 <div id="login-screen">
   <div class="login-card">
     <h1 style="color:var(--gold); font-size:42px; letter-spacing:8px; margin-bottom:10px;">UMBRA</h1>
-    <p id="login-hint" style="color:var(--text-muted); font-weight:700; margin-bottom:30px;">AUTHENTICATION REQUIRED</p>
+    <p style="color:var(--text-muted); font-weight:700; margin-bottom:30px;">GLOBAL COMMAND CENTER</p>
     <input type="password" id="pw-inp" class="cel" placeholder="SECURITY KEY" style="text-align:center; margin-bottom:20px;">
-    <button class="btn btn-gold" style="width:100%" onclick="doLogin()">ACCESS COMMAND CENTER</button>
+    <button class="btn btn-gold" style="width:100%" onclick="doLogin()">AUTHENTICATE</button>
     <div id="login-err" style="color:var(--red); margin-top:15px; display:none;">ACCESS DENIED</div>
   </div>
 </div>
 
 <div id="app" style="display:none">
   <div class="topbar">
-    <div style="font-weight:900; font-size:24px; letter-spacing:4px; color:var(--gold);">UMBRA v4.1</div>
+    <div class="t-brand">UMBRA v4.2</div>
     <div style="display:flex; gap:12px; align-items:center;">
-      <select id="ws-select" class="cel" style="width:180px" onchange="switchWorkspace(this.value)"></select>
-      <button class="btn" style="background:var(--bg-input); color:var(--gold);" onclick="openAddWs()">+ Workspace</button>
-      <button class="btn" id="theme-btn" onclick="toggleTheme()">☀️ Light</button>
-      <button class="btn" style="background:#ef444420; color:#ef4444;" onclick="doLogout()">LOGOUT</button>
+        <span style="font-size:11px; color:var(--text-muted); font-weight:700;">ACTIVE VIEW:</span>
+        <select id="ws-select" class="cel" style="width:200px; border-color:var(--gold-dim);" onchange="switchWorkspace(this.value)"></select>
+        <button class="btn btn-gold" onclick="openAddWs()">+ Add Workspace</button>
+        <button class="btn btn-red" onclick="doLogout()">LOGOUT</button>
     </div>
   </div>
 
   <div class="metrics-grid">
-    <div class="metric-card">
-      <span class="m-label">Vendor Liquidity</span>
-      <span class="m-value" id="m-bal" style="color:var(--gold);">$0</span>
-    </div>
-    <div class="metric-card">
-      <span class="m-label">Meta Spend Today</span>
-      <span class="m-value" id="m-spend">$0</span>
-    </div>
-    <div class="metric-card">
-      <span class="m-label">Risk Flagged</span>
-      <span class="m-value" id="m-flags" style="color:var(--red);">0</span>
-    </div>
-    <div class="metric-card">
-      <span class="m-label">Auto-Sync In</span>
-      <span class="m-value" id="m-cd" style="color:var(--text-muted);">--:--</span>
-    </div>
+    <div class="metric-card"><span class="m-label">Total Liquidity (Global)</span><span class="m-value" id="m-bal" style="color:var(--gold);">$0</span></div>
+    <div class="metric-card"><span class="m-label">Meta Spend (Today)</span><span class="m-value" id="m-spend">$0</span></div>
+    <div class="metric-card"><span class="m-label">Risk Flags</span><span class="m-value" id="m-flags" style="color:var(--red);">0</span></div>
+    <div class="metric-card"><span class="m-label">Sync Timer</span><span class="m-value" id="m-cd" style="color:var(--text-muted);">--:--</span></div>
   </div>
 
   <div class="tabs">
     <div class="tab on" onclick="switchTab('recon')">Reconciliation</div>
     <div class="tab" onclick="switchTab('health')">Account Health</div>
+    <div class="tab" onclick="switchTab('setup')">Workspace Manager</div>
     <div class="tab" onclick="switchTab('report')">Briefing</div>
-    <div class="tab" onclick="switchTab('log')">System Log</div>
   </div>
 
   <div class="content-area">
+    <!-- RECON -->
     <div id="pane-recon" class="pane">
-      <div style="margin: 0 40px 15px; display:flex; justify-content:space-between; align-items:center;">
+      <div style="margin-bottom:20px; display:flex; justify-content:space-between; align-items:center;">
         <h2 style="font-size:24px;">Asset Map</h2>
-        <button class="btn btn-gold" id="check-btn" onclick="runCheck()">SYNC ALL ASSETS</button>
+        <button class="btn btn-gold" id="check-btn" onclick="runCheck()">SYNC ALL DATA</button>
       </div>
-      <div class="card-main" style="overflow-x:auto;">
+      <div class="card-main">
         <table>
           <thead>
-            <tr><th>Account</th><th>Vendor</th><th>Buyer</th><th>Vertical</th><th>Balance</th><th>Spend</th><th>Remaining</th><th>Alert</th></tr>
+            <tr><th>Account Details</th><th>Vendor</th><th>Buyer</th><th>Vertical</th><th>Balance</th><th>Spend</th><th>Remaining</th><th>Alert</th></tr>
           </thead>
           <tbody id="recon-tb"></tbody>
         </table>
       </div>
     </div>
 
+    <!-- HEALTH -->
     <div id="pane-health" class="pane" style="display:none">
-        <div id="hgrid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap:20px; padding:0 40px;"></div>
+        <div id="hgrid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap:20px;"></div>
     </div>
 
-    <div id="pane-report" class="pane" style="display:none; padding:0 40px;">
-        <div class="card-main" style="padding:30px;">
-            <button class="btn btn-gold" style="margin-bottom:20px" onclick="copyReport()">Copy Report</button>
-            <pre id="rbox" style="background:var(--bg-deep); padding:20px; border-radius:12px; font-family:monospace;"></pre>
+    <!-- SETUP (MANAGER) -->
+    <div id="pane-setup" class="pane" style="display:none">
+        <h2 style="margin-bottom:20px;">Workspace Manager</h2>
+        <div class="card-main">
+            <table id="ws-manager-table">
+                <thead><tr><th>Workspace Name</th><th>Token (Sensível)</th><th>Status</th><th>Ações</th></tr></thead>
+                <tbody id="ws-list-tb"></tbody>
+            </table>
         </div>
     </div>
 
-    <div id="pane-log" class="pane" style="display:none; padding:0 40px;">
-        <div class="card-main" id="slog" style="padding:20px; height:400px; overflow-y:auto; font-family:monospace; font-size:12px;"></div>
+    <!-- REPORT -->
+    <div id="pane-report" class="pane" style="display:none">
+        <pre id="rbox" style="background:var(--bg-card); padding:40px; border-radius:20px; border:1px solid var(--border); font-family:monospace; font-size:16px; overflow-x:auto;"></pre>
     </div>
   </div>
 </div>
 
-<!-- MODAL -->
+<!-- MODAL ADD WS -->
 <div class="modal-bg" id="add-ws-modal">
   <div class="modal">
-    <h3 style="margin-bottom:20px; color:var(--gold)">New Workspace</h3>
-    <input id="new-ws-name" class="cel" placeholder="Company Name" style="margin-bottom:10px">
-    <input id="new-ws-token" type="password" class="cel" placeholder="Meta API Token" style="margin-bottom:20px">
-    <div style="display:flex; gap:10px">
+    <h3 style="margin-bottom:20px; color:var(--gold)">Add New Workspace</h3>
+    <div style="margin-bottom:15px;">
+        <label style="font-size:11px; color:var(--text-muted); font-weight:700;">WORKSPACE NAME</label>
+        <input id="new-ws-name" class="cel" placeholder="Ex: Tiger Agency" style="margin-top:5px;">
+    </div>
+    <div style="margin-bottom:25px;">
+        <label style="font-size:11px; color:var(--text-muted); font-weight:700;">META ACCESS TOKEN</label>
+        <input id="new-ws-token" class="cel" placeholder="EAALH..." style="margin-top:5px;">
+    </div>
+    <div style="display:flex; gap:15px">
       <button class="btn btn-gold" style="flex:2" onclick="saveNewWorkspace()">Establish Connection</button>
       <button class="btn" style="background:var(--bg-input); color:white; flex:1" onclick="closeAddWs()">Cancel</button>
     </div>
@@ -151,12 +164,13 @@ td { padding: 18px; border-bottom: 1px solid var(--border); font-size: 15px; }
 <script>
 const TG_TOKEN = '8700935512:AAF1oz_Ynv4cCq9lyA_7fXaAIAoXPdSweBw';
 const TG_CHAT = '5245753077';
+const WS_COLORS = ['#d4a853', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#a855f7'];
 
 let workspaces = [];
-let activeWsId = null;
+let activeWsId = 'all'; // Default para ver tudo
 let autoSecs = 300;
 
-// SANITIZAÇÃO ROBUSTA DE NÚMEROS (Aceita 28.900 ou 28,900)
+// UTILS
 function sanitizeNum(v) {
   if (!v) return 0;
   let s = String(v).trim();
@@ -164,8 +178,7 @@ function sanitizeNum(v) {
   if(hasComma && hasDot) {
     const lastC = s.lastIndexOf(','), lastD = s.lastIndexOf('.');
     s = lastC > lastD ? s.replace(/\./g, '').replace(',', '.') : s.replace(/,/g, '');
-  } else if(hasComma) {
-    s = (/,\d{3}/).test(s) ? s.replace(/,/g, '') : s.replace(',', '.');
+  } else if(hasComma) { s = (/,\d{3}/).test(s) ? s.replace(/,/g, '') : s.replace(',', '.');
   } else if(hasDot) {
     if((s.match(/\./g)||[]).length > 1) s = s.replace(/\./g, '');
     else if(/^\d+\.\d{3}$/.test(s)) s = s.replace('.', '');
@@ -173,7 +186,6 @@ function sanitizeNum(v) {
   return parseFloat(s) || 0;
 }
 
-// SEGURANÇA
 async function hashPw(pw) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
@@ -193,176 +205,168 @@ function initApp() {
   document.getElementById('app').style.display='block';
   loadStorage();
   renderDropdown();
-  if(workspaces.length > 0) switchWorkspace(workspaces[0].id);
+  renderWsManager();
   autoSecs = calcInterval();
   setInterval(tick, 1000);
+  runCheck(); // Auto-start
 }
 
+// STORAGE
 function loadStorage() {
   const d = localStorage.getItem('umbra_workspaces');
-  if(d) workspaces = JSON.parse(d).map(w => ({...w, accounts:[], spends:{}, status:'disconnected'}));
+  if(d) {
+    workspaces = JSON.parse(d).map((w, index) => ({
+      ...w, accounts:[], spends:{}, status:'idle', color: WS_COLORS[index % WS_COLORS.length]
+    }));
+  }
 }
 
 function saveStorage() {
-  const toSave = workspaces.map(w => ({id:w.id, name:w.name, token:w.token, acctMeta:w.acctMeta||{}, balances:w.balances||{}, alertState:w.alertState||{}}));
+  const toSave = workspaces.map(w => ({
+    id:w.id, name:w.name, token:w.token, acctMeta:w.acctMeta||{}, balances:w.balances||{}, alertState:w.alertState||{}
+  }));
   localStorage.setItem('umbra_workspaces', JSON.stringify(toSave));
 }
 
-// API & SYNC
-async function runCheck() {
-  const btn = document.getElementById('check-btn');
-  btn.disabled = true; btn.textContent = 'SYNCING...';
-  addLog("Starting global asset sync...", "var(--gold)");
+// WORKSPACE MANAGER
+function openAddWs() { document.getElementById('add-ws-modal').style.display='flex'; }
+function closeAddWs() { document.getElementById('add-ws-modal').style.display='none'; }
 
-  for(let ws of workspaces) {
-    if(ws.status === 'connected') {
-      for(let acc of ws.accounts) {
-        try {
-          const r = await fetch(`https://graph.facebook.com/v19.0/${acc.id}/insights?fields=spend&date_preset=today&access_token=${ws.token}`);
-          const d = await r.json();
-          ws.spends[acc.id] = parseFloat(d.data?.[0]?.spend || 0);
-          processAlerts(ws, acc);
-        } catch(e) { console.error(e); }
-      }
-    }
+function saveNewWorkspace() {
+  const n = document.getElementById('new-ws-name').value;
+  const t = document.getElementById('new-ws-token').value;
+  if(!n || !t) return;
+  const newWs = {
+    id: 'ws_'+Date.now(), name: n, token: t, acctMeta:{}, balances:{}, alertState:{}, color: WS_COLORS[workspaces.length % WS_COLORS.length]
+  };
+  workspaces.push(newWs);
+  saveStorage();
+  location.reload();
+}
+
+function deleteWorkspace(id) {
+  if(confirm("Deseja realmente remover este workspace e todos os seus dados?")) {
+    workspaces = workspaces.filter(w => w.id !== id);
+    saveStorage();
+    location.reload();
   }
-  autoSecs = calcInterval();
-  renderActive();
-  btn.disabled = false; btn.textContent = 'SYNC ALL ASSETS';
+}
+
+function renderWsManager() {
+    const tb = document.getElementById('ws-list-tb');
+    tb.innerHTML = '';
+    workspaces.forEach(w => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><strong style="color:${w.color}">${w.name}</strong></td>
+            <td><code style="font-size:10px; opacity:0.6;">${w.token.substring(0,20)}...</code></td>
+            <td><span class="pill p-ok">${w.status}</span></td>
+            <td><button class="btn btn-red" style="padding:5px 12px; font-size:11px;" onclick="deleteWorkspace('${w.id}')">Deletar</button></td>
+        `;
+        tb.appendChild(tr);
+    });
+}
+
+// CORE RECON
+async function runCheck() {
+    const btn = document.getElementById('check-btn');
+    btn.disabled = true; btn.textContent = 'SYNCING ALL...';
+    
+    for(let ws of workspaces) {
+        ws.status = 'syncing';
+        try {
+            // 1. Fetch Accounts
+            const rAcc = await fetch(`https://graph.facebook.com/v19.0/me/adaccounts?fields=id,name,account_status,currency,amount_spent&access_token=${ws.token}`);
+            const dAcc = await rAcc.json();
+            if(dAcc.error) throw new Error(dAcc.error.message);
+            ws.accounts = dAcc.data || [];
+            
+            // 2. Fetch Insights (Spend Today)
+            for(let acc of ws.accounts) {
+                const rSp = await fetch(`https://graph.facebook.com/v19.0/${acc.id}/insights?fields=spend&date_preset=today&access_token=${ws.token}`);
+                const dSp = await rSp.json();
+                ws.spends[acc.id] = parseFloat(dSp.data?.[0]?.spend || 0);
+                processAlerts(ws, acc);
+            }
+            ws.status = 'idle';
+        } catch(e) { 
+            ws.status = 'error'; 
+            console.error(`Error in ${ws.name}:`, e);
+        }
+    }
+    
+    autoSecs = calcInterval();
+    renderActive();
+    renderWsManager();
+    btn.disabled = false; btn.textContent = 'SYNC ALL DATA';
 }
 
 function processAlerts(ws, acc) {
-  const bal = ws.balances[acc.id] || 0;
-  const sp = ws.spends[acc.id] || 0;
-  const rem = bal - sp;
-  const layer = getLayer(bal, sp);
-  if(!ws.alertState) ws.alertState = {};
-  const prev = ws.alertState[acc.id] || 0;
-
-  if(layer > 0 && layer > prev) {
-    const msg = `🚨 *UMBRA ALERT* 🚨\n*WS:* ${ws.name}\n*Account:* ${acc.name}\n*Vendor:* ${ws.acctMeta[acc.id]?.vendor || '-'}\n*Status:* LAYER ${layer}\n*Remaining:* $${Math.round(rem)}`;
-    sendTelegram(msg);
-    addLog(`Alert sent for ${acc.name} (L${layer})`, "var(--red)");
-  }
-  ws.alertState[acc.id] = layer;
-}
-
-function sendTelegram(text) {
-  fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({chat_id: TG_CHAT, text, parse_mode:'Markdown'})
-  });
+    const bal = ws.balances[acc.id] || 0;
+    const sp = ws.spends[acc.id] || 0;
+    const layer = getLayer(bal, sp);
+    if(!ws.alertState) ws.alertState = {};
+    const prev = ws.alertState[acc.id] || 0;
+    if(layer > 0 && layer > prev) {
+        const msg = `🚨 *UMBRA ALERT* 🚨\n*WS:* ${ws.name}\n*Account:* ${acc.name}\n*Status:* LAYER ${layer}\n*Remaining:* $${Math.round(bal-sp)}`;
+        fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({chat_id: TG_CHAT, text: msg, parse_mode:'Markdown'})
+        });
+    }
+    ws.alertState[acc.id] = layer;
 }
 
 function getLayer(bal, sp) {
-  if(!bal || bal <= 0) return 0;
-  const rem = bal - sp;
-  const pct = (rem/bal)*100;
-  if(rem < 0) return 5;
-  if(rem === 0) return 4;
-  if(pct <= 5) return 3;
-  if(pct <= 10) return 2;
-  if(pct <= 20) return 1;
-  return 0;
+    if(!bal || bal <= 0) return 0;
+    const rem = bal - sp;
+    const pct = (rem/bal)*100;
+    if(rem < 0) return 5;
+    if(pct <= 5) return 3;
+    if(pct <= 10) return 2;
+    if(pct <= 20) return 1;
+    return 0;
 }
 
 function renderActive() {
-  const ws = workspaces.find(w => w.id === activeWsId);
-  if(!ws) return;
-  const tb = document.getElementById('recon-tb');
-  tb.innerHTML = '';
-  let tBal = 0, tSp = 0, tFlags = 0;
+    const tb = document.getElementById('recon-tb');
+    const hg = document.getElementById('hgrid');
+    tb.innerHTML = ''; hg.innerHTML = '';
+    
+    let tBal = 0, tSp = 0, tFlags = 0;
+    
+    workspaces.forEach(ws => {
+        if(activeWsId !== 'all' && activeWsId !== ws.id) return;
 
-  ws.accounts.forEach(acc => {
-    const bal = ws.balances[acc.id] || 0;
-    const sp = ws.spends[acc.id] || 0;
-    const rem = bal - sp;
-    const layer = getLayer(bal, sp);
-    if(layer > 0) tFlags++; tBal += bal; tSp += sp;
-    const meta = ws.acctMeta[acc.id] || {};
+        ws.accounts.forEach(acc => {
+            const bal = ws.balances[acc.id] || 0;
+            const sp = ws.spends[acc.id] || 0;
+            const rem = bal - sp;
+            const layer = getLayer(bal, sp);
+            if(layer > 0) tFlags++;
+            tBal += bal; tSp += sp;
 
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td><div style="font-weight:900">${acc.name}</div><div style="font-size:10px; color:var(--text-muted)">${acc.id}</div></td>
-      <td><input class="cel" value="${meta.vendor||''}" onchange="upMeta('${acc.id}','vendor',this.value)"></td>
-      <td><input class="cel" value="${meta.buyer||''}" onchange="upMeta('${acc.id}','buyer',this.value)"></td>
-      <td><input class="cel" value="${meta.vertical||''}" onchange="upMeta('${acc.id}','vertical',this.value)"></td>
-      <td><input class="cel" style="color:var(--gold)" value="${bal}" onchange="upBal('${acc.id}',this.value)"></td>
-      <td style="font-family:monospace">$${Math.round(sp)}</td>
-      <td style="font-weight:900; color:${rem < 0 ? 'var(--red)' : 'var(--green)'}">$${Math.round(rem)}</td>
-      <td><span class="pill ${layer === 5 ? 'p-l5' : 'p-ok'}">LAYER ${layer}</span></td>
-    `;
-    tb.appendChild(tr);
-  });
-  document.getElementById('m-bal').textContent = '$' + Math.round(tBal).toLocaleString();
-  document.getElementById('m-spend').textContent = '$' + Math.round(tSp).toLocaleString();
-  document.getElementById('m-flags').textContent = tFlags;
-  renderHealth(ws);
-}
+            // Render Table Row
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>
+                    <span class="ws-tag" style="background:${ws.color}22; color:${ws.color}; border:1px solid ${ws.color}44;">${ws.name}</span>
+                    <div style="font-weight:900">${acc.name}</div>
+                    <div style="color:var(--text-muted); font-size:10px">${acc.id}</div>
+                </td>
+                <td><input class="cel" value="${ws.acctMeta[acc.id]?.vendor || ''}" onchange="upMeta('${ws.id}','${acc.id}','vendor',this.value)"></td>
+                <td><input class="cel" value="${ws.acctMeta[acc.id]?.buyer || ''}" onchange="upMeta('${ws.id}','${acc.id}','buyer',this.value)"></td>
+                <td><input class="cel" value="${ws.acctMeta[acc.id]?.vertical || ''}" onchange="upMeta('${ws.id}','${acc.id}','vertical',this.value)"></td>
+                <td><input class="cel" style="color:var(--gold)" value="${bal}" onchange="upBal('${ws.id}','${acc.id}',this.value)"></td>
+                <td style="font-family:monospace">$${Math.round(sp)}</td>
+                <td style="font-weight:900; color:${rem < 0 ? 'var(--red)' : 'var(--green)'}">$${Math.round(rem)}</td>
+                <td><span class="pill ${layer === 5 ? 'p-l5' : 'p-ok'}">LAYER ${layer}</span></td>
+            `;
+            tb.appendChild(tr);
 
-// UTILS
-function upMeta(aid, k, v) { const ws=workspaces.find(w=>w.id===activeWsId); if(!ws.acctMeta[aid])ws.acctMeta[aid]={}; ws.acctMeta[aid][k]=v; saveStorage(); }
-function upBal(aid, v) { const ws=workspaces.find(w=>w.id===activeWsId); ws.balances[aid]=sanitizeNum(v); saveStorage(); renderActive(); }
-function calcInterval() {
-  let accs = 0; workspaces.forEach(w => { if(w.status==='connected') accs += w.accounts.length; });
-  if(accs === 0) return 300;
-  return Math.max(300, Math.ceil((accs + workspaces.length) * 3600 / 144));
-}
-function tick() {
-  autoSecs--;
-  const m = Math.floor(autoSecs/60), s = autoSecs%60;
-  document.getElementById('m-cd').textContent = `${m}:${s < 10 ? '0' : ''}${s}`;
-  if(autoSecs <= 0) runCheck();
-}
-function switchTab(id) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
-  document.querySelectorAll('.pane').forEach(p => p.style.display = 'none');
-  document.getElementById('pane-' + id).style.display = 'block';
-  event.currentTarget.classList.add('on');
-}
-function openAddWs() { document.getElementById('add-ws-modal').style.display='flex'; }
-function closeAddWs() { document.getElementById('add-ws-modal').style.display='none'; }
-function saveNewWorkspace() {
-  const n = document.getElementById('new-ws-name').value, t = document.getElementById('new-ws-token').value;
-  if(!n || !t) return;
-  workspaces.push({id:'ws_'+Date.now(), name:n, token:t, accounts:[], spends:{}, acctMeta:{}, balances:{}, alertState:{}, status:'disconnected'});
-  saveStorage(); location.reload();
-}
-function renderDropdown() {
-  const s = document.getElementById('ws-select');
-  workspaces.forEach(w => { const o = document.createElement('option'); o.value=w.id; o.textContent=w.name; s.appendChild(o); });
-}
-async function switchWorkspace(id) {
-  activeWsId = id; const ws = workspaces.find(w => w.id === id);
-  if(ws.status !== 'connected') await connect(ws); renderActive();
-}
-async function connect(ws) {
-  try {
-    const r = await fetch(`https://graph.facebook.com/v19.0/me/adaccounts?fields=id,name,account_status&access_token=${ws.token}`);
-    const d = await r.json(); ws.accounts = d.data || []; ws.status = 'connected'; renderActive();
-  } catch(e) { addLog("Connection failed for " + ws.name, "var(--red)"); }
-}
-function renderHealth(ws) {
-    const g = document.getElementById('hgrid'); g.innerHTML = '';
-    ws.accounts.forEach(acc => {
-        g.innerHTML += `<div class="metric-card" style="border-left:4px solid ${acc.account_status === 1 ? 'var(--green)' : 'var(--red)'}">
-            <div class="m-label">${acc.id}</div>
-            <div style="font-weight:800; font-size:18px; margin:5px 0;">${acc.name}</div>
-            <div class="pill ${acc.account_status === 1 ? 'p-ok' : 'p-l5'}" style="display:inline-block">${acc.account_status === 1 ? 'ACTIVE' : 'DISABLED'}</div>
-        </div>`;
-    });
-}
-function addLog(m, c) {
-  const log = document.getElementById('slog'); const d = document.createElement('div');
-  d.style.color = c; d.textContent = `[${new Date().toLocaleTimeString()}] ${m}`;
-  log.prepend(d);
-}
-function toggleTheme() {
-  const t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', t);
-}
-function doLogout() { localStorage.removeItem('umbra_pw'); location.reload(); }
-</script>
-</body>
-</html>
+            // Render Health Card
+            hg.innerHTML += `
+                <div class="metric-card" style="border-left:4px solid ${acc.account_status === 1 ? 'var(--green)' : 'var(--red)'}">
+                    <span class="ws-tag" style="background:${ws.color}22; color:${ws.color};">${ws.name}</span>
+                    <div style="font-weight:800; font-size:18px; margin:5px 0;">${acc.name}</div>
+                    <div class="pill
