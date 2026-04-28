@@ -296,6 +296,38 @@ tbody tr:hover td{background:var(--bg3)!important}
 .filter-clear:hover{border-color:var(--rd4);color:var(--red)}
 tr.filtered-out{display:none}
 
+
+/* ═══ ASSETS PANE ═════════════════════════════════════════════════════════ */
+.assets-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}
+@media(max-width:900px){.assets-grid{grid-template-columns:1fr}}
+.asset-col{background:var(--bg3);border:1px solid var(--b1);border-radius:10px;padding:18px}
+.asset-col-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.asset-col-hdr h4{font-size:13px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin:0}
+.asset-count{background:var(--gd3);color:var(--gold);border:1px solid var(--gd4);font-size:11px;font-weight:700;padding:2px 10px;border-radius:20px}
+.asset-add{display:flex;gap:6px;margin-bottom:14px}
+.asset-add input{flex:1;background:var(--bg2);border:1px solid var(--b2);border-radius:6px;padding:8px 12px;color:var(--t1);font-size:13px;outline:none;transition:all .15s}
+.asset-add input:focus{border-color:var(--gd5);box-shadow:0 0 0 2px var(--gd3)}
+.asset-list{display:flex;flex-direction:column;gap:6px;max-height:340px;overflow-y:auto}
+.asset-item{display:flex;align-items:center;justify-content:space-between;background:var(--bg2);border:1px solid var(--b1);border-radius:6px;padding:8px 12px;font-size:13px;color:var(--t1);transition:all .15s}
+.asset-item:hover{border-color:var(--b2);background:var(--bg4)}
+.asset-item-name{font-weight:500}
+.asset-item-del{background:transparent;border:none;color:var(--t3);cursor:pointer;font-size:14px;padding:0 4px;transition:color .15s}
+.asset-item-del:hover{color:var(--red)}
+.asset-empty{text-align:center;padding:24px 12px;color:var(--t3);font-size:12px}
+
+/* ═══ WORKSPACES PANE ════════════════════════════════════════════════════ */
+.ws-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.ws-card{background:var(--bg3);border:1px solid var(--b1);border-radius:12px;padding:18px;transition:all .2s}
+.ws-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+.ws-card.ws-error{border-color:var(--rd4);background:var(--rd2)}
+.ws-card.ws-connected{border-left:3px solid var(--green)}
+.ws-card-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+.ws-card-name{font-size:15px;font-weight:700;color:var(--t1);margin-bottom:3px}
+.ws-card-stats{font-size:11px;color:var(--t3)}
+.ws-card-actions{display:flex;gap:6px;flex-wrap:wrap}
+.ws-card-actions .btn{padding:5px 10px;font-size:11px}
+.ws-card-color-bar{height:3px;border-radius:2px;margin-bottom:14px}
+
 </style>
 </head>
 <body>
@@ -349,27 +381,16 @@ tr.filtered-out{display:none}
     <div class="tab on" onclick="switchTab('recon')"><span id="tab-recon">Reconciliation</span> <span class="tbg" id="tb-recon">—</span></div>
     <div class="tab" onclick="switchTab('health')"><span id="tab-health">Account health</span> <span class="tbg" id="tb-health">—</span></div>
     <div class="tab" onclick="switchTab('warming')"><span id="tab-warming">Warming</span> <span class="tbg" id="tb-warm">0</span></div>
+    <div class="tab" onclick="switchTab('assets')"><span id="tab-assets">Assets</span></div>
+    <div class="tab" onclick="switchTab('workspaces')"><span id="tab-workspaces">Workspaces</span> <span class="tbg" id="tb-ws">0</span></div>
     <div class="tab" onclick="switchTab('report')"><span id="tab-report">Report</span></div>
     <div class="tab" onclick="switchTab('log')"><span id="tab-log">Log</span> <span class="tbg" id="tb-log">0</span></div>
   </div>
 
   <div class="main">
 
-    <!-- SETUP / WORKSPACE MANAGER -->
-    <div id="pane-setup" class="pane on">
-      <div class="setup-wrap">
-        <div class="ws-setup-card">
-          <h2>Workspaces</h2>
-          <p>Each workspace connects to a different Meta API token. All workspaces are checked simultaneously every 5 minutes and alerts go to the same Telegram.</p>
-          <div class="ws-list" id="ws-list-items"></div>
-          <button class="pbtn" onclick="openAddWs()">+ Add workspace</button>
-          <div class="errbox" id="errmsg"></div>
-        </div>
-      </div>
-    </div>
-
     <!-- RECON -->
-    <div id="pane-recon" class="pane">
+    <div id="pane-recon" class="pane on">
       <div class="metrics">
         <div class="met"><div class="mlbl">Vendor balances</div><div class="mval gold" id="m-bal">—</div></div>
         <div class="met"><div class="mlbl">Meta spend today</div><div class="mval" id="m-spend">—</div></div>
@@ -455,6 +476,63 @@ tr.filtered-out{display:none}
       </div>
     </div>
 
+    <!-- ASSETS -->
+    <div id="pane-assets" class="pane">
+      <div class="card">
+        <div class="card-hdr">
+          <div class="card-title">Assets — Vendors, Buyers, Verticals</div>
+        </div>
+        <p class="card-hint">Manage your global lists of vendors, media buyers, and verticals. These appear as dropdowns in the Reconciliation tab.</p>
+        <div class="assets-grid">
+          <div class="asset-col">
+            <div class="asset-col-hdr">
+              <h4>Vendors</h4>
+              <span class="asset-count" id="vendor-count">0</span>
+            </div>
+            <div class="asset-add">
+              <input type="text" id="new-vendor" placeholder="e.g. GG, Tiger, Midas" onkeydown="if(event.key==='Enter')addAsset('vendors')"/>
+              <button class="btn gold" onclick="addAsset('vendors')">+ Add</button>
+            </div>
+            <div class="asset-list" id="vendor-list"></div>
+          </div>
+          <div class="asset-col">
+            <div class="asset-col-hdr">
+              <h4>Media Buyers</h4>
+              <span class="asset-count" id="buyer-count">0</span>
+            </div>
+            <div class="asset-add">
+              <input type="text" id="new-buyer" placeholder="e.g. Lucas, João, Pedro" onkeydown="if(event.key==='Enter')addAsset('buyers')"/>
+              <button class="btn gold" onclick="addAsset('buyers')">+ Add</button>
+            </div>
+            <div class="asset-list" id="buyer-list"></div>
+          </div>
+          <div class="asset-col">
+            <div class="asset-col-hdr">
+              <h4>Verticals</h4>
+              <span class="asset-count" id="vertical-count">0</span>
+            </div>
+            <div class="asset-add">
+              <input type="text" id="new-vertical" placeholder="e.g. Nutra, Biz Op, Ecom" onkeydown="if(event.key==='Enter')addAsset('verticals')"/>
+              <button class="btn gold" onclick="addAsset('verticals')">+ Add</button>
+            </div>
+            <div class="asset-list" id="vertical-list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WORKSPACES -->
+    <div id="pane-workspaces" class="pane">
+      <div class="card">
+        <div class="card-hdr">
+          <div class="card-title">Workspaces</div>
+          <button class="btn gold" onclick="openAddWs()">+ Add workspace</button>
+        </div>
+        <p class="card-hint">Each workspace connects to a different Meta API token. All workspaces are checked simultaneously every cycle.</p>
+        <div id="ws-grid" class="ws-grid"></div>
+      </div>
+    </div>
+
     <!-- REPORT -->
     <div id="pane-report" class="pane">
       <div class="card">
@@ -506,6 +584,21 @@ tr.filtered-out{display:none}
     <div class="banner-title" id="banner-title">Check complete</div>
     <div class="banner-msg" id="banner-msg"></div>
     <button class="banner-ok" id="banner-ok">OK</button>
+  </div>
+</div>
+
+<!-- REPLACE TOKEN MODAL -->
+<div class="modal-bg" id="replace-ws-modal">
+  <div class="modal">
+    <h3>Replace token for workspace</h3>
+    <p style="color:var(--t3);font-size:13px;margin-bottom:14px">Replacing token for: <span id="replace-ws-name" style="color:var(--gold);font-weight:700">—</span></p>
+    <input type="hidden" id="replace-ws-id"/>
+    <div class="mfield"><span class="flabel">New Meta access token</span><input class="finp" type="password" id="replace-ws-token" placeholder="EAALHty9jREg..." style="margin:0" autocomplete="off"/></div>
+    <div class="errbox" id="replace-ws-err" style="margin-top:0;margin-bottom:12px"></div>
+    <div class="brow">
+      <button class="btn gold" style="flex:1;padding:10px" id="replace-token-btn" onclick="saveReplacedToken()">Replace</button>
+      <button class="btn" style="padding:10px 14px" onclick="closeReplaceToken()">Cancel</button>
+    </div>
   </div>
 </div>
 
@@ -592,14 +685,24 @@ function showLoginErr(m){const e=document.getElementById('login-err');e.textCont
 function startSession(){
   document.getElementById('login-screen').style.display='none';
   document.getElementById('app').style.display='block';
+  document.getElementById('tabs').style.display='flex';
   document.getElementById('login-hint').textContent='Password set.';
   loadAllStorage();
+  loadAssets();
+  localStorage.setItem('umbra_session', JSON.stringify({expires: Date.now() + 24*60*60*1000}));
   addLog('Session started','ok');
   renderWorkspaceList();
-  if(workspaces.length>0) switchWorkspace(workspaces[0].id);
+  renderWorkspacesView();
+  renderAssetsView();
+  if(workspaces.length>0){
+    switchWorkspace(workspaces[0].id);
+  } else {
+    switchTab('workspaces');
+  }
 }
 function doLogout(){
   clearAllTimers();
+  localStorage.removeItem('umbra_session');
   document.getElementById('app').style.display='none';
   document.getElementById('login-screen').style.display='flex';
   document.getElementById('pw-inp').value='';
@@ -664,17 +767,17 @@ async function sendWA(body){
 
 // ═══ ALERT MESSAGES ══════════════════════════════════════════════════════
 const MSGS={
-  l1:(ws,n,v,b,rem,pct,sym)=>`⚠️ *UMBRA — ATTENTION*\n${'─'.repeat(28)}\n*Workspace:* ${ws}\n*Account:* ${n}\n*Vendor:* ${v||'—'} | *Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nBalance at *${pct}%* → *${sym}${Math.round(rem)} remaining*\nPlan your top-up soon.`,
-  l2:(ws,n,v,b,rem,pct,sym)=>`🔶 *UMBRA — ALERT*\n${'─'.repeat(28)}\n*Workspace:* ${ws}\n*Account:* ${n}\n*Vendor:* ${v||'—'} | *Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nBalance at *${pct}%* → *${sym}${Math.round(rem)} remaining*\nTop up *TODAY*.`,
-  l3:(ws,n,v,b,rem,pct,sym)=>`🔴 *UMBRA — CRITICAL*\n${'─'.repeat(28)}\n*Workspace:* ${ws}\n*Account:* ${n}\n*Vendor:* ${v||'—'} | *Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nBalance at *${pct}%* → *${sym}${Math.round(rem)} remaining*\n⚡ *URGENT top-up required*.`,
-  l4:(ws,n,v,b,sym)=>`🚨 *UMBRA — ACCOUNT ZEROED*\n${'─'.repeat(28)}\n*Workspace:* ${ws}\n*Account:* ${n}\n*Vendor:* ${v||'—'} | *Buyer:* ${b||'—'}\n${'─'.repeat(28)}\n*Balance ZERO.* Campaigns paused.\n⚡ Top up *IMMEDIATELY*.`,
-  l5:(ws,n,v,b,amt,sym)=>`🚨🚨 *UMBRA — EMERGENCY*\n${'─'.repeat(28)}\n*Workspace:* ${ws}\n*Account:* ${n}\n*Vendor:* ${v||'—'} | *Buyer:* ${b||'—'}\n${'─'.repeat(28)}\n*Spend EXCEEDED balance by ${sym}${Math.abs(Math.round(amt))}*\n🔥 Contact vendor *NOW*.`,
-  disabled:(ws,n,v,b)=>`🔴 *UMBRA — ACCOUNT DISABLED*\n${'─'.repeat(28)}\n*Workspace:* ${ws}\n*Account:* ${n}\n*Vendor:* ${v||'—'} | *Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nRequest *replacement + balance transfer* immediately.`,
-  warn:(ws,n,v,b)=>`⚠️ *UMBRA — WARNING*\n${'─'.repeat(28)}\n*Workspace:* ${ws}\n*Account:* ${n}\n*Vendor:* ${v||'—'} | *Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nBilling or policy issue detected.`,
-  change:(ws,n,v,b,s1,s2)=>`🚨 *UMBRA — STATUS CHANGE*\n${'─'.repeat(28)}\n*Workspace:* ${ws}\n*Account:* ${n}\n*Vendor:* ${v||'—'} | *Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nStatus: *${s1} → ${s2}*\n⚡ Check immediately.`,
-  repeat:(ws,n,v,b,lbl)=>`⏰ *UMBRA — 24h REMINDER*\n${'─'.repeat(28)}\n*Workspace:* ${ws}\n*Account:* ${n}\n*Vendor:* ${v||'—'} | *Buyer:* ${b||'—'}\n${'─'.repeat(28)}\nIssue persists: *${lbl}*\nNo action taken yet?`,
-  tokenExpired:(ws)=>`🚨🚨 *UMBRA — TOKEN EXPIRED*\n${'─'.repeat(28)}\n*Workspace:* ${ws}\n${'─'.repeat(28)}\n*CRITICAL:* Meta API token is invalid or expired.\nRenew immediately to restore monitoring.`,
-  checkDone:(results)=>`✅ *UMBRA — 5-min Check Complete*\n${'─'.repeat(28)}\n${results}\n${'─'.repeat(28)}\nNext check in 5 minutes.`,
+  l1:(ws,n,v,b,rem,pct,sym)=>`*⚠️ UMBRA — ATTENTION*\n*${'─'.repeat(28)}*\n*Workspace:* *${ws}*\n*Account:* *${n}*\n*Vendor:* *${v||'—'}* | *Buyer:* *${b||'—'}*\n*${'─'.repeat(28)}*\n*Balance at ${pct}% → ${sym}${Math.round(rem)} remaining*\n\n*🎯 NEXT ACTION:*\n*Notify vendor that top-up will be needed in the next few days. Begin scheduling.*`,
+  l2:(ws,n,v,b,rem,pct,sym)=>`*🔶 UMBRA — ALERT*\n*${'─'.repeat(28)}*\n*Workspace:* *${ws}*\n*Account:* *${n}*\n*Vendor:* *${v||'—'}* | *Buyer:* *${b||'—'}*\n*${'─'.repeat(28)}*\n*Balance at ${pct}% → ${sym}${Math.round(rem)} remaining*\n\n*🎯 NEXT ACTION:*\n*Request top-up TODAY. Confirm timing with vendor — valid within 24h.*`,
+  l3:(ws,n,v,b,rem,pct,sym)=>`*🔴 UMBRA — CRITICAL*\n*${'─'.repeat(28)}*\n*Workspace:* *${ws}*\n*Account:* *${n}*\n*Vendor:* *${v||'—'}* | *Buyer:* *${b||'—'}*\n*${'─'.repeat(28)}*\n*Balance at ${pct}% → ${sym}${Math.round(rem)} remaining*\n\n*🚨 NEXT ACTION:*\n*URGENT — direct contact with vendor. Top-up must process in the next hours.*`,
+  l4:(ws,n,v,b,sym)=>`*🚨 UMBRA — ACCOUNT ZEROED*\n*${'─'.repeat(28)}*\n*Workspace:* *${ws}*\n*Account:* *${n}*\n*Vendor:* *${v||'—'}* | *Buyer:* *${b||'—'}*\n*${'─'.repeat(28)}*\n*Balance ZERO. Spend stopped.*\n\n*🚨🚨 NEXT ACTION:*\n*Contact vendor IMMEDIATELY. Expedite top-up to restart spend.*`,
+  l5:(ws,n,v,b,amt,sym)=>`*🚨🚨 UMBRA — EMERGENCY*\n*${'─'.repeat(28)}*\n*Workspace:* *${ws}*\n*Account:* *${n}*\n*Vendor:* *${v||'—'}* | *Buyer:* *${b||'—'}*\n*${'─'.repeat(28)}*\n*Spend EXCEEDED balance by ${sym}${Math.abs(Math.round(amt))}*\n\n*🔥 NEXT ACTION:*\n*Contact vendor NOW. Confirm overspend and align on settlement immediately.*`,
+  disabled:(ws,n,v,b)=>`*🔴 UMBRA — ACCOUNT DISABLED*\n*${'─'.repeat(28)}*\n*Workspace:* *${ws}*\n*Account:* *${n}*\n*Vendor:* *${v||'—'}* | *Buyer:* *${b||'—'}*\n*${'─'.repeat(28)}*\n*🎯 NEXT ACTION:*\n*Request replacement account + balance transfer from vendor immediately.*`,
+  warn:(ws,n,v,b)=>`*⚠️ UMBRA — WARNING*\n*${'─'.repeat(28)}*\n*Workspace:* *${ws}*\n*Account:* *${n}*\n*Vendor:* *${v||'—'}* | *Buyer:* *${b||'—'}*\n*${'─'.repeat(28)}*\n*Billing or policy issue detected.*\n\n*🎯 NEXT ACTION:*\n*Investigate via Meta Business Suite. Resolve or escalate to vendor within 24h.*`,
+  change:(ws,n,v,b,s1,s2)=>`*🚨 UMBRA — STATUS CHANGE*\n*${'─'.repeat(28)}*\n*Workspace:* *${ws}*\n*Account:* *${n}*\n*Vendor:* *${v||'—'}* | *Buyer:* *${b||'—'}*\n*${'─'.repeat(28)}*\n*Status: ${s1} → ${s2}*\n\n*🚨 NEXT ACTION:*\n*Check account immediately. Determine if vendor escalation is required.*`,
+  repeat:(ws,n,v,b,lbl)=>`*⏰ UMBRA — 24h REMINDER*\n*${'─'.repeat(28)}*\n*Workspace:* *${ws}*\n*Account:* *${n}*\n*Vendor:* *${v||'—'}* | *Buyer:* *${b||'—'}*\n*${'─'.repeat(28)}*\n*Issue persists: ${lbl}*\n\n*🎯 NEXT ACTION:*\n*Escalate. Issue is past 24h with no resolution.*`,
+  tokenExpired:(ws)=>`*🚨🚨 UMBRA — TOKEN EXPIRED*\n*${'─'.repeat(28)}*\n*Workspace:* *${ws}*\n*${'─'.repeat(28)}*\n*CRITICAL: Meta API token is invalid or expired.*\n\n*🔥 NEXT ACTION:*\n*Renew token immediately to restore monitoring on this workspace.*`,
+  checkDone:(results)=>`*✅ UMBRA — Cycle Check Complete*\n*${'─'.repeat(28)}*\n${results}\n*${'─'.repeat(28)}*\n*Next check scheduled.*`,
 };
 
 // ═══ WORKSPACE STATE ══════════════════════════════════════════════════════
@@ -755,15 +858,13 @@ function deleteWorkspace(id){
   workspaces=workspaces.filter(w=>w.id!==id);
   if(activeWsId===id) activeWsId=workspaces.length>0?workspaces[0].id:null;
   saveAllStorage();
-  renderWorkspaceList();
   renderWsDropdown();
+  if(typeof renderWorkspacesView==='function') renderWorkspacesView();
   if(workspaces.length===0){
-    // No workspaces left — reset to setup screen
-    document.getElementById('tabs').style.display='none';
-    document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
-    document.getElementById('pane-setup').classList.add('on');
+    // No workspaces left — go to workspaces tab to add new one
     document.getElementById('conn-dot').classList.remove('on');
     document.getElementById('conn-label').textContent='Not connected';
+    switchTab('workspaces');
   } else if(activeWsId){
     switchWorkspace(activeWsId);
   }
@@ -827,9 +928,7 @@ function renderActiveWorkspace(){
   document.getElementById('acct-count').textContent=ws.accounts.length+' accounts';
   document.getElementById('conn-label').textContent='Connected — '+ws.accounts.length+' accounts';
   document.getElementById('conn-dot').classList.add('on');
-  document.getElementById('pane-setup').classList.remove('on');
   document.getElementById('tabs').style.display='flex';
-  document.getElementById('pane-recon').classList.add('on');
   buildReconRows();
   updateAllRows();
   renderAccountsList();
@@ -840,6 +939,8 @@ function renderActiveWorkspace(){
 // ═══ WORKSPACE UI ════════════════════════════════════════════════════════
 function renderWsDropdown(){
   const sel=document.getElementById('ws-select');
+  const tbWs=document.getElementById('tb-ws');
+  if(tbWs) tbWs.textContent=workspaces.length;
   if(!sel) return;
   sel.innerHTML='';
   workspaces.forEach(w=>{
@@ -857,27 +958,8 @@ function renderWsDropdown(){
 }
 
 function renderWorkspaceList(){
-  const el=document.getElementById('ws-list-items');
-  if(!el) return;
-  el.innerHTML='';
-  if(workspaces.length===0){
-    el.innerHTML='<div style="text-align:center;padding:20px;color:var(--t3);font-size:13px">No workspaces yet. Add one below.</div>';
-    return;
-  }
-  workspaces.forEach(w=>{
-    const div=document.createElement('div');
-    div.className='ws-item';
-    div.innerHTML=`
-      <div>
-        <div class="ws-item-name" style="color:${w.color}">${sanitize(w.name)}</div>
-        <div class="ws-item-sub">${w.status==='connected'?w.accounts.length+' accounts':w.status==='error'?'Error: '+sanitize(w.errorMsg||'unknown'):'Not connected'}</div>
-      </div>
-      <div class="ws-item-status">
-        <span class="pill ${w.status==='connected'?'p-ok':w.status==='error'?'p-danger':'p-gray'}">${w.status}</span>
-        <button class="ws-item-del" onclick="deleteWorkspace('${w.id}')" title="Delete workspace">✕</button>
-      </div>`;
-    el.appendChild(div);
-  });
+  // Legacy compat — just trigger workspaces view if it exists
+  if(typeof renderWorkspacesView==='function') renderWorkspacesView();
 }
 
 // ═══ ADD WORKSPACE MODAL ══════════════════════════════════════════════════
@@ -959,7 +1041,6 @@ function clearLog(){
   if(el) el.textContent='0';
   addLog('Log cleared','muted');
 }
-function showErr(m){const e=document.getElementById('errmsg');if(e){e.textContent=sanitize(m);e.style.display='block';}}
 
 function sPill(code){
   const map={1:['Active','p-ok'],2:['Disabled','p-danger'],3:['Unsettled','p-warn'],
@@ -1004,6 +1085,22 @@ function saveBalanceWs(wsId, acctId, val){
   saveAllStorage();
 }
 
+
+function buildAssetSelect(id, options, current, wsId, acctId){
+  let html='<select class="cel" id="'+id+'" onchange="saveMetaWs(\''+wsId+'\',\''+acctId+'\')">';
+  html+='<option value="">— None —</option>';
+  options.forEach(opt=>{
+    const sel=current===opt?' selected':'';
+    html+='<option value="'+sanitize(opt)+'"'+sel+'>'+sanitize(opt)+'</option>';
+  });
+  // If current value not in options, show it as a custom option (legacy data)
+  if(current&&!options.includes(current)){
+    html+='<option value="'+sanitize(current)+'" selected>'+sanitize(current)+' (custom)</option>';
+  }
+  html+='</select>';
+  return html;
+}
+
 function buildReconRows(){
   const ws=getActiveWs();
   const tb=document.getElementById('recon-tb');
@@ -1017,10 +1114,10 @@ function buildReconRows(){
     tr.innerHTML=
       '<td><div style="display:flex;align-items:center;gap:6px"><div class="ws-tag" style="background:'+ws.color+'22;color:'+ws.color+';border:1px solid '+ws.color+'44">'+sanitize(ws.name)+'</div></div>'+
       '<div class="aname">'+sanitize(a.name)+'</div><div class="aid">'+sanitize(a.id)+'</div></td>'+
-      '<td><input class="cel" id="vendor-'+a.id+'" placeholder="Vendor" value="'+sanitize(m.vendor||'')+'" onchange="saveMetaWs(\''+ws.id+'\',\''+a.id+'\')"/></td>'+
-      '<td><input class="cel" id="buyer-'+a.id+'" placeholder="Buyer" value="'+sanitize(m.buyer||'')+'" onchange="saveMetaWs(\''+ws.id+'\',\''+a.id+'\')"/></td>'+
+      '<td>'+buildAssetSelect('vendor-'+a.id,assets.vendors,m.vendor||'',ws.id,a.id)+'</td>'+
+      '<td>'+buildAssetSelect('buyer-'+a.id,assets.buyers,m.buyer||'',ws.id,a.id)+'</td>'+
       '<td><input class="cel" id="bm-'+a.id+'" placeholder="BM" value="'+sanitize(m.bm||'')+'" onchange="saveMetaWs(\''+ws.id+'\',\''+a.id+'\')"/></td>'+
-      '<td><input class="cel" id="vertical-'+a.id+'" placeholder="Vertical" value="'+sanitize(m.vertical||'')+'" onchange="saveMetaWs(\''+ws.id+'\',\''+a.id+'\')"/></td>'+
+      '<td>'+buildAssetSelect('vertical-'+a.id,assets.verticals,m.vertical||'',ws.id,a.id)+'</td>'+
       '<td><input class="cel cel-bal" type="number" id="bal-'+a.id+'" placeholder="0.00" step="any" value="'+bal+'" onchange="saveBalanceWs(\''+ws.id+'\',\''+a.id+'\',this.value)"/></td>'+
       '<td class="mono" id="rsp-'+a.id+'">—</td>'+
       '<td class="mono" id="rrem-'+a.id+'" style="font-weight:600">—</td>'+
@@ -1381,24 +1478,162 @@ async function runHealthCheckWs(ws){
   }catch(e){}
 }
 function switchTab(name){
-  const names=['recon','health','warming','report','log'];
+  const names=['recon','health','warming','assets','workspaces','report','log'];
   document.querySelectorAll('.tab').forEach((tab,i)=>tab.classList.toggle('on',names[i]===name));
   document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
   document.getElementById('pane-'+name).classList.add('on');
-}
-function disconnectToken(){
-  const ws=getActiveWs();
-  if(!ws) return;
-  ws.status='disconnected';ws.accounts=[];
-  renderWsDropdown();
-  document.getElementById('pane-setup').classList.add('on');
-  document.getElementById('tabs').style.display='none';
-  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
-  document.getElementById('pane-setup').classList.add('on');
-  addLog('Workspace disconnected','info');
+  if(name==='assets') renderAssetsView();
+  if(name==='workspaces') renderWorkspacesView();
 }
 
 
+
+
+
+// ═══ ASSETS (vendors / buyers / verticals) ═══════════════════════════════
+let assets={vendors:[],buyers:[],verticals:[]};
+
+function loadAssets(){
+  try{
+    const d=localStorage.getItem('umbra_assets');
+    if(d) assets=JSON.parse(d);
+    if(!assets.vendors) assets.vendors=[];
+    if(!assets.buyers) assets.buyers=[];
+    if(!assets.verticals) assets.verticals=[];
+  }catch(e){assets={vendors:[],buyers:[],verticals:[]};}
+}
+function saveAssets(){try{localStorage.setItem('umbra_assets',JSON.stringify(assets));}catch(e){}}
+
+function addAsset(type){
+  const inputId={vendors:'new-vendor',buyers:'new-buyer',verticals:'new-vertical'}[type];
+  const el=document.getElementById(inputId);
+  if(!el) return;
+  const val=sanitize(el.value.trim());
+  if(!val) return;
+  if(assets[type].includes(val)){
+    addLog(type.slice(0,-1)+' already exists: '+val,'warn');
+    return;
+  }
+  assets[type].push(val);
+  assets[type].sort();
+  saveAssets();
+  renderAssetsView();
+  el.value='';
+  // Rebuild recon rows so dropdowns include the new value
+  buildReconRows();
+  addLog('Added '+type.slice(0,-1)+': '+val,'ok');
+}
+
+function removeAsset(type, val){
+  assets[type]=assets[type].filter(v=>v!==val);
+  saveAssets();
+  renderAssetsView();
+  buildReconRows();
+  addLog('Removed '+type.slice(0,-1)+': '+val,'info');
+}
+
+function renderAssetsView(){
+  ['vendors','buyers','verticals'].forEach(type=>{
+    const listId={vendors:'vendor-list',buyers:'buyer-list',verticals:'vertical-list'}[type];
+    const countId={vendors:'vendor-count',buyers:'buyer-count',verticals:'vertical-count'}[type];
+    const list=document.getElementById(listId);
+    const count=document.getElementById(countId);
+    if(!list) return;
+    count.textContent=assets[type].length;
+    if(assets[type].length===0){
+      list.innerHTML='<div class="asset-empty">None added yet</div>';
+      return;
+    }
+    list.innerHTML='';
+    assets[type].forEach(v=>{
+      const div=document.createElement('div');
+      div.className='asset-item';
+      div.innerHTML='<span class="asset-item-name">'+sanitize(v)+'</span><button class="asset-item-del" onclick="removeAsset(\''+type+'\',\''+sanitize(v).replace(/\'/g,'')+'\')">✕</button>';
+      list.appendChild(div);
+    });
+  });
+}
+
+// ═══ WORKSPACES VIEW ═════════════════════════════════════════════════════
+function renderWorkspacesView(){
+  const grid=document.getElementById('ws-grid');
+  if(!grid) return;
+  document.getElementById('tb-ws').textContent=workspaces.length;
+  if(workspaces.length===0){
+    grid.innerHTML='<div class="empty-s" style="grid-column:1/-1">No workspaces yet. Click "+ Add workspace" to start.</div>';
+    return;
+  }
+  grid.innerHTML='';
+  workspaces.forEach(w=>{
+    const card=document.createElement('div');
+    card.className='ws-card '+(w.status==='connected'?'ws-connected':w.status==='error'?'ws-error':'');
+    const statusLabel=w.status==='connected'?'<span class="pill p-ok">Connected</span>':
+                      w.status==='error'?'<span class="pill p-danger">Error</span>':
+                      w.status==='connecting'?'<span class="pill p-warn">Connecting...</span>':
+                      '<span class="pill p-gray">Disconnected</span>';
+    const accountsLine=w.status==='connected'?w.accounts.length+' accounts':
+                        w.status==='error'?'Error: '+sanitize(w.errorMsg||'unknown'):
+                        'Not connected';
+    card.innerHTML=`
+      <div class="ws-card-color-bar" style="background:${w.color}"></div>
+      <div class="ws-card-hdr">
+        <div>
+          <div class="ws-card-name">${sanitize(w.name)}</div>
+          <div class="ws-card-stats">${accountsLine}</div>
+        </div>
+        ${statusLabel}
+      </div>
+      <div class="ws-card-actions">
+        ${w.status==='connected'?'<button class="btn" onclick="switchWorkspace(\''+w.id+'\');switchTab(\'recon\')">View</button>':''}
+        <button class="btn gold" onclick="openReplaceToken('${w.id}')">Replace token</button>
+        <button class="btn" onclick="connectWorkspace('${w.id}')">Reconnect</button>
+        <button class="btn" style="border-color:var(--rd4);color:var(--red)" onclick="confirmDeleteWs('${w.id}')">Delete</button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function confirmDeleteWs(id){
+  const ws=getWs(id); if(!ws) return;
+  showBanner('critical','⚠️','Delete workspace?','This will remove "'+ws.name+'" permanently. Saved data (vendor balances, account tags) will be lost.','Delete',()=>{
+    deleteWorkspace(id);
+    renderWorkspacesView();
+  });
+}
+
+function openReplaceToken(id){
+  const ws=getWs(id); if(!ws) return;
+  document.getElementById('replace-ws-id').value=id;
+  document.getElementById('replace-ws-token').value='';
+  document.getElementById('replace-ws-name').textContent=ws.name;
+  document.getElementById('replace-ws-err').style.display='none';
+  document.getElementById('replace-ws-modal').classList.add('open');
+}
+function closeReplaceToken(){document.getElementById('replace-ws-modal').classList.remove('open');}
+
+async function saveReplacedToken(){
+  const id=document.getElementById('replace-ws-id').value;
+  const newToken=document.getElementById('replace-ws-token').value.trim();
+  const errEl=document.getElementById('replace-ws-err');
+  if(!newToken){errEl.textContent='Please enter a token.';errEl.style.display='block';return;}
+  const ws=getWs(id); if(!ws) return;
+  const btn=document.getElementById('replace-token-btn');
+  btn.disabled=true;btn.innerHTML='<span class="loader"></span>Testing...';
+  try{
+    const r=await fetch('https://graph.facebook.com/v19.0/me/adaccounts?fields=id,name&limit=1&access_token='+newToken);
+    const d=await r.json();
+    if(d.error){errEl.textContent='Invalid token: '+d.error.message;errEl.style.display='block';btn.disabled=false;btn.textContent='Replace';return;}
+    ws.token=newToken;
+    ws.status='disconnected';
+    saveAllStorage();
+    closeReplaceToken();
+    addLog('Token replaced for "'+ws.name+'"','ok');
+    connectWorkspace(id);
+    renderWorkspacesView();
+  }catch(e){errEl.textContent='Connection failed: '+e.message;errEl.style.display='block';}
+  btn.disabled=false;btn.textContent='Replace';
+}
 
 // ═══ FILTERS ═══════════════════════════════════════════════════════════════
 function populateFilters(){
@@ -1554,6 +1789,38 @@ function exportPDF(){
 .filter-clear:hover{border-color:var(--rd4);color:var(--red)}
 tr.filtered-out{display:none}
 
+
+/* ═══ ASSETS PANE ═════════════════════════════════════════════════════════ */
+.assets-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}
+@media(max-width:900px){.assets-grid{grid-template-columns:1fr}}
+.asset-col{background:var(--bg3);border:1px solid var(--b1);border-radius:10px;padding:18px}
+.asset-col-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.asset-col-hdr h4{font-size:13px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin:0}
+.asset-count{background:var(--gd3);color:var(--gold);border:1px solid var(--gd4);font-size:11px;font-weight:700;padding:2px 10px;border-radius:20px}
+.asset-add{display:flex;gap:6px;margin-bottom:14px}
+.asset-add input{flex:1;background:var(--bg2);border:1px solid var(--b2);border-radius:6px;padding:8px 12px;color:var(--t1);font-size:13px;outline:none;transition:all .15s}
+.asset-add input:focus{border-color:var(--gd5);box-shadow:0 0 0 2px var(--gd3)}
+.asset-list{display:flex;flex-direction:column;gap:6px;max-height:340px;overflow-y:auto}
+.asset-item{display:flex;align-items:center;justify-content:space-between;background:var(--bg2);border:1px solid var(--b1);border-radius:6px;padding:8px 12px;font-size:13px;color:var(--t1);transition:all .15s}
+.asset-item:hover{border-color:var(--b2);background:var(--bg4)}
+.asset-item-name{font-weight:500}
+.asset-item-del{background:transparent;border:none;color:var(--t3);cursor:pointer;font-size:14px;padding:0 4px;transition:color .15s}
+.asset-item-del:hover{color:var(--red)}
+.asset-empty{text-align:center;padding:24px 12px;color:var(--t3);font-size:12px}
+
+/* ═══ WORKSPACES PANE ════════════════════════════════════════════════════ */
+.ws-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.ws-card{background:var(--bg3);border:1px solid var(--b1);border-radius:12px;padding:18px;transition:all .2s}
+.ws-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+.ws-card.ws-error{border-color:var(--rd4);background:var(--rd2)}
+.ws-card.ws-connected{border-left:3px solid var(--green)}
+.ws-card-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+.ws-card-name{font-size:15px;font-weight:700;color:var(--t1);margin-bottom:3px}
+.ws-card-stats{font-size:11px;color:var(--t3)}
+.ws-card-actions{display:flex;gap:6px;flex-wrap:wrap}
+.ws-card-actions .btn{padding:5px 10px;font-size:11px}
+.ws-card-color-bar{height:3px;border-radius:2px;margin-bottom:14px}
+
 </style>
   </head><body>
     <h1>UMBRA OPS</h1>
@@ -1564,6 +1831,43 @@ tr.filtered-out{display:none}
   win.document.close();
 }
 
+
+// ═══ SESSION PERSISTENCE ═══════════════════════════════════════════════════
+function checkPersistentSession(){
+  try{
+    const sess=localStorage.getItem('umbra_session');
+    if(!sess) return false;
+    const data=JSON.parse(sess);
+    if(!data.expires||Date.now()>=data.expires){
+      localStorage.removeItem('umbra_session');
+      return false;
+    }
+    // Valid session — auto-login
+    return true;
+  }catch(e){return false;}
+}
+
+function autoLoginIfValid(){
+  if(!localStorage.getItem('umbra_pw')) return; // No password set
+  if(checkPersistentSession()){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='block';
+    document.getElementById('tabs').style.display='flex';
+    loadAllStorage();
+    loadAssets();
+    addLog('Session restored','ok');
+    renderWorkspaceList();
+    renderWorkspacesView();
+    renderAssetsView();
+    if(workspaces.length>0){
+      switchWorkspace(workspaces[0].id);
+    } else {
+      // No workspaces — show workspaces tab so user can add one
+      switchTab('workspaces');
+    }
+  }
+}
+
 // ═══ INIT ══════════════════════════════════════════════════════════════════
 document.getElementById('rbox').textContent='Run a reconciliation check first.';
 document.getElementById('warm-empty').textContent='No accounts warming. Click + Add account to start.';
@@ -1572,6 +1876,7 @@ const _stored=localStorage.getItem('umbra_pw');
 const _hint=document.getElementById('login-hint');
 if(_hint) _hint.textContent=_stored?'Password set.':'First time? Set a password.';
 addLog('UMBRA Ops v3 ready','ok');
+autoLoginIfValid();
 
 </script>
 </body>
